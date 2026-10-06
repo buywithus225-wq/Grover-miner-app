@@ -12,75 +12,172 @@
   
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: radial-gradient(circle at top, #0d1b3a 0%, #050a18 100%);
+    background: #050a18;
     color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 16px;
+    padding: 10px;
   }
 
   .frame {
     width: 100%;
     max-width: 400px;
     height: 100%;
-    max-height: 780px;
-    background: linear-gradient(160deg, #0a1428 0%, #050a18 100%);
-    border: 2px solid rgba(245,184,0,0.4);
+    max-height: 800px;
+    background: linear-gradient(160deg, #0f1e42 0%, #1a0f3a 50%, #0a1428 100%);
+    border: 2px solid transparent;
+    background-clip: padding-box;
     border-radius: 32px;
     position: relative;
     overflow: hidden;
     box-shadow: 
-      0 0 60px rgba(245,184,0,0.2),
-      0 0 100px rgba(0,102,255,0.15),
-      inset 0 0 60px rgba(0,102,255,0.05);
+      0 0 80px rgba(245,184,0,0.25),
+      0 0 120px rgba(139,92,246,0.3),
+      inset 0 0 80px rgba(0,102,255,0.08);
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 30px 22px;
+    padding: 24px 20px;
     overflow-y: auto;
+    animation: borderGlow 4s ease-in-out infinite;
+  }
+
+  @keyframes borderGlow {
+    0%, 100% { box-shadow: 0 0 80px rgba(245,184,0,0.25), 0 0 120px rgba(139,92,246,0.3), inset 0 0 80px rgba(0,102,255,0.08); }
+    50% { box-shadow: 0 0 100px rgba(245,184,0,0.4), 0 0 150px rgba(139,92,246,0.5), inset 0 0 100px rgba(0,102,255,0.15); }
   }
 
   .frame::-webkit-scrollbar { display: none; }
 
+  /* Animated top glow */
   .frame::before {
     content: '';
-    position: absolute; top: 0; left: 20%; right: 20%; height: 2px;
-    background: linear-gradient(90deg, transparent, #f5b800, transparent);
-    box-shadow: 0 0 20px #f5b800;
+    position: absolute; top: 0; left: 10%; right: 10%; height: 3px;
+    background: linear-gradient(90deg, transparent, #f5b800, #ff6b00, #f5b800, transparent);
+    background-size: 200% 100%;
+    box-shadow: 0 0 25px #f5b800;
+    animation: shimmer 3s linear infinite;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
   }
 
   .frame::after {
     content: '';
-    position: absolute; bottom: 0; left: 20%; right: 20%; height: 2px;
-    background: linear-gradient(90deg, transparent, #0066ff, transparent);
-    box-shadow: 0 0 20px #0066ff;
+    position: absolute; bottom: 0; left: 10%; right: 10%; height: 3px;
+    background: linear-gradient(90deg, transparent, #0066ff, #8b5cf6, #0066ff, transparent);
+    background-size: 200% 100%;
+    box-shadow: 0 0 25px #0066ff;
+    animation: shimmer 3s linear infinite reverse;
   }
 
   .corner {
     position: absolute;
-    width: 26px; height: 26px;
+    width: 28px; height: 28px;
     border: 2px solid #f5b800;
-    opacity: 0.6;
+    opacity: 0.7;
     pointer-events: none;
+    animation: cornerPulse 2s ease-in-out infinite;
   }
-  .tl { top: 14px; left: 14px; border-right: none; border-bottom: none; border-radius: 10px 0 0 0; }
-  .tr { top: 14px; right: 14px; border-left: none; border-bottom: none; border-radius: 0 10px 0 0; }
-  .bl { bottom: 14px; left: 14px; border-right: none; border-top: none; border-radius: 0 0 0 10px; }
-  .br { bottom: 14px; right: 14px; border-left: none; border-top: none; border-radius: 0 0 10px 0; }
+  @keyframes cornerPulse {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; box-shadow: 0 0 15px #f5b800; }
+  }
+  .tl { top: 12px; left: 12px; border-right: none; border-bottom: none; border-radius: 12px 0 0 0; }
+  .tr { top: 12px; right: 12px; border-left: none; border-bottom: none; border-radius: 0 12px 0 0; }
+  .bl { bottom: 12px; left: 12px; border-right: none; border-top: none; border-radius: 0 0 0 12px; }
+  .br { bottom: 12px; right: 12px; border-left: none; border-top: none; border-radius: 0 0 12px 0; }
+
+  /* Floating particles background */
+  .particles {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0.6;
+  }
+
+  .particle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: #f5b800;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #f5b800;
+    animation: floatUp linear infinite;
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(100vh) scale(0); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(-20px) scale(1); opacity: 0; }
+  }
+
+  .logo-wrap {
+    position: relative;
+    margin: 8px 0 18px;
+  }
+
+  .logo-wrap::before {
+    content: '';
+    position: absolute;
+    inset: -20px;
+    background: radial-gradient(circle, rgba(245,184,0,0.4), transparent 70%);
+    border-radius: 50%;
+    animation: logoGlow 2.5s ease-in-out infinite;
+  }
+
+  @keyframes logoGlow {
+    0%, 100% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.15); opacity: 1; }
+  }
 
   .logo {
-    width: 130px;
-    height: 130px;
+    width: 120px;
+    height: 120px;
     object-fit: contain;
-    margin: 10px 0 16px;
-    filter: drop-shadow(0 0 30px rgba(245,184,0,0.5));
+    position: relative;
+    z-index: 2;
+    filter: drop-shadow(0 0 25px rgba(245,184,0,0.8));
     animation: float 3s ease-in-out infinite;
   }
 
   @keyframes float {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-6px); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .title {
+    font-size: 26px;
+    font-weight: 900;
+    letter-spacing: 3px;
+    background: linear-gradient(135deg, #f5b800 0%, #ff6b00 30%, #f5b800 60%, #ffdd00 100%);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 30px rgba(245,184,0,0.5);
+    animation: titleShine 3s linear infinite;
+    margin-bottom: 4px;
+  }
+
+  @keyframes titleShine {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  .subtitle {
+    font-size: 10px;
+    color: #6ba3ff;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 16px;
+    text-shadow: 0 0 10px rgba(107,163,255,0.5);
   }
 
   .stats {
@@ -88,73 +185,102 @@
     grid-template-columns: 1fr 1fr;
     gap: 10px;
     width: 100%;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
   }
 
   .stat {
-    background: rgba(0,102,255,0.08);
-    border: 1px solid rgba(107,163,255,0.2);
-    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(0,102,255,0.15), rgba(139,92,246,0.1));
+    border: 1px solid rgba(107,163,255,0.3);
+    border-radius: 14px;
     padding: 12px 8px;
     text-align: center;
+    box-shadow: inset 0 0 20px rgba(0,102,255,0.1);
+    transition: all 0.3s;
   }
 
   .stat-label {
-    font-size: 10px;
+    font-size: 9px;
     color: #6ba3ff;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 1.5px;
     margin-bottom: 4px;
-    font-weight: 600;
+    font-weight: 700;
   }
 
   .stat-value {
     font-size: 18px;
-    font-weight: 800;
-    color: #f5b800;
-    text-shadow: 0 0 12px rgba(245,184,0,0.4);
+    font-weight: 900;
+    background: linear-gradient(135deg, #f5b800, #ff6b00);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 15px rgba(245,184,0,0.5);
   }
 
   .fee-box {
     width: 100%;
-    background: linear-gradient(135deg, rgba(245,184,0,0.12), rgba(245,184,0,0.03));
-    border: 1px solid rgba(245,184,0,0.4);
-    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(245,184,0,0.2), rgba(255,107,0,0.1), rgba(139,92,246,0.15));
+    border: 1.5px solid rgba(245,184,0,0.6);
+    border-radius: 16px;
     padding: 14px;
     text-align: center;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(245,184,0,0.3), inset 0 0 30px rgba(245,184,0,0.05);
+  }
+
+  .fee-box::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+    animation: feeShine 4s linear infinite;
+  }
+
+  @keyframes feeShine {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
   }
 
   .fee-label {
     font-size: 10px;
-    color: #6ba3ff;
+    color: #ffdd00;
     letter-spacing: 2px;
     text-transform: uppercase;
     margin-bottom: 6px;
-    font-weight: 600;
+    font-weight: 700;
+    position: relative;
+    z-index: 2;
   }
 
   .fee-value {
-    font-size: 26px;
+    font-size: 28px;
     font-weight: 900;
-    color: #f5b800;
-    text-shadow: 0 0 20px rgba(245,184,0,0.5);
+    color: #fff;
+    text-shadow: 0 0 20px rgba(245,184,0,0.8), 0 0 40px rgba(245,184,0,0.4);
+    position: relative;
+    z-index: 2;
   }
 
   .fee-value span {
-    font-size: 14px;
-    color: #a8c5ff;
-    margin-left: 4px;
-    font-weight: 600;
+    font-size: 15px;
+    color: #ffdd00;
+    margin-left: 5px;
+    font-weight: 700;
   }
 
   .notice {
     font-size: 11px;
-    color: #7a92b8;
+    color: #a8c5ff;
     text-align: center;
     line-height: 1.5;
     margin-bottom: 16px;
-    padding: 0 8px;
+    padding: 8px 12px;
+    background: rgba(139,92,246,0.08);
+    border-left: 3px solid #8b5cf6;
+    border-radius: 8px;
   }
 
   .notice strong { color: #f5b800; }
@@ -165,43 +291,60 @@
     border: none;
     border-radius: 14px;
     font-size: 14px;
-    font-weight: 800;
-    letter-spacing: 1px;
+    font-weight: 900;
+    letter-spacing: 1.5px;
     cursor: pointer;
     transition: all 0.2s;
     font-family: inherit;
     text-transform: uppercase;
+    position: relative;
+    overflow: hidden;
   }
+
+  button:active { transform: scale(0.97); }
 
   #connectBtn {
-    background: linear-gradient(135deg, #0066ff, #0047b3);
+    background: linear-gradient(135deg, #0066ff 0%, #8b5cf6 50%, #0066ff 100%);
+    background-size: 200% 100%;
     color: #fff;
     margin-bottom: 10px;
-    box-shadow: 0 4px 20px rgba(0,102,255,0.4);
+    box-shadow: 0 4px 25px rgba(0,102,255,0.5), 0 0 40px rgba(139,92,246,0.3);
+    animation: btnPulse 3s ease-in-out infinite;
   }
 
-  #connectBtn:active { transform: scale(0.97); }
+  @keyframes btnPulse {
+    0%, 100% { box-shadow: 0 4px 25px rgba(0,102,255,0.5), 0 0 40px rgba(139,92,246,0.3); }
+    50% { box-shadow: 0 4px 35px rgba(0,102,255,0.8), 0 0 60px rgba(139,92,246,0.5); }
+  }
 
   #payBtn {
-    background: linear-gradient(135deg, #f5b800, #d99e00);
+    background: linear-gradient(135deg, #f5b800 0%, #ff6b00 50%, #f5b800 100%);
+    background-size: 200% 100%;
     color: #0a1428;
-    box-shadow: 0 4px 20px rgba(245,184,0,0.4);
+    box-shadow: 0 4px 25px rgba(245,184,0,0.5), 0 0 40px rgba(255,107,0,0.3);
     display: none;
+    animation: btnPulseGold 3s ease-in-out infinite;
   }
 
-  #payBtn:active { transform: scale(0.97); }
+  @keyframes btnPulseGold {
+    0%, 100% { box-shadow: 0 4px 25px rgba(245,184,0,0.5), 0 0 40px rgba(255,107,0,0.3); }
+    50% { box-shadow: 0 4px 35px rgba(245,184,0,0.8), 0 0 60px rgba(255,107,0,0.5); }
+  }
+
   #payBtn.show { display: block; }
 
   .wallet-info {
     font-size: 11px;
-    color: #6ba3ff;
+    color: #6bff8f;
     margin: 8px 0;
     padding: 8px;
-    background: rgba(107,163,255,0.08);
+    background: rgba(50,255,100,0.1);
+    border: 1px solid rgba(50,255,100,0.3);
     border-radius: 8px;
     word-break: break-all;
     display: none;
     text-align: center;
+    font-weight: 600;
   }
 
   .wallet-info.show { display: block; }
@@ -214,53 +357,66 @@
     display: none;
     text-align: center;
     width: 100%;
+    font-weight: 600;
   }
 
   .status.show { display: block; }
-  .status.error { background: rgba(255,50,50,0.1); color: #ff6b6b; border: 1px solid rgba(255,50,50,0.3); }
-  .status.success { background: rgba(50,255,100,0.1); color: #6bff8f; border: 1px solid rgba(50,255,100,0.3); }
-  .status.loading { background: rgba(107,163,255,0.1); color: #6ba3ff; border: 1px solid rgba(107,163,255,0.3); }
+  .status.error { background: rgba(255,50,50,0.15); color: #ff6b6b; border: 1px solid rgba(255,50,50,0.4); }
+  .status.success { background: rgba(50,255,100,0.15); color: #6bff8f; border: 1px solid rgba(50,255,100,0.4); }
+  .status.loading { background: rgba(107,163,255,0.15); color: #6ba3ff; border: 1px solid rgba(107,163,255,0.4); }
 
   .footer {
     margin-top: auto;
-    padding-top: 20px;
+    padding-top: 16px;
     font-size: 10px;
     color: #4a6a9a;
     letter-spacing: 3px;
     text-transform: uppercase;
     text-align: center;
   }
-  .footer span { color: #f5b800; font-weight: 700; text-shadow: 0 0 10px rgba(245,184,0,0.5); }
+  .footer span { 
+    background: linear-gradient(135deg, #f5b800, #ff6b00);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 900; 
+  }
 </style>
 </head>
 <body>
 
 <div class="frame">
+  <div class="particles" id="particles"></div>
   <div class="corner tl"></div>
   <div class="corner tr"></div>
   <div class="corner bl"></div>
   <div class="corner br"></div>
 
-  <img src="file_000000004a1481f4ad0c20442e76e9f7.png" alt="Grover" class="logo">
+  <div class="logo-wrap">
+    <img src="file_000000004a1481f4ad0c20442e76e9f7.png" alt="Grover" class="logo">
+  </div>
+
+  <div class="title">GROVER</div>
+  <div class="subtitle">Mining Bot</div>
 
   <div class="stats">
     <div class="stat">
-      <div class="stat-label">Balance</div>
+      <div class="stat-label">💰 Balance</div>
       <div class="stat-value">0</div>
     </div>
     <div class="stat">
-      <div class="stat-label">Profit</div>
+      <div class="stat-label">📈 Profit</div>
       <div class="stat-value">0</div>
     </div>
   </div>
 
   <div class="fee-box">
-    <div class="fee-label">One-Time Entry Fee</div>
+    <div class="fee-label">⚡ One-Time Entry Fee ⚡</div>
     <div class="fee-value">0.05<span>TON</span></div>
   </div>
 
   <div class="notice">
-    Wallet must be <strong>7+ days old</strong> to unlock mining, tasks, ads, referrals and withdrawals.
+    🔒 Wallet must be <strong>7+ days old</strong> to unlock mining, tasks, ads, referrals and withdrawals.
   </div>
 
   <button id="connectBtn">🔗 Connect Wallet</button>
@@ -281,6 +437,21 @@
     tg.setBackgroundColor('#050a18');
   }
 
+  // Generate floating particles
+  const particlesContainer = document.getElementById('particles');
+  for (let i = 0; i < 25; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.animationDuration = (8 + Math.random() * 12) + 's';
+    p.style.animationDelay = Math.random() * 10 + 's';
+    const colors = ['#f5b800', '#0066ff', '#8b5cf6', '#ff6b00'];
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    p.style.background = color;
+    p.style.boxShadow = '0 0 8px ' + color;
+    particlesContainer.appendChild(p);
+  }
+
   const connectBtn = document.getElementById('connectBtn');
   const payBtn = document.getElementById('payBtn');
   const walletInfo = document.getElementById('walletInfo');
@@ -289,7 +460,6 @@
   let connectedWallet = null;
   let tonConnectUI = null;
 
-  // YOUR PROJECT WALLET
   const PROJECT_WALLET = 'UQBiiE8EcQ-tRSIi4HjKnCYjGJ0Wjh5SA84xyzbc-qdq5ws2';
 
   function showStatus(msg, type) {
@@ -301,7 +471,6 @@
     statusBox.className = 'status';
   }
 
-  // Initialize TON Connect
   try {
     tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
       manifestUrl: 'https://buywithus225-wq.github.io/Grover-miner-app/tonconnect-manifest.json',
@@ -313,7 +482,7 @@
         connectedWallet = wallet;
         const addr = wallet.account.address;
         const short = addr.slice(0, 6) + '...' + addr.slice(-4);
-        walletInfo.textContent = 'Connected: ' + short;
+        walletInfo.textContent = '✅ Connected: ' + short;
         walletInfo.classList.add('show');
         connectBtn.style.display = 'none';
         payBtn.classList.add('show');
@@ -330,7 +499,6 @@
     console.log('TON Connect init error:', e);
   }
 
-  // Connect wallet
   connectBtn.addEventListener('click', async () => {
     if (!tonConnectUI) {
       showStatus('TON Connect not loaded. Please refresh.', 'error');
@@ -344,7 +512,6 @@
     }
   });
 
-  // Pay entry fee (visual only — real verification needs backend)
   payBtn.addEventListener('click', async () => {
     if (!connectedWallet) return;
     try {
@@ -355,12 +522,12 @@
         messages: [
           {
             address: PROJECT_WALLET,
-            amount: '50000000' // 0.05 TON in nanotons
+            amount: '50000000'
           }
         ]
       };
 
-      const result = await tonConnectUI.sendTransaction(transaction);
+      await tonConnectUI.sendTransaction(transaction);
       showStatus('✅ Payment sent! Verification coming in Stage 7.', 'success');
 
     } catch (e) {
