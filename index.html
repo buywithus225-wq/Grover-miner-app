@@ -1,25 +1,164 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Grover Mining Bot</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html, body { height: 100%; overflow: hidden; }
+  
   body {
-    background: #050a18;
-    color: #f5b800;
-    font-family: sans-serif;
-    text-align: center;
-    padding: 50px 20px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: radial-gradient(circle at top, #0d1b3a 0%, #050a18 100%);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
   }
-  h1 { font-size: 32px; }
-  p { color: #6ba3ff; }
+
+  .frame {
+    width: 100%;
+    max-width: 400px;
+    height: 100%;
+    max-height: 780px;
+    background: linear-gradient(160deg, #0a1428 0%, #050a18 100%);
+    border: 2px solid rgba(245,184,0,0.4);
+    border-radius: 32px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 
+      0 0 60px rgba(245,184,0,0.2),
+      0 0 100px rgba(0,102,255,0.15),
+      inset 0 0 60px rgba(0,102,255,0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 24px;
+  }
+
+  .frame::before {
+    content: '';
+    position: absolute; top: 0; left: 20%; right: 20%; height: 2px;
+    background: linear-gradient(90deg, transparent, #f5b800, transparent);
+    box-shadow: 0 0 20px #f5b800;
+  }
+
+  .frame::after {
+    content: '';
+    position: absolute; bottom: 0; left: 20%; right: 20%; height: 2px;
+    background: linear-gradient(90deg, transparent, #0066ff, transparent);
+    box-shadow: 0 0 20px #0066ff;
+  }
+
+  .corner {
+    position: absolute;
+    width: 26px; height: 26px;
+    border: 2px solid #f5b800;
+    opacity: 0.6;
+  }
+  .tl { top: 14px; left: 14px; border-right: none; border-bottom: none; border-radius: 10px 0 0 0; }
+  .tr { top: 14px; right: 14px; border-left: none; border-bottom: none; border-radius: 0 10px 0 0; }
+  .bl { bottom: 14px; left: 14px; border-right: none; border-top: none; border-radius: 0 0 0 10px; }
+  .br { bottom: 14px; right: 14px; border-left: none; border-top: none; border-radius: 0 0 10px 0; }
+
+  .logo {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 0 30px rgba(245,184,0,0.5));
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .coming {
+    padding: 12px 28px;
+    background: linear-gradient(135deg, rgba(245,184,0,0.15), rgba(245,184,0,0.05));
+    border: 1px solid rgba(245,184,0,0.5);
+    border-radius: 50px;
+    color: #f5b800;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    box-shadow: 0 0 25px rgba(245,184,0,0.3);
+    animation: glow 2s ease-in-out infinite;
+  }
+
+  @keyframes glow {
+    0%, 100% { box-shadow: 0 0 25px rgba(245,184,0,0.3); }
+    50% { box-shadow: 0 0 45px rgba(245,184,0,0.6); }
+  }
+
+  .features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .feature {
+    background: rgba(0,102,255,0.08);
+    border: 1px solid rgba(107,163,255,0.2);
+    border-radius: 14px;
+    padding: 14px 8px;
+    text-align: center;
+  }
+
+  .feature .icon { font-size: 24px; display: block; margin-bottom: 6px; }
+  .feature .label { font-size: 11px; color: #a8c5ff; font-weight: 600; }
+
+  .footer {
+    position: absolute;
+    bottom: 22px;
+    font-size: 10px;
+    color: #4a6a9a;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+  .footer span { color: #f5b800; font-weight: 700; text-shadow: 0 0 10px rgba(245,184,0,0.5); }
 </style>
 </head>
 <body>
-  <h1>⛏️ GROVER</h1>
-  <p>Mining Bot — Coming Soon</p>
+
+<div class="frame">
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <img src="logo.png" alt="Grover" class="logo">
+
+  <div class="coming">Coming Soon</div>
+
+  <div class="features">
+    <div class="feature"><span class="icon">⛏️</span><span class="label">Mine Daily</span></div>
+    <div class="feature"><span class="icon">🎬</span><span class="label">Watch & Earn</span></div>
+    <div class="feature"><span class="icon">👥</span><span class="label">Refer Friends</span></div>
+    <div class="feature"><span class="icon">💎</span><span class="label">Withdraw TON</span></div>
+  </div>
+
+  <div class="footer">POWERED BY <span>TON</span></div>
+</div>
+
+<script>
+  const tg = window.Telegram?.WebApp;
+  if (tg) {
+    tg.ready();
+    tg.expand();
+    tg.setHeaderColor('#050a18');
+    tg.setBackgroundColor('#050a18');
+  }
+</script>
+
 </body>
 </html>
