@@ -9,60 +9,74 @@
 <style>
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html, body { height: 100%; overflow: hidden; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: #050a18; color: #fff;
-    display: flex; align-items: center; justify-content: center; padding: 8px;
-  }
-  .frame {
-    width: 100%; max-width: 400px; height: 100%; max-height: 820px;
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #050a18; color: #fff; display: flex; align-items: center; justify-content: center; padding: 8px; }
+
+  .splash { position: fixed; inset: 0; z-index: 9999;
+    background: radial-gradient(circle at center, #0f1e42 0%, #0a1428 40%, #050a18 100%);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    transition: opacity 0.8s ease, visibility 0.8s ease; }
+  .splash.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+  .splash-logo-wrap { position: relative; animation: splashEnter 1s ease-out; }
+  @keyframes splashEnter { 0% { transform: scale(0.3); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  .splash-logo-wrap::before { content: ''; position: absolute; inset: -50px;
+    background: radial-gradient(circle, rgba(245,184,0,0.6), transparent 70%);
+    border-radius: 50%; animation: splashGlow 2s ease-in-out infinite; }
+  @keyframes splashGlow { 0%, 100% { transform: scale(1); opacity: 0.6; } 50% { transform: scale(1.3); opacity: 1; } }
+  .splash-logo { width: 200px; height: 200px; object-fit: contain; position: relative; z-index: 2;
+    filter: drop-shadow(0 0 50px rgba(245,184,0,1)); animation: splashFloat 3s ease-in-out infinite; }
+  @keyframes splashFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+  .splash-title { font-size: 40px; font-weight: 900; letter-spacing: 8px; margin-top: 24px;
+    background: linear-gradient(135deg, #f5b800, #ff6b00, #f5b800, #ffdd00);
+    background-size: 200% 100%; -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; animation: titleShine 3s linear infinite; }
+  @keyframes titleShine { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+  .splash-subtitle { font-size: 12px; color: #6ba3ff; letter-spacing: 10px; text-transform: uppercase;
+    font-weight: 700; margin-top: 6px; text-shadow: 0 0 20px rgba(107,163,255,0.8); }
+  .loading-bar { position: absolute; bottom: 80px; width: 200px; height: 4px;
+    background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; }
+  .loading-fill { height: 100%; width: 0%;
+    background: linear-gradient(90deg, #f5b800, #ff6b00, #f5b800);
+    border-radius: 2px; box-shadow: 0 0 15px #f5b800; animation: loadBar 8s linear forwards; }
+  @keyframes loadBar { 0% { width: 0%; } 100% { width: 100%; } }
+
+  .frame { width: 100%; max-width: 400px; height: 100%; max-height: 820px;
     background: linear-gradient(160deg, #0f1e42 0%, #1a0f3a 50%, #0a1428 100%);
     border-radius: 28px; position: relative; overflow: hidden;
     box-shadow: 0 0 80px rgba(245,184,0,0.25), 0 0 120px rgba(139,92,246,0.3);
-    display: flex; flex-direction: column;
-  }
-  .frame::before {
-    content: ''; position: absolute; top: 0; left: 10%; right: 10%; height: 3px;
+    display: flex; flex-direction: column; opacity: 0; transition: opacity 0.8s ease; }
+  .frame.show { opacity: 1; }
+  .frame::before { content: ''; position: absolute; top: 0; left: 10%; right: 10%; height: 3px;
     background: linear-gradient(90deg, transparent, #f5b800, #ff6b00, #f5b800, transparent);
     background-size: 200% 100%; box-shadow: 0 0 25px #f5b800;
-    animation: shimmer 3s linear infinite; z-index: 100;
-  }
-  .frame::after {
-    content: ''; position: absolute; bottom: 0; left: 10%; right: 10%; height: 3px;
+    animation: shimmer 3s linear infinite; z-index: 100; }
+  .frame::after { content: ''; position: absolute; bottom: 0; left: 10%; right: 10%; height: 3px;
     background: linear-gradient(90deg, transparent, #0066ff, #8b5cf6, #0066ff, transparent);
     background-size: 200% 100%; box-shadow: 0 0 25px #0066ff;
-    animation: shimmer 3s linear infinite reverse; z-index: 100;
-  }
+    animation: shimmer 3s linear infinite reverse; z-index: 100; }
   @keyframes shimmer { 0%{background-position:200% 0;} 100%{background-position:-200% 0;} }
 
   .screen { display: none; flex-direction: column; flex: 1; overflow-y: auto; padding: 18px 16px 90px; }
   .screen::-webkit-scrollbar { display: none; }
   .screen.active { display: flex; }
 
-  /* GATE */
   .logo-wrap { position: relative; margin: 8px auto 10px; width: fit-content; }
-  .logo-wrap::before {
-    content: ''; position: absolute; inset: -20px;
+  .logo-wrap::before { content: ''; position: absolute; inset: -20px;
     background: radial-gradient(circle, rgba(245,184,0,0.5), transparent 70%);
-    border-radius: 50%; animation: logoGlow 2.5s ease-in-out infinite;
-  }
+    border-radius: 50%; animation: logoGlow 2.5s ease-in-out infinite; }
   @keyframes logoGlow { 0%,100%{transform:scale(1);opacity:0.6;} 50%{transform:scale(1.2);opacity:1;} }
   .logo { width: 100px; height: 100px; object-fit: contain; position: relative; z-index: 2;
     filter: drop-shadow(0 0 30px rgba(245,184,0,0.9)); animation: float 3s ease-in-out infinite; }
   @keyframes float { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-6px);} }
-  .title {
-    font-size: 22px; font-weight: 900; letter-spacing: 4px; text-align: center;
+  .title { font-size: 22px; font-weight: 900; letter-spacing: 4px; text-align: center;
     background: linear-gradient(135deg, #f5b800, #ff6b00, #f5b800, #ffdd00);
     background-size: 200% 100%; -webkit-background-clip: text; background-clip: text;
-    -webkit-text-fill-color: transparent; animation: titleShine 3s linear infinite; margin-bottom: 2px;
-  }
-  @keyframes titleShine { 0%{background-position:200% 0;} 100%{background-position:-200% 0;} }
-  .subtitle { font-size: 9px; color: #6ba3ff; letter-spacing: 5px; text-transform: uppercase; font-weight: 700; text-align: center; margin-bottom: 14px; }
-  .mining-locked {
-    width: 100%; background: linear-gradient(135deg, rgba(80,80,120,0.25), rgba(50,50,80,0.2));
-    border: 1.5px solid rgba(150,150,180,0.3); border-radius: 16px;
-    padding: 14px; text-align: center; margin-bottom: 12px;
-  }
+    -webkit-text-fill-color: transparent; animation: titleShine 3s linear infinite; margin-bottom: 2px; }
+  .subtitle { font-size: 9px; color: #6ba3ff; letter-spacing: 5px; text-transform: uppercase;
+    font-weight: 700; text-align: center; margin-bottom: 14px; }
+
+  .mining-locked { width: 100%; background: linear-gradient(135deg, rgba(80,80,120,0.25), rgba(50,50,80,0.2));
+    border: 1.5px solid rgba(150,150,180,0.3); border-radius: 16px; padding: 14px; text-align: center; margin-bottom: 12px; }
   .lock-icon { font-size: 26px; margin-bottom: 2px; display: block; }
   .mining-label { font-size: 9px; color: #a8b8d8; letter-spacing: 2.5px; text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }
   .mining-value { font-size: 26px; font-weight: 900; color: #4a5a7a; letter-spacing: 1px; }
@@ -97,7 +111,6 @@
   #payBtn.show { display: block; }
   .demo-btn { background: linear-gradient(135deg, #8b5cf6, #ec4899) !important;
     color: #fff !important; margin-top: 8px; box-shadow: 0 4px 20px rgba(139,92,246,0.4) !important; font-size: 11px !important; }
-
   .wallet-info { font-size: 10px; color: #6bff8f; margin: 6px 0; padding: 6px;
     background: rgba(50,255,100,0.1); border: 1px solid rgba(50,255,100,0.3);
     border-radius: 8px; word-break: break-all; display: none; text-align: center; font-weight: 600; }
@@ -109,18 +122,13 @@
   .status.success { background: rgba(50,255,100,0.15); color: #6bff8f; border: 1px solid rgba(50,255,100,0.4); }
   .status.loading { background: rgba(107,163,255,0.15); color: #6ba3ff; border: 1px solid rgba(107,163,255,0.4); }
 
-  /* HOME */
   .home-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; padding: 0 4px; }
   .home-user { display: flex; align-items: center; gap: 8px; }
-  .avatar { width: 36px; height: 36px; border-radius: 50%;
-    background: linear-gradient(135deg, #f5b800, #ff6b00);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px; font-weight: 900; color: #0a1428; }
+  .avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #f5b800, #ff6b00);
+    display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 900; color: #0a1428; }
   .home-name { font-size: 13px; font-weight: 700; }
   .home-handle { font-size: 9px; color: #6ba3ff; }
-
-  .coin-hero { text-align: center; padding: 16px 0;
-    background: radial-gradient(circle at center, rgba(245,184,0,0.15), transparent 70%);
+  .coin-hero { text-align: center; padding: 16px 0; background: radial-gradient(circle at center, rgba(245,184,0,0.15), transparent 70%);
     border-radius: 20px; margin-bottom: 12px; }
   .coin-label { font-size: 10px; color: #6ba3ff; letter-spacing: 3px; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
   .coin-value { font-size: 44px; font-weight: 900; line-height: 1;
@@ -128,17 +136,14 @@
     background-size: 200% 100%; -webkit-background-clip: text; background-clip: text;
     -webkit-text-fill-color: transparent; animation: titleShine 3s linear infinite; margin-bottom: 4px; }
   .coin-sub { font-size: 11px; color: #6ba3ff; font-weight: 700; }
-
   .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
   .action-card { background: linear-gradient(135deg, rgba(0,102,255,0.15), rgba(139,92,246,0.1));
-    border: 1px solid rgba(107,163,255,0.3); border-radius: 14px;
-    padding: 12px 8px; text-align: center; cursor: pointer; transition: all 0.2s; }
+    border: 1px solid rgba(107,163,255,0.3); border-radius: 14px; padding: 12px 8px; text-align: center; cursor: pointer; transition: all 0.2s; }
   .action-card:active { transform: scale(0.97); }
   .action-icon { font-size: 22px; margin-bottom: 4px; display: block; }
   .action-label { font-size: 10px; color: #a8c5ff; font-weight: 700; letter-spacing: 0.5px; }
   .action-value { font-size: 12px; color: #f5b800; font-weight: 800; margin-top: 2px; }
 
-  /* BOTTOM NAV */
   .bottom-nav { position: absolute; bottom: 0; left: 0; right: 0;
     background: linear-gradient(180deg, rgba(10,20,40,0.95), rgba(5,10,24,0.98));
     border-top: 1px solid rgba(245,184,0,0.3);
@@ -156,9 +161,7 @@
   .nav-mine .nav-icon { font-size: 24px; margin-bottom: 0; }
   .nav-mine .nav-label { color: #0a1428; font-size: 7px; font-weight: 900; }
 
-  /* MINE */
-  .mine-hero { text-align: center; padding: 20px 0;
-    background: radial-gradient(circle at center, rgba(245,184,0,0.2), transparent 70%);
+  .mine-hero { text-align: center; padding: 20px 0; background: radial-gradient(circle at center, rgba(245,184,0,0.2), transparent 70%);
     border-radius: 20px; margin-bottom: 12px; }
   .pickaxe-spin { font-size: 60px; display: inline-block;
     animation: pickaxeSpin 4s ease-in-out infinite;
@@ -173,10 +176,36 @@
   .collect-btn { background: linear-gradient(135deg, #f5b800, #ff6b00) !important;
     color: #0a1428 !important; margin-top: 8px; box-shadow: 0 4px 25px rgba(245,184,0,0.5) !important; }
 
-  /* PROFILE */
-  .profile-header { text-align: center; padding: 20px 0; margin-bottom: 14px; }
-  .profile-avatar { width: 80px; height: 80px; border-radius: 50%;
+  .ads-counter { background: linear-gradient(135deg, rgba(245,184,0,0.15), rgba(255,107,0,0.08));
+    border: 1.5px solid rgba(245,184,0,0.5); border-radius: 16px; padding: 16px; text-align: center; margin-bottom: 14px; }
+  .ads-count { font-size: 36px; font-weight: 900;
     background: linear-gradient(135deg, #f5b800, #ff6b00);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .ads-label { font-size: 11px; color: #6ba3ff; margin-top: 4px; font-weight: 700; }
+  .ad-btn { background: linear-gradient(135deg, #0066ff, #8b5cf6) !important; color: #fff !important;
+    box-shadow: 0 4px 25px rgba(0,102,255,0.5) !important; margin-bottom: 10px; }
+  .ad-btn:disabled { opacity: 0.4; }
+
+  .wheel-container { text-align: center; padding: 20px 0; }
+  .wheel { font-size: 120px; display: inline-block; animation: spinWheel 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 30px rgba(245,184,0,0.6)); }
+  @keyframes spinWheel { 0%, 100% { transform: rotate(-8deg); } 50% { transform: rotate(8deg); } }
+  .wheel.spinning { animation: spinFast 3s linear forwards; }
+  @keyframes spinFast { 0% { transform: rotate(0deg); } 100% { transform: rotate(1440deg); } }
+
+  .checkin-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; width: 100%; margin-bottom: 14px; }
+  .checkin-day { background: linear-gradient(135deg, rgba(0,102,255,0.12), rgba(139,92,246,0.08));
+    border: 1px solid rgba(107,163,255,0.25); border-radius: 10px; padding: 10px 4px; text-align: center; }
+  .checkin-day.claimed { background: linear-gradient(135deg, rgba(50,255,100,0.15), rgba(50,255,100,0.05));
+    border-color: rgba(50,255,100,0.4); }
+  .checkin-day.today { background: linear-gradient(135deg, rgba(245,184,0,0.25), rgba(255,107,0,0.15));
+    border-color: rgba(245,184,0,0.6); animation: pulse 1.5s ease-in-out infinite; }
+  @keyframes pulse { 0%,100%{transform:scale(1);} 50%{transform:scale(1.05);} }
+  .checkin-num { font-size: 9px; color: #6ba3ff; font-weight: 700; margin-bottom: 4px; }
+  .checkin-reward { font-size: 13px; color: #f5b800; font-weight: 900; }
+
+  .profile-header { text-align: center; padding: 20px 0; margin-bottom: 14px; }
+  .profile-avatar { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #f5b800, #ff6b00);
     display: flex; align-items: center; justify-content: center;
     font-size: 36px; font-weight: 900; color: #0a1428;
     margin: 0 auto 12px; border: 3px solid rgba(245,184,0,0.5); box-shadow: 0 0 30px rgba(245,184,0,0.4); }
@@ -190,7 +219,6 @@
   .profile-item-label { font-size: 12px; color: #a8c5ff; font-weight: 600; display: flex; align-items: center; gap: 8px; }
   .profile-item-value { font-size: 12px; color: #f5b800; font-weight: 800; }
 
-  /* PLACEHOLDER */
   .placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center;
     flex: 1; text-align: center; padding: 40px 20px; }
   .placeholder-icon { font-size: 60px; margin-bottom: 16px; opacity: 0.6; }
@@ -200,13 +228,23 @@
   .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-100px);
     background: linear-gradient(135deg, #f5b800, #ff6b00); color: #0a1428;
     padding: 12px 24px; border-radius: 30px; font-size: 13px; font-weight: 800; z-index: 1000;
-    box-shadow: 0 8px 30px rgba(245,184,0,0.6); transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); pointer-events: none; }
+    box-shadow: 0 8px 30px rgba(245,184,0,0.6); transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); pointer-events: none; max-width: 90%; text-align: center; }
   .toast.show { transform: translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
 
-<div class="frame">
+<!-- SPLASH -->
+<div class="splash" id="splash">
+  <div class="splash-logo-wrap">
+    <img src="file_000000004a1481f4ad0c20442e76e9f7.png" alt="Grover" class="splash-logo">
+  </div>
+  <div class="splash-title">GROVER</div>
+  <div class="splash-subtitle">Mining Bot</div>
+  <div class="loading-bar"><div class="loading-fill"></div></div>
+</div>
+
+<div class="frame" id="frame">
 
   <!-- GATE -->
   <div class="screen active" id="gateScreen">
@@ -215,7 +253,6 @@
     </div>
     <div class="title">GROVER</div>
     <div class="subtitle">Mining Bot</div>
-
     <div class="mining-locked">
       <span class="lock-icon">🔒</span>
       <div class="mining-label">⛏️ Mining Locked</div>
@@ -223,23 +260,18 @@
       <div class="mining-rate">⚡ Level 1 · 1 GROVER/hr</div>
       <div class="mining-lock-text">Unlock by paying 0.05 TON</div>
     </div>
-
     <div class="stats2">
-      <div class="stat"><div class="stat-label">💰 Balance</div><div class="stat-value">0</div></div>
-      <div class="stat"><div class="stat-label">📈 Profit</div><div class="stat-value">0</div></div>
+      <div class="stat"><div class="stat-label">💰 Balance</div><div class="stat-value" id="gateBalance">0</div></div>
+      <div class="stat"><div class="stat-label">📈 Profit</div><div class="stat-value" id="gateProfit">0</div></div>
     </div>
-
     <div class="fee-box">
       <div class="fee-label">⚡ One-Time Entry Fee ⚡</div>
       <div class="fee-value">0.05<span>TON</span></div>
     </div>
-
     <div class="notice">🔒 Wallet must be <strong>7+ days old</strong> to unlock mining, tasks, ads, referrals and withdrawals.</div>
-
     <button id="connectBtn">🔗 Connect Wallet</button>
     <button id="payBtn">💎 Pay 0.05 TON</button>
     <button class="demo-btn" id="demoBtn">🎮 Demo Mode (Test Only)</button>
-
     <div id="walletInfo" class="wallet-info"></div>
     <div id="status" class="status"></div>
   </div>
@@ -250,271 +282,4 @@
       <div class="home-user">
         <div class="avatar" id="homeAvatar">G</div>
         <div>
-          <div class="home-name" id="homeName">Grover User</div>
-          <div class="home-handle" id="homeHandle">@user</div>
-        </div>
-      </div>
-      <div style="font-size:20px;">⚙️</div>
-    </div>
-
-    <div class="coin-hero">
-      <div class="coin-label">💰 Your Balance</div>
-      <div class="coin-value" id="balanceDisplay">0.00</div>
-      <div class="coin-sub">GROVER</div>
-    </div>
-
-    <div class="stats2">
-      <div class="stat"><div class="stat-label">📈 Profit</div><div class="stat-value">0</div></div>
-      <div class="stat"><div class="stat-label">⚡ Rate</div><div class="stat-value">1/hr</div></div>
-    </div>
-
-    <div class="action-grid">
-      <div class="action-card" onclick="switchTab('tasks')">
-        <span class="action-icon">📋</span>
-        <div class="action-label">Tasks</div>
-        <div class="action-value">+200</div>
-      </div>
-      <div class="action-card" onclick="switchTab('ads')">
-        <span class="action-icon">🎬</span>
-        <div class="action-label">Watch Ads</div>
-        <div class="action-value">10/day</div>
-      </div>
-      <div class="action-card" onclick="switchTab('spin')">
-        <span class="action-icon">🎡</span>
-        <div class="action-label">Spin Wheel</div>
-        <div class="action-value">1-200</div>
-      </div>
-      <div class="action-card" onclick="toast('Coming in Stage 3!')">
-        <span class="action-icon">🎁</span>
-        <div class="action-label">Daily Bonus</div>
-        <div class="action-value">+10</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- TASKS -->
-  <div class="screen" id="tasksScreen">
-    <div class="placeholder">
-      <div class="placeholder-icon">📋</div>
-      <div class="placeholder-title">TASKS</div>
-      <div class="placeholder-text">Complete tasks to earn GROVER coins.<br><br>📢 Follow our channel<br>🐦 Follow on Twitter<br>💬 Join Discord<br>⭐ Subscribe YouTube<br><br>Coming in Stage 3!</div>
-    </div>
-  </div>
-
-  <!-- MINE -->
-  <div class="screen" id="mineScreen">
-    <div class="mine-hero">
-      <div class="pickaxe-spin">⛏️</div>
-      <div class="mine-rate">Mining at <strong>1 GROVER/hr</strong></div>
-      <div class="mine-rate" style="font-size:10px;margin-top:4px;color:#6a7a9a;">Level 1</div>
-    </div>
-
-    <div class="progress-bar"><div class="progress-fill"></div></div>
-    <div style="text-align:center;font-size:10px;color:#6ba3ff;margin-bottom:12px;">Collect in 2h 15m</div>
-
-    <button class="collect-btn" onclick="toast('Collect unlocked after payment!')">💰 COLLECT</button>
-    <button style="background:linear-gradient(135deg,#0066ff,#8b5cf6);color:#fff;margin-top:8px;" onclick="toast('Upgrade coming in Stage 3!')">⬆️ UPGRADE — 0.05 TON</button>
-
-    <div class="stats2" style="margin-top:14px;">
-      <div class="stat"><div class="stat-label">⚡ Level</div><div class="stat-value">1</div></div>
-      <div class="stat"><div class="stat-label">📊 Rate</div><div class="stat-value">1/hr</div></div>
-    </div>
-  </div>
-
-  <!-- ADS -->
-  <div class="screen" id="adsScreen">
-    <div class="placeholder">
-      <div class="placeholder-icon">🎬</div>
-      <div class="placeholder-title">WATCH ADS</div>
-      <div class="placeholder-text">Watch 10 ads per day.<br><br>💰 +20 GROVER per ad<br>📊 Max 200 GROVER/day<br>⏱️ 15 seconds each<br><br>Coming in Stage 3!</div>
-    </div>
-  </div>
-
-  <!-- SPIN -->
-  <div class="screen" id="spinScreen">
-    <div class="placeholder">
-      <div class="placeholder-icon">🎡</div>
-      <div class="placeholder-title">SPIN WHEEL</div>
-      <div class="placeholder-text">Spin once per day for free.<br><br>🎁 Prizes: 1-200 GROVER<br>⭐ Weighted odds<br><br>Coming in Stage 3!</div>
-    </div>
-  </div>
-
-  <!-- WALLET -->
-  <div class="screen" id="walletScreen">
-    <div class="placeholder">
-      <div class="placeholder-icon">💰</div>
-      <div class="placeholder-title">WALLET</div>
-      <div class="placeholder-text">Withdraw your GROVER coins.<br><br>📤 Min: 10,000 GROVER<br>📤 Max: 12,000 GROVER<br>💸 15% fee<br>⏳ 1.5 weeks cooldown<br><br>Coming in Stage 3!</div>
-    </div>
-  </div>
-
-  <!-- PROFILE -->
-  <div class="screen" id="profileScreen">
-    <div class="profile-header">
-      <div class="profile-avatar" id="profileAvatar">G</div>
-      <div class="profile-name" id="profileName">Grover User</div>
-      <div class="profile-handle" id="profileHandle">@user</div>
-    </div>
-
-    <div class="profile-item" onclick="toast('Refer system coming soon!')">
-      <div class="profile-item-label">👥 Refer Friends</div>
-      <div class="profile-item-value">+200</div>
-    </div>
-    <div class="profile-item" onclick="toast('Stats coming in Stage 3!')">
-      <div class="profile-item-label">📊 My Stats</div>
-      <div class="profile-item-value">›</div>
-    </div>
-    <div class="profile-item" onclick="toast('History coming in Stage 3!')">
-      <div class="profile-item-label">📜 History</div>
-      <div class="profile-item-value">›</div>
-    </div>
-    <div class="profile-item" onclick="toast('Settings coming in Stage 3!')">
-      <div class="profile-item-label">⚙️ Settings</div>
-      <div class="profile-item-value">›</div>
-    </div>
-    <div class="profile-item" onclick="toast('Support coming soon!')">
-      <div class="profile-item-label">❓ Help & Support</div>
-      <div class="profile-item-value">›</div>
-    </div>
-  </div>
-
-  <!-- BOTTOM NAV -->
-  <div class="bottom-nav" id="bottomNav" style="display:none;">
-    <div class="nav-item" onclick="switchTab('tasks')" data-tab="tasks">
-      <span class="nav-icon">📋</span>
-      <span class="nav-label">Tasks</span>
-    </div>
-    <div class="nav-item" onclick="switchTab('ads')" data-tab="ads">
-      <span class="nav-icon">🎬</span>
-      <span class="nav-label">Ads</span>
-    </div>
-    <div class="nav-item nav-mine" onclick="switchTab('mine')" data-tab="mine">
-      <span class="nav-icon">⛏️</span>
-      <span class="nav-label">Mine</span>
-    </div>
-    <div class="nav-item" onclick="switchTab('wallet')" data-tab="wallet">
-      <span class="nav-icon">💰</span>
-      <span class="nav-label">Wallet</span>
-    </div>
-    <div class="nav-item" onclick="switchTab('profile')" data-tab="profile">
-      <span class="nav-icon">👤</span>
-      <span class="nav-label">Profile</span>
-    </div>
-  </div>
-
-</div>
-
-<div class="toast" id="toast">Message</div>
-
-<script>
-  const tg = window.Telegram?.WebApp;
-  if (tg) { tg.ready(); tg.expand(); tg.setHeaderColor('#050a18'); tg.setBackgroundColor('#050a18'); }
-
-  function toast(msg) {
-    const el = document.getElementById('toast');
-    el.textContent = msg;
-    el.classList.add('show');
-    setTimeout(() => el.classList.remove('show'), 2500);
-  }
-
-  function switchTab(tab) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-
-    const screens = { tasks: 'tasksScreen', mine: 'mineScreen', ads: 'adsScreen', spin: 'spinScreen', wallet: 'walletScreen', profile: 'profileScreen', home: 'homeScreen' };
-    const el = document.getElementById(screens[tab]);
-    if (el) el.classList.add('active');
-
-    document.querySelectorAll('.nav-item').forEach(n => {
-      if (n.dataset.tab === tab) n.classList.add('active');
-    });
-  }
-
-  function unlockApp() {
-    document.getElementById('gateScreen').classList.remove('active');
-    document.getElementById('homeScreen').classList.add('active');
-    document.getElementById('bottomNav').style.display = 'flex';
-
-    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
-      const u = tg.initDataUnsafe.user;
-      const name = (u.first_name || '') + (u.last_name ? ' ' + u.last_name : '');
-      const handle = u.username ? '@' + u.username : '@user';
-      const initial = (u.first_name || 'G').charAt(0).toUpperCase();
-
-      document.getElementById('homeName').textContent = name || 'Grover User';
-      document.getElementById('homeHandle').textContent = handle;
-      document.getElementById('homeAvatar').textContent = initial;
-      document.getElementById('profileName').textContent = name || 'Grover User';
-      document.getElementById('profileHandle').textContent = handle;
-      document.getElementById('profileAvatar').textContent = initial;
-    }
-
-    toast('🎉 Welcome to Grover!');
-  }
-
-  document.getElementById('demoBtn').addEventListener('click', unlockApp);
-
-  const connectBtn = document.getElementById('connectBtn');
-  const payBtn = document.getElementById('payBtn');
-  const walletInfo = document.getElementById('walletInfo');
-  const statusBox = document.getElementById('status');
-
-  let connectedWallet = null;
-  let tonConnectUI = null;
-  const PROJECT_WALLET = 'UQBiiE8EcQ-tRSIi4HjKnCYjGJ0Wjh5SA84xyzbc-qdq5ws2';
-
-  function showStatus(msg, type) {
-    statusBox.textContent = msg;
-    statusBox.className = 'status show ' + type;
-  }
-  function hideStatus() { statusBox.className = 'status'; }
-
-  try {
-    tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-      manifestUrl: 'https://buywithus225-wq.github.io/Grover-miner-app/tonconnect-manifest.json',
-      buttonRootId: null
-    });
-
-    tonConnectUI.onStatusChange(wallet => {
-      if (wallet) {
-        connectedWallet = wallet;
-        const addr = wallet.account.address;
-        walletInfo.textContent = '✅ Connected: ' + addr.slice(0, 6) + '...' + addr.slice(-4);
-        walletInfo.classList.add('show');
-        connectBtn.style.display = 'none';
-        payBtn.classList.add('show');
-        showStatus('✅ Wallet connected. Ready to pay.', 'success');
-      } else {
-        connectedWallet = null;
-        walletInfo.classList.remove('show');
-        connectBtn.style.display = 'block';
-        payBtn.classList.remove('show');
-        hideStatus();
-      }
-    });
-  } catch (e) { console.log('TON Connect init error:', e); }
-
-  connectBtn.addEventListener('click', async () => {
-    if (!tonConnectUI) { showStatus('TON Connect not loaded. Refresh.', 'error'); return; }
-    try {
-      showStatus('Opening wallet...', 'loading');
-      await tonConnectUI.openModal();
-    } catch (e) { showStatus('Connection cancelled.', 'error'); }
-  });
-
-  payBtn.addEventListener('click', async () => {
-    if (!connectedWallet) return;
-    try {
-      showStatus('Confirm payment in your wallet...', 'loading');
-      await tonConnectUI.sendTransaction({
-        validUntil: Math.floor(Date.now() / 1000) + 360,
-        messages: [{ address: PROJECT_WALLET, amount: '50000000' }]
-      });
-      showStatus('✅ Payment sent! Unlocking...', 'success');
-      setTimeout(unlockApp, 2000);
-    } catch (e) { showStatus('Payment cancelled.', 'error'); }
-  });
-</script>
-
-</body>
-</html>
+          <div class="home-name" id="homeName
