@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Grover Mining Bot</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
   html, body { height: 100%; overflow: hidden; }
@@ -36,9 +37,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 30px 24px;
+    padding: 30px 22px;
+    overflow-y: auto;
   }
+
+  .frame::-webkit-scrollbar { display: none; }
 
   .frame::before {
     content: '';
@@ -59,6 +62,7 @@
     width: 26px; height: 26px;
     border: 2px solid #f5b800;
     opacity: 0.6;
+    pointer-events: none;
   }
   .tl { top: 14px; left: 14px; border-right: none; border-bottom: none; border-radius: 10px 0 0 0; }
   .tr { top: 14px; right: 14px; border-left: none; border-bottom: none; border-radius: 0 10px 0 0; }
@@ -66,64 +70,165 @@
   .br { bottom: 14px; right: 14px; border-left: none; border-top: none; border-radius: 0 0 10px 0; }
 
   .logo {
-    width: 200px;
-    height: 200px;
+    width: 130px;
+    height: 130px;
     object-fit: contain;
-    margin-bottom: 20px;
+    margin: 10px 0 16px;
     filter: drop-shadow(0 0 30px rgba(245,184,0,0.5));
     animation: float 3s ease-in-out infinite;
   }
 
   @keyframes float {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
+    50% { transform: translateY(-6px); }
   }
 
-  .coming {
-    padding: 12px 28px;
-    background: linear-gradient(135deg, rgba(245,184,0,0.15), rgba(245,184,0,0.05));
-    border: 1px solid rgba(245,184,0,0.5);
-    border-radius: 50px;
-    color: #f5b800;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    margin-bottom: 28px;
-    box-shadow: 0 0 25px rgba(245,184,0,0.3);
-    animation: glow 2s ease-in-out infinite;
-  }
-
-  @keyframes glow {
-    0%, 100% { box-shadow: 0 0 25px rgba(245,184,0,0.3); }
-    50% { box-shadow: 0 0 45px rgba(245,184,0,0.6); }
-  }
-
-  .features {
+  .stats {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
     width: 100%;
+    margin-bottom: 16px;
   }
 
-  .feature {
+  .stat {
     background: rgba(0,102,255,0.08);
     border: 1px solid rgba(107,163,255,0.2);
-    border-radius: 14px;
-    padding: 14px 8px;
+    border-radius: 12px;
+    padding: 12px 8px;
     text-align: center;
   }
 
-  .feature .icon { font-size: 24px; display: block; margin-bottom: 6px; }
-  .feature .label { font-size: 11px; color: #a8c5ff; font-weight: 600; }
+  .stat-label {
+    font-size: 10px;
+    color: #6ba3ff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+
+  .stat-value {
+    font-size: 18px;
+    font-weight: 800;
+    color: #f5b800;
+    text-shadow: 0 0 12px rgba(245,184,0,0.4);
+  }
+
+  .fee-box {
+    width: 100%;
+    background: linear-gradient(135deg, rgba(245,184,0,0.12), rgba(245,184,0,0.03));
+    border: 1px solid rgba(245,184,0,0.4);
+    border-radius: 14px;
+    padding: 14px;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+
+  .fee-label {
+    font-size: 10px;
+    color: #6ba3ff;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  .fee-value {
+    font-size: 26px;
+    font-weight: 900;
+    color: #f5b800;
+    text-shadow: 0 0 20px rgba(245,184,0,0.5);
+  }
+
+  .fee-value span {
+    font-size: 14px;
+    color: #a8c5ff;
+    margin-left: 4px;
+    font-weight: 600;
+  }
+
+  .notice {
+    font-size: 11px;
+    color: #7a92b8;
+    text-align: center;
+    line-height: 1.5;
+    margin-bottom: 16px;
+    padding: 0 8px;
+  }
+
+  .notice strong { color: #f5b800; }
+
+  button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 14px;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+    text-transform: uppercase;
+  }
+
+  #connectBtn {
+    background: linear-gradient(135deg, #0066ff, #0047b3);
+    color: #fff;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 20px rgba(0,102,255,0.4);
+  }
+
+  #connectBtn:active { transform: scale(0.97); }
+
+  #payBtn {
+    background: linear-gradient(135deg, #f5b800, #d99e00);
+    color: #0a1428;
+    box-shadow: 0 4px 20px rgba(245,184,0,0.4);
+    display: none;
+  }
+
+  #payBtn:active { transform: scale(0.97); }
+  #payBtn.show { display: block; }
+
+  .wallet-info {
+    font-size: 11px;
+    color: #6ba3ff;
+    margin: 8px 0;
+    padding: 8px;
+    background: rgba(107,163,255,0.08);
+    border-radius: 8px;
+    word-break: break-all;
+    display: none;
+    text-align: center;
+  }
+
+  .wallet-info.show { display: block; }
+
+  .status {
+    font-size: 12px;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    display: none;
+    text-align: center;
+    width: 100%;
+  }
+
+  .status.show { display: block; }
+  .status.error { background: rgba(255,50,50,0.1); color: #ff6b6b; border: 1px solid rgba(255,50,50,0.3); }
+  .status.success { background: rgba(50,255,100,0.1); color: #6bff8f; border: 1px solid rgba(50,255,100,0.3); }
+  .status.loading { background: rgba(107,163,255,0.1); color: #6ba3ff; border: 1px solid rgba(107,163,255,0.3); }
 
   .footer {
-    position: absolute;
-    bottom: 22px;
+    margin-top: auto;
+    padding-top: 20px;
     font-size: 10px;
     color: #4a6a9a;
     letter-spacing: 3px;
     text-transform: uppercase;
+    text-align: center;
   }
   .footer span { color: #f5b800; font-weight: 700; text-shadow: 0 0 10px rgba(245,184,0,0.5); }
 </style>
@@ -138,14 +243,31 @@
 
   <img src="file_000000004a1481f4ad0c20442e76e9f7.png" alt="Grover" class="logo">
 
-  <div class="coming">Coming Soon</div>
-
-  <div class="features">
-    <div class="feature"><span class="icon">⛏️</span><span class="label">Mine Daily</span></div>
-    <div class="feature"><span class="icon">🎬</span><span class="label">Watch & Earn</span></div>
-    <div class="feature"><span class="icon">👥</span><span class="label">Refer Friends</span></div>
-    <div class="feature"><span class="icon">💎</span><span class="label">Withdraw TON</span></div>
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-label">Balance</div>
+      <div class="stat-value">0</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Profit</div>
+      <div class="stat-value">0</div>
+    </div>
   </div>
+
+  <div class="fee-box">
+    <div class="fee-label">One-Time Entry Fee</div>
+    <div class="fee-value">0.05<span>TON</span></div>
+  </div>
+
+  <div class="notice">
+    Wallet must be <strong>7+ days old</strong> to unlock mining, tasks, ads, referrals and withdrawals.
+  </div>
+
+  <button id="connectBtn">🔗 Connect Wallet</button>
+  <button id="payBtn">💎 Pay 0.05 TON</button>
+
+  <div id="walletInfo" class="wallet-info"></div>
+  <div id="status" class="status"></div>
 
   <div class="footer">POWERED BY <span>TON</span></div>
 </div>
@@ -158,6 +280,93 @@
     tg.setHeaderColor('#050a18');
     tg.setBackgroundColor('#050a18');
   }
+
+  const connectBtn = document.getElementById('connectBtn');
+  const payBtn = document.getElementById('payBtn');
+  const walletInfo = document.getElementById('walletInfo');
+  const statusBox = document.getElementById('status');
+
+  let connectedWallet = null;
+  let tonConnectUI = null;
+
+  // YOUR PROJECT WALLET
+  const PROJECT_WALLET = 'UQBiiE8EcQ-tRSIi4HjKnCYjGJ0Wjh5SA84xyzbc-qdq5ws2';
+
+  function showStatus(msg, type) {
+    statusBox.textContent = msg;
+    statusBox.className = 'status show ' + type;
+  }
+
+  function hideStatus() {
+    statusBox.className = 'status';
+  }
+
+  // Initialize TON Connect
+  try {
+    tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+      manifestUrl: 'https://buywithus225-wq.github.io/Grover-miner-app/tonconnect-manifest.json',
+      buttonRootId: null
+    });
+
+    tonConnectUI.onStatusChange(wallet => {
+      if (wallet) {
+        connectedWallet = wallet;
+        const addr = wallet.account.address;
+        const short = addr.slice(0, 6) + '...' + addr.slice(-4);
+        walletInfo.textContent = 'Connected: ' + short;
+        walletInfo.classList.add('show');
+        connectBtn.style.display = 'none';
+        payBtn.classList.add('show');
+        showStatus('✅ Wallet connected. Ready to pay.', 'success');
+      } else {
+        connectedWallet = null;
+        walletInfo.classList.remove('show');
+        connectBtn.style.display = 'block';
+        payBtn.classList.remove('show');
+        hideStatus();
+      }
+    });
+  } catch (e) {
+    console.log('TON Connect init error:', e);
+  }
+
+  // Connect wallet
+  connectBtn.addEventListener('click', async () => {
+    if (!tonConnectUI) {
+      showStatus('TON Connect not loaded. Please refresh.', 'error');
+      return;
+    }
+    try {
+      showStatus('Opening wallet...', 'loading');
+      await tonConnectUI.openModal();
+    } catch (e) {
+      showStatus('Connection cancelled.', 'error');
+    }
+  });
+
+  // Pay entry fee (visual only — real verification needs backend)
+  payBtn.addEventListener('click', async () => {
+    if (!connectedWallet) return;
+    try {
+      showStatus('Confirm payment in your wallet...', 'loading');
+
+      const transaction = {
+        validUntil: Math.floor(Date.now() / 1000) + 360,
+        messages: [
+          {
+            address: PROJECT_WALLET,
+            amount: '50000000' // 0.05 TON in nanotons
+          }
+        ]
+      };
+
+      const result = await tonConnectUI.sendTransaction(transaction);
+      showStatus('✅ Payment sent! Verification coming in Stage 7.', 'success');
+
+    } catch (e) {
+      showStatus('Payment cancelled.', 'error');
+    }
+  });
 </script>
 
 </body>
