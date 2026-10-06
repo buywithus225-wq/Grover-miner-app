@@ -24,10 +24,8 @@
     width: 100%;
     max-width: 400px;
     height: 100%;
-    max-height: 800px;
+    max-height: 820px;
     background: linear-gradient(160deg, #0f1e42 0%, #1a0f3a 50%, #0a1428 100%);
-    border: 2px solid transparent;
-    background-clip: padding-box;
     border-radius: 32px;
     position: relative;
     overflow: hidden;
@@ -38,7 +36,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 24px 20px;
+    padding: 20px 18px;
     overflow-y: auto;
     animation: borderGlow 4s ease-in-out infinite;
   }
@@ -50,7 +48,6 @@
 
   .frame::-webkit-scrollbar { display: none; }
 
-  /* Animated top glow */
   .frame::before {
     content: '';
     position: absolute; top: 0; left: 10%; right: 10%; height: 3px;
@@ -91,7 +88,6 @@
   .bl { bottom: 12px; left: 12px; border-right: none; border-top: none; border-radius: 0 0 0 12px; }
   .br { bottom: 12px; right: 12px; border-left: none; border-top: none; border-radius: 0 0 12px 0; }
 
-  /* Floating particles background */
   .particles {
     position: absolute;
     inset: 0;
@@ -104,9 +100,7 @@
     position: absolute;
     width: 3px;
     height: 3px;
-    background: #f5b800;
     border-radius: 50%;
-    box-shadow: 0 0 8px #f5b800;
     animation: floatUp linear infinite;
   }
 
@@ -117,52 +111,53 @@
     100% { transform: translateY(-20px) scale(1); opacity: 0; }
   }
 
+  /* BIG HERO LOGO */
   .logo-wrap {
     position: relative;
-    margin: 8px 0 18px;
+    margin: 4px 0 10px;
   }
 
   .logo-wrap::before {
     content: '';
     position: absolute;
-    inset: -20px;
-    background: radial-gradient(circle, rgba(245,184,0,0.4), transparent 70%);
+    inset: -25px;
+    background: radial-gradient(circle, rgba(245,184,0,0.5), transparent 70%);
     border-radius: 50%;
     animation: logoGlow 2.5s ease-in-out infinite;
   }
 
   @keyframes logoGlow {
     0%, 100% { transform: scale(1); opacity: 0.6; }
-    50% { transform: scale(1.15); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 1; }
   }
 
   .logo {
-    width: 120px;
-    height: 120px;
+    width: 130px;
+    height: 130px;
     object-fit: contain;
     position: relative;
     z-index: 2;
-    filter: drop-shadow(0 0 25px rgba(245,184,0,0.8));
+    filter: drop-shadow(0 0 30px rgba(245,184,0,0.9));
     animation: float 3s ease-in-out infinite;
   }
 
   @keyframes float {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
+    50% { transform: translateY(-7px); }
   }
 
   .title {
     font-size: 26px;
     font-weight: 900;
-    letter-spacing: 3px;
+    letter-spacing: 4px;
     background: linear-gradient(135deg, #f5b800 0%, #ff6b00 30%, #f5b800 60%, #ffdd00 100%);
     background-size: 200% 100%;
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 30px rgba(245,184,0,0.5);
     animation: titleShine 3s linear infinite;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
+    text-align: center;
   }
 
   @keyframes titleShine {
@@ -173,61 +168,147 @@
   .subtitle {
     font-size: 10px;
     color: #6ba3ff;
-    letter-spacing: 4px;
+    letter-spacing: 5px;
     text-transform: uppercase;
     font-weight: 700;
     margin-bottom: 16px;
     text-shadow: 0 0 10px rgba(107,163,255,0.5);
+    text-align: center;
+  }
+
+  /* LOCKED MINING SECTION */
+  .mining-locked {
+    width: 100%;
+    background: linear-gradient(135deg, rgba(80,80,120,0.25), rgba(50,50,80,0.2));
+    border: 1.5px solid rgba(150,150,180,0.3);
+    border-radius: 16px;
+    padding: 14px;
+    text-align: center;
+    margin-bottom: 12px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 25px rgba(0,102,255,0.1), inset 0 0 25px rgba(80,80,120,0.15);
+  }
+
+  .mining-locked::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 8px,
+      rgba(150,150,180,0.05) 8px,
+      rgba(150,150,180,0.05) 16px
+    );
+    pointer-events: none;
+  }
+
+  .lock-icon {
+    font-size: 26px;
+    margin-bottom: 2px;
+    display: block;
+    filter: drop-shadow(0 0 15px rgba(245,184,0,0.6));
+    opacity: 0.9;
+  }
+
+  .mining-label {
+    font-size: 9px;
+    color: #a8b8d8;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .mining-value {
+    font-size: 28px;
+    font-weight: 900;
+    color: #4a5a7a;
+    text-shadow: 0 0 15px rgba(0,0,0,0.5);
+    letter-spacing: 1px;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+    position: relative;
+    z-index: 2;
+  }
+
+  .mining-value .unit {
+    font-size: 11px;
+    color: #4a5a7a;
+    font-weight: 700;
+    margin-left: 5px;
+    letter-spacing: 1px;
+  }
+
+  .mining-rate {
+    font-size: 10px;
+    color: #6a7a9a;
+    font-weight: 700;
+    margin-top: 4px;
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .mining-lock-text {
+    font-size: 10px;
+    color: #f5b800;
+    font-weight: 800;
+    margin-top: 6px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 2;
+    text-shadow: 0 0 10px rgba(245,184,0,0.5);
   }
 
   .stats {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 8px;
     width: 100%;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
   }
 
   .stat {
     background: linear-gradient(135deg, rgba(0,102,255,0.15), rgba(139,92,246,0.1));
     border: 1px solid rgba(107,163,255,0.3);
-    border-radius: 14px;
-    padding: 12px 8px;
+    border-radius: 12px;
+    padding: 10px 6px;
     text-align: center;
     box-shadow: inset 0 0 20px rgba(0,102,255,0.1);
-    transition: all 0.3s;
   }
 
   .stat-label {
-    font-size: 9px;
+    font-size: 8px;
     color: #6ba3ff;
     text-transform: uppercase;
     letter-spacing: 1.5px;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
     font-weight: 700;
   }
 
   .stat-value {
-    font-size: 18px;
+    font-size: 15px;
     font-weight: 900;
     background: linear-gradient(135deg, #f5b800, #ff6b00);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 15px rgba(245,184,0,0.5);
   }
 
   .fee-box {
     width: 100%;
     background: linear-gradient(135deg, rgba(245,184,0,0.2), rgba(255,107,0,0.1), rgba(139,92,246,0.15));
     border: 1.5px solid rgba(245,184,0,0.6);
-    border-radius: 16px;
-    padding: 14px;
+    border-radius: 14px;
+    padding: 11px;
     text-align: center;
-    margin-bottom: 14px;
+    margin-bottom: 10px;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 0 30px rgba(245,184,0,0.3), inset 0 0 30px rgba(245,184,0,0.05);
+    box-shadow: 0 0 30px rgba(245,184,0,0.3);
   }
 
   .fee-box::before {
@@ -245,18 +326,18 @@
   }
 
   .fee-label {
-    font-size: 10px;
+    font-size: 9px;
     color: #ffdd00;
     letter-spacing: 2px;
     text-transform: uppercase;
-    margin-bottom: 6px;
+    margin-bottom: 3px;
     font-weight: 700;
     position: relative;
     z-index: 2;
   }
 
   .fee-value {
-    font-size: 28px;
+    font-size: 22px;
     font-weight: 900;
     color: #fff;
     text-shadow: 0 0 20px rgba(245,184,0,0.8), 0 0 40px rgba(245,184,0,0.4);
@@ -265,19 +346,19 @@
   }
 
   .fee-value span {
-    font-size: 15px;
+    font-size: 12px;
     color: #ffdd00;
-    margin-left: 5px;
+    margin-left: 4px;
     font-weight: 700;
   }
 
   .notice {
-    font-size: 11px;
+    font-size: 10px;
     color: #a8c5ff;
     text-align: center;
-    line-height: 1.5;
-    margin-bottom: 16px;
-    padding: 8px 12px;
+    line-height: 1.4;
+    margin-bottom: 10px;
+    padding: 7px 10px;
     background: rgba(139,92,246,0.08);
     border-left: 3px solid #8b5cf6;
     border-radius: 8px;
@@ -287,18 +368,16 @@
 
   button {
     width: 100%;
-    padding: 15px;
+    padding: 13px;
     border: none;
-    border-radius: 14px;
-    font-size: 14px;
+    border-radius: 12px;
+    font-size: 13px;
     font-weight: 900;
     letter-spacing: 1.5px;
     cursor: pointer;
     transition: all 0.2s;
     font-family: inherit;
     text-transform: uppercase;
-    position: relative;
-    overflow: hidden;
   }
 
   button:active { transform: scale(0.97); }
@@ -307,7 +386,7 @@
     background: linear-gradient(135deg, #0066ff 0%, #8b5cf6 50%, #0066ff 100%);
     background-size: 200% 100%;
     color: #fff;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     box-shadow: 0 4px 25px rgba(0,102,255,0.5), 0 0 40px rgba(139,92,246,0.3);
     animation: btnPulse 3s ease-in-out infinite;
   }
@@ -321,23 +400,17 @@
     background: linear-gradient(135deg, #f5b800 0%, #ff6b00 50%, #f5b800 100%);
     background-size: 200% 100%;
     color: #0a1428;
-    box-shadow: 0 4px 25px rgba(245,184,0,0.5), 0 0 40px rgba(255,107,0,0.3);
+    box-shadow: 0 4px 25px rgba(245,184,0,0.5);
     display: none;
-    animation: btnPulseGold 3s ease-in-out infinite;
-  }
-
-  @keyframes btnPulseGold {
-    0%, 100% { box-shadow: 0 4px 25px rgba(245,184,0,0.5), 0 0 40px rgba(255,107,0,0.3); }
-    50% { box-shadow: 0 4px 35px rgba(245,184,0,0.8), 0 0 60px rgba(255,107,0,0.5); }
   }
 
   #payBtn.show { display: block; }
 
   .wallet-info {
-    font-size: 11px;
+    font-size: 10px;
     color: #6bff8f;
-    margin: 8px 0;
-    padding: 8px;
+    margin: 6px 0;
+    padding: 6px;
     background: rgba(50,255,100,0.1);
     border: 1px solid rgba(50,255,100,0.3);
     border-radius: 8px;
@@ -350,10 +423,10 @@
   .wallet-info.show { display: block; }
 
   .status {
-    font-size: 12px;
-    margin-top: 10px;
-    padding: 10px;
-    border-radius: 10px;
+    font-size: 11px;
+    margin-top: 8px;
+    padding: 8px;
+    border-radius: 8px;
     display: none;
     text-align: center;
     width: 100%;
@@ -367,8 +440,8 @@
 
   .footer {
     margin-top: auto;
-    padding-top: 16px;
-    font-size: 10px;
+    padding-top: 12px;
+    font-size: 9px;
     color: #4a6a9a;
     letter-spacing: 3px;
     text-transform: uppercase;
@@ -392,12 +465,22 @@
   <div class="corner bl"></div>
   <div class="corner br"></div>
 
+  <!-- HERO LOGO FIRST -->
   <div class="logo-wrap">
     <img src="file_000000004a1481f4ad0c20442e76e9f7.png" alt="Grover" class="logo">
   </div>
 
   <div class="title">GROVER</div>
   <div class="subtitle">Mining Bot</div>
+
+  <!-- LOCKED MINING -->
+  <div class="mining-locked">
+    <span class="lock-icon">🔒</span>
+    <div class="mining-label">⛏️ Mining Locked</div>
+    <div class="mining-value">0.00<span class="unit">GROVER</span></div>
+    <div class="mining-rate">⚡ Level 1 · 1 GROVER/hr (after unlock)</div>
+    <div class="mining-lock-text">Unlock by paying 0.05 TON</div>
+  </div>
 
   <div class="stats">
     <div class="stat">
@@ -437,7 +520,6 @@
     tg.setBackgroundColor('#050a18');
   }
 
-  // Generate floating particles
   const particlesContainer = document.getElementById('particles');
   for (let i = 0; i < 25; i++) {
     const p = document.createElement('div');
