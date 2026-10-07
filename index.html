@@ -155,7 +155,6 @@
     0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
     100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
   }
-
   .logo-wrap { position: relative; margin: 10px auto 14px; width: fit-content; }
   .logo { width: 180px; height: 180px; object-fit: contain;
     filter: drop-shadow(0 0 40px rgba(0,212,255,0.9)) drop-shadow(0 0 70px rgba(245,184,0,0.4));
@@ -345,7 +344,6 @@
   <div class="wave"></div>
   <div class="wave"></div>
 </div>
-
 <!-- SPLASH -->
 <div class="splash" id="splash">
   <div class="splash-logo-wrap">
@@ -369,7 +367,7 @@
       <span class="lock-icon">🔒</span>
       <div class="mining-label">⛏️ Mining Locked</div>
       <div class="mining-value">0.00<span class="unit">GROV</span></div>
-      <div class="mining-rate">⚡ Level 1 · 20 GROV/day</div>
+      <div class="mining-rate">⚡ Level 1 · 5 GROV / 24hrs</div>
       <div class="mining-lock-text">Unlock by paying 0.05 TON</div>
     </div>
     <div class="stats2">
@@ -380,7 +378,7 @@
       <div class="fee-label">⚡ One-Time Entry Fee ⚡</div>
       <div class="fee-value">0.05<span>TON</span></div>
     </div>
-    <div class="notice">🔒 Wallet must be <strong>7+ days old</strong> to unlock mining, tasks, ads, referrals and withdrawals.</div>
+    <div class="notice">🔒 Wallet must be <strong>7+ days old</strong> to unlock mining.</div>
     <button id="connectBtn" onclick="handleConnect()">🔗 Connect Wallet</button>
     <button id="payBtn" onclick="handlePay()">💎 Pay 0.05 TON</button>
     <button class="demo-btn" onclick="unlockApp()">🎮 Demo Mode (Test Only)</button>
@@ -405,16 +403,21 @@
     </div>
 
     <div class="earned-counter">
-      <div class="earned-value" id="earnedValue">+0.0000</div>
-      <div class="earned-label">GROV Earned</div>
+      <div class="earned-value" id="earnedValue">+0.00000000</div>
+      <div class="earned-label">⛏️ Mining Live</div>
+      <div style="font-size:10px;color:#00d4ff;margin-top:6px;font-weight:700;" id="nextClaimTimer">Loading...</div>
+    </div>
+
+    <div style="text-align:center;margin-bottom:14px;font-size:11px;color:#6ba3ff;">
+      🎯 Level 1 Max: <strong style="color:#f5b800;">5.00000000 GROV / 24hrs</strong>
     </div>
 
     <div class="balance-box">
-      <div class="balance-label">💰 Balance</div>
+      <div class="balance-label">💰 Balance (Claimed)</div>
       <div class="balance-value" id="balanceDisplay">0.00<span>GROV</span></div>
     </div>
 
-    <button class="claim-btn" onclick="claimMining()">CLAIM</button>
+    <button class="claim-btn" onclick="claimMining()" id="claimBtn">CLAIM</button>
   </div>
 
   <!-- SPIN -->
@@ -453,7 +456,7 @@
       </svg>
     </div>
     <button class="collect-btn" id="spinBtn" onclick="spinWheel(false)">🎡 SPIN NOW</button>
-    <div class="notice" style="margin-top:12px;">🎰 Rare jackpot: 200 GROV! Land on RE-SPIN → auto-spin → 1 GROV</div>
+    <div class="notice" style="margin-top:12px;">🎰 Jackpot: 200 GROV! Land on RE-SPIN → auto-spin → 1 GROV</div>
     <div id="spinTimer" style="text-align:center;font-size:11px;color:#00d4ff;margin-top:10px;font-weight:700;"></div>
   </div>
 
@@ -461,30 +464,30 @@
   <div class="screen" id="adsScreen">
     <div style="text-align:center;margin-bottom:16px;">
       <div style="font-size:24px;font-weight:900;color:#00d4ff;">🎬 WATCH ADS</div>
-      <div style="font-size:11px;color:#00d4ff;margin-top:4px;">Earn 5 GROV per ad · Max 10/day</div>
+      <div style="font-size:11px;color:#00d4ff;margin-top:4px;">Earn GROV per ad</div>
     </div>
     <div class="ads-counter">
       <div class="ads-count" id="adsCount">0 / 10</div>
       <div class="ads-label">Ads watched today</div>
     </div>
-    <button class="ad-btn" id="watchAdBtn" onclick="watchAd()">🎬 WATCH AD (+5 GROV)</button>
-    <div class="notice" style="text-align:left;">Each ad takes 15 seconds. Max 10 ads per day. VIP users earn more per ad.</div>
+    <button class="ad-btn" id="watchAdBtn" onclick="watchAd()">🎬 WATCH AD</button>
+    <div class="notice" style="text-align:left;">Each ad takes 15 seconds. Max 10 ads per day.</div>
   </div>
 
   <!-- MINE -->
   <div class="screen" id="mineScreen">
     <div class="mine-hero">
       <div class="pickaxe-spin">⛏️</div>
-      <div class="mine-rate">Mining at <strong>20 GROV/day</strong></div>
-      <div class="mine-rate" style="font-size:10px;margin-top:4px;color:#4a7aaa;">Level 1</div>
+      <div class="mine-rate">Mining at <strong id="mineRateText">5 GROV/day</strong></div>
+      <div class="mine-rate" style="font-size:10px;margin-top:4px;color:#4a7aaa;" id="mineLevelText">Level 1</div>
     </div>
-    <div class="progress-bar"><div class="progress-fill"></div></div>
-    <div style="text-align:center;font-size:10px;color:#00d4ff;margin-bottom:12px;">Collect on Home page</div>
+    <div class="progress-bar"><div class="progress-fill" id="mineProgressFill"></div></div>
+    <div style="text-align:center;font-size:10px;color:#00d4ff;margin-bottom:12px;" id="mineProgressText">Collect on Home page</div>
     <button class="collect-btn" onclick="switchTab('home')">💰 GO TO CLAIM</button>
     <button style="background:linear-gradient(135deg,#00d4ff,#0088ff);color:#fff;margin-top:10px;" onclick="openVip()">👑 UPGRADE TO VIP</button>
     <div class="stats2" style="margin-top:14px;">
-      <div class="stat"><div class="stat-label">⚡ Level</div><div class="stat-value">1</div></div>
-      <div class="stat"><div class="stat-label">📊 Rate</div><div class="stat-value">20/day</div></div>
+      <div class="stat"><div class="stat-label">⚡ Level</div><div class="stat-value" id="mineLevel">1</div></div>
+      <div class="stat"><div class="stat-label">📊 Rate</div><div class="stat-value" id="mineRate">5/day</div></div>
     </div>
   </div>
 
@@ -504,7 +507,7 @@
     <div class="placeholder">
       <div class="placeholder-icon">💰</div>
       <div class="placeholder-title">WALLET</div>
-      <div class="placeholder-text">🚧 Withdrawal Coming Soon 🚧<br><br>Min: 10,000 GROV<br>Max: 12,000 GROV<br>Fee: 15% (VIP: lower)<br>Cooldown: 1.5 weeks<br>Wallet must be 7+ days old</div>
+      <div class="placeholder-text">🚧 Withdrawal Coming Soon 🚧<br><br>Min: 10,000 GROV<br>Max: 12,000 GROV<br>Fee: 15%<br>Cooldown: 1.5 weeks</div>
     </div>
   </div>
 
@@ -517,7 +520,11 @@
     </div>
     <div class="profile-item" onclick="referFriend()">
       <div class="profile-item-label">👥 Refer Friends</div>
-      <div class="profile-item-value">+200 GROV</div>
+      <div class="profile-item-value" id="myReferralCount">0 invited</div>
+    </div>
+    <div class="profile-item" onclick="showMyLink()">
+      <div class="profile-item-label">🔗 My Referral Link</div>
+      <div class="profile-item-value">Copy</div>
     </div>
     <div class="profile-item" onclick="toast('Top 10 coming soon!')">
       <div class="profile-item-label">🏆 Top 10 Referrers</div>
@@ -525,10 +532,6 @@
     </div>
     <div class="profile-item" onclick="toast('Stats coming soon!')">
       <div class="profile-item-label">📊 My Stats</div>
-      <div class="profile-item-value">›</div>
-    </div>
-    <div class="profile-item" onclick="toast('History coming soon!')">
-      <div class="profile-item-label">📜 History</div>
       <div class="profile-item-value">›</div>
     </div>
     <div class="profile-item" onclick="toast('Settings coming soon!')">
@@ -579,11 +582,7 @@
         <div class="vip-tier-name">Level 2</div>
         <div class="vip-tier-price">2 TON</div>
       </div>
-      <div class="vip-tier-benefits">
-        ⚡ 25 GROV/day mining<br>
-        🎬 10 GROV per ad<br>
-        💸 12% withdrawal fee
-      </div>
+      <div class="vip-tier-benefits">⚡ 7 GROV/day<br>🎬 10 GROV per ad<br>💸 12% fee</div>
       <button class="vip-buy-btn" onclick="buyVip(2)">BUY LEVEL 2</button>
     </div>
     <div class="vip-tier">
@@ -591,11 +590,7 @@
         <div class="vip-tier-name">Level 3</div>
         <div class="vip-tier-price">3 TON</div>
       </div>
-      <div class="vip-tier-benefits">
-        ⚡ 30 GROV/day mining<br>
-        🎬 12 GROV per ad<br>
-        💸 10% withdrawal fee
-      </div>
+      <div class="vip-tier-benefits">⚡ 10 GROV/day<br>🎬 12 GROV per ad<br>💸 10% fee</div>
       <button class="vip-buy-btn" onclick="buyVip(3)">BUY LEVEL 3</button>
     </div>
     <div class="vip-tier">
@@ -603,11 +598,7 @@
         <div class="vip-tier-name">Level 4</div>
         <div class="vip-tier-price">5 TON</div>
       </div>
-      <div class="vip-tier-benefits">
-        ⚡ 40 GROV/day mining<br>
-        🎬 15 GROV per ad<br>
-        💸 8% withdrawal fee
-      </div>
+      <div class="vip-tier-benefits">⚡ 15 GROV/day<br>🎬 15 GROV per ad<br>💸 8% fee</div>
       <button class="vip-buy-btn" onclick="buyVip(4)">BUY LEVEL 4</button>
     </div>
     <div class="vip-tier">
@@ -615,11 +606,7 @@
         <div class="vip-tier-name">Level 5 (MAX)</div>
         <div class="vip-tier-price">7 TON</div>
       </div>
-      <div class="vip-tier-benefits">
-        ⚡ 50 GROV/day mining<br>
-        🎬 20 GROV per ad<br>
-        💸 5% withdrawal fee
-      </div>
+      <div class="vip-tier-benefits">⚡ 20 GROV/day<br>🎬 20 GROV per ad<br>💸 5% fee</div>
       <button class="vip-buy-btn" onclick="buyVip(5)">BUY LEVEL 5</button>
     </div>
   </div>
@@ -636,15 +623,23 @@
 </div>
 
 <div class="toast" id="toast">Message</div>
-
 <script>
   const tg = window.Telegram?.WebApp;
   if (tg) { tg.ready(); tg.expand(); tg.setHeaderColor('#030a1a'); tg.setBackgroundColor('#030a1a'); }
 
+  // ============================================
+  // MINING CONFIG
+  // ============================================
+  const MINING_RATES = { 1: 5, 2: 7, 3: 10, 4: 15, 5: 20 };
+  const AD_REWARDS = { 1: 5, 2: 10, 3: 12, 4: 15, 5: 20 };
+  const DAY_MS = 24 * 60 * 60 * 1000;
+
+  // ============================================
+  // STATE
+  // ============================================
   let state = {
     balance: 0,
-    earned: 0,
-    profit: 0,
+    lastClaimTime: Date.now(),
     adsWatched: 0,
     checkinStreak: 0,
     lastCheckin: null,
@@ -652,7 +647,9 @@
     spinUsedToday: false,
     extraSpinsUsed: 0,
     vipLevel: 1,
-    hasPaid: false
+    hasPaid: false,
+    referralCount: 0,
+    referralCode: null
   };
 
   const TARGET_MAX = 100000;
@@ -661,11 +658,30 @@
   let vipTapCount = 0;
   let vipTapTimer = null;
 
+  // ============================================
+  // REFERRAL CODE
+  // ============================================
+  function getOrCreateReferralCode() {
+    if (state.referralCode) return state.referralCode;
+    let userId = Date.now();
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      userId = tg.initDataUnsafe.user.id;
+    }
+    state.referralCode = 'GRV' + String(userId).slice(-6).toUpperCase();
+    return state.referralCode;
+  }
+
+  // ============================================
+  // SPLASH
+  // ============================================
   setTimeout(() => {
     document.getElementById('splash').classList.add('hide');
     document.getElementById('frame').classList.add('show');
   }, 8000);
 
+  // ============================================
+  // TOAST
+  // ============================================
   function toast(msg) {
     const el = document.getElementById('toast');
     el.textContent = msg;
@@ -673,17 +689,76 @@
     setTimeout(() => el.classList.remove('show'), 2500);
   }
 
-  function updateBalance() {
+  // ============================================
+  // MINING COUNTER (live tick)
+  // ============================================
+  function getMiningRate() {
+    return MINING_RATES[state.vipLevel] || 5;
+  }
+
+  function calculatePending() {
+    const rate = getMiningRate();
+    const elapsed = Date.now() - state.lastClaimTime;
+    return Math.min(rate, (elapsed / DAY_MS) * rate);
+  }
+
+  function updateMiningCounter() {
+    const pending = calculatePending();
+    const earnedEl = document.getElementById('earnedValue');
+    if (earnedEl) earnedEl.textContent = '+' + pending.toFixed(8);
+
+    const rate = getMiningRate();
+    const timerEl = document.getElementById('nextClaimTimer');
+    if (timerEl) {
+      if (pending >= rate) {
+        timerEl.textContent = '✅ FULL - Ready to claim!';
+        timerEl.style.color = '#f5b800';
+      } else {
+        const secondsLeft = Math.max(0, Math.floor((DAY_MS - (Date.now() - state.lastClaimTime)) / 1000));
+        const hrs = Math.floor(secondsLeft / 3600);
+        const mins = Math.floor((secondsLeft % 3600) / 60);
+        timerEl.textContent = '⛏️ Full in ' + hrs + 'h ' + mins + 'm';
+        timerEl.style.color = '#00d4ff';
+      }
+    }
+
+    // Update Mine tab
+    const mRate = document.getElementById('mineRate');
+    const mLevel = document.getElementById('mineLevel');
+    const mRateText = document.getElementById('mineRateText');
+    const mLevelText = document.getElementById('mineLevelText');
+    const mProgFill = document.getElementById('mineProgressFill');
+    const mProgText = document.getElementById('mineProgressText');
+    if (mRate) mRate.textContent = rate + '/day';
+    if (mLevel) mLevel.textContent = state.vipLevel;
+    if (mRateText) mRateText.textContent = rate + ' GROV/day';
+    if (mLevelText) mLevelText.textContent = 'Level ' + state.vipLevel;
+    if (mProgFill) mProgFill.style.width = Math.min(100, (pending / rate) * 100) + '%';
+    if (mProgText) mProgText.textContent = pending >= rate ? '✅ Ready to claim' : 'Mining... ' + pending.toFixed(6) + ' GROV';
+  }
+
+  function updateBalanceDisplay() {
     const bal = document.getElementById('balanceDisplay');
-    const earned = document.getElementById('earnedValue');
     const gateBal = document.getElementById('gateBalance');
     const gateProfit = document.getElementById('gateProfit');
     if (bal) bal.innerHTML = state.balance.toFixed(2) + '<span>GROV</span>';
-    if (earned) earned.textContent = '+' + state.earned.toFixed(4);
     if (gateBal) gateBal.textContent = state.balance.toFixed(0);
-    if (gateProfit) gateProfit.textContent = state.profit.toFixed(0);
+    if (gateProfit) gateProfit.textContent = state.balance.toFixed(0);
   }
 
+  function claimMining() {
+    const pending = calculatePending();
+    if (pending < 0.00000001) return toast('⛏️ Mining in progress...');
+    state.balance += pending;
+    state.lastClaimTime = Date.now();
+    updateBalanceDisplay();
+    updateMiningCounter();
+    toast('💰 +' + pending.toFixed(6) + ' GROV claimed!');
+  }
+
+  // ============================================
+  // TARGET BAR
+  // ============================================
   function updateTargetBar() {
     const percent = Math.max(1, (currentUsers / TARGET_MAX) * 100);
     const fill = document.getElementById('targetFill');
@@ -692,6 +767,9 @@
     if (count) count.textContent = currentUsers.toLocaleString();
   }
 
+  // ============================================
+  // SWITCH TAB
+  // ============================================
   function switchTab(tab) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -709,21 +787,14 @@
     if (tab === 'spin') updateSpinTimer();
   }
 
-  function claimMining() {
-    const rate = state.vipLevel === 1 ? 20 : state.vipLevel === 2 ? 25 : state.vipLevel === 3 ? 30 : state.vipLevel === 4 ? 40 : 50;
-    const earned = rate / 24;
-    state.balance += earned;
-    state.earned += earned;
-    state.profit += earned;
-    updateBalance();
-    toast('💰 +' + earned.toFixed(4) + ' GROV claimed!');
-  }
-
+  // ============================================
+  // ADS
+  // ============================================
   function updateAdsView() {
     const el = document.getElementById('adsCount');
     const btn = document.getElementById('watchAdBtn');
     if (el) el.textContent = state.adsWatched + ' / 10';
-    const reward = state.vipLevel === 1 ? 5 : state.vipLevel === 2 ? 10 : state.vipLevel === 3 ? 12 : state.vipLevel === 4 ? 15 : 20;
+    const reward = AD_REWARDS[state.vipLevel] || 5;
     if (btn) {
       if (state.adsWatched >= 10) {
         btn.disabled = true;
@@ -740,32 +811,30 @@
     const btn = document.getElementById('watchAdBtn');
     btn.disabled = true;
     toast('⏱️ Loading ad...');
-
-    const reward = state.vipLevel === 1 ? 5 : state.vipLevel === 2 ? 10 : state.vipLevel === 3 ? 12 : state.vipLevel === 4 ? 15 : 20;
+    const reward = AD_REWARDS[state.vipLevel] || 5;
 
     try {
       const AdController = window.Adsgram.init({ blockId: "52452" });
       const result = await AdController.show();
-
       if (result && result.done) {
         state.adsWatched++;
         state.balance += reward;
-        state.earned += reward;
-        state.profit += reward;
-        updateBalance();
+        updateBalanceDisplay();
         updateAdsView();
         toast('✅ +' + reward + ' GROV earned!');
       } else {
         btn.disabled = false;
-        toast('Ad skipped. Try again!');
+        toast('Ad skipped.');
       }
     } catch (e) {
-      console.log('Ad error:', e);
       btn.disabled = false;
       toast('Ad not available. Try later.');
     }
   }
 
+  // ============================================
+  // SPIN WHEEL
+  // ============================================
   function spinWheel(isRespin) {
     const today = new Date().toDateString();
 
@@ -792,51 +861,36 @@
       const r = Math.random() * 100;
       let prize;
       let isReSpinSegment = false;
-
-      if (r < 5) { prize = 200; }
-      else if (r < 8) { prize = 50; }
-      else if (r < 16) { prize = 10; }
-      else if (r < 26) { prize = 7; }
-      else if (r < 38) { prize = 5; }
-      else if (r < 53) { prize = 3; }
-      else if (r < 73) { prize = 2; }
-      else if (r < 87) { prize = 1; }
-      else { isReSpinSegment = true; }
+      if (r < 5) prize = 200;
+      else if (r < 8) prize = 50;
+      else if (r < 16) prize = 10;
+      else if (r < 26) prize = 7;
+      else if (r < 38) prize = 5;
+      else if (r < 53) prize = 3;
+      else if (r < 73) prize = 2;
+      else if (r < 87) prize = 1;
+      else isReSpinSegment = true;
 
       if (isReSpinSegment && !isRespin) {
-        toast('🔄 RE-SPIN! Spinning again...');
+        toast('🔄 RE-SPIN!');
         btn.disabled = false;
         btn.textContent = '⏳ SPINNING...';
         setTimeout(() => spinWheel(true), 1500);
         return;
       }
 
-      if (isRespin && isReSpinSegment) {
-        prize = 1;
-        toast('🎯 RE-SPIN → 1 GROV');
-      } else if (prize === 200) {
-        toast('🎰 JACKPOT! +200 GROV!');
-      } else {
-        toast('🎉 You won ' + prize + ' GROV!');
-      }
+      if (isRespin && isReSpinSegment) { prize = 1; toast('🎯 RE-SPIN → 1 GROV'); }
+      else if (prize === 200) toast('🎰 JACKPOT! +200 GROV!');
+      else toast('🎉 You won ' + prize + ' GROV!');
 
       state.balance += prize;
-      state.earned += prize;
-      state.profit += prize;
-
       if (!isRespin) {
-        if (!state.spinUsedToday) {
-          state.spinUsedToday = true;
-          state.lastSpin = today;
-        } else {
-          state.extraSpinsUsed++;
-        }
+        if (!state.spinUsedToday) { state.spinUsedToday = true; state.lastSpin = today; }
+        else state.extraSpinsUsed++;
       }
-
-      updateBalance();
+      updateBalanceDisplay();
       updateSpinTimer();
       btn.disabled = false;
-
       wheelGroup.style.transition = 'none';
       wheelGroup.style.transform = 'rotate(0deg)';
     }, 4000);
@@ -849,10 +903,7 @@
       AdController.show().then(result => {
         if (result && result.done) {
           state.extraSpinsUsed++;
-          toast('✅ Ad complete! Spin now!');
           setTimeout(() => spinWheel(false), 500);
-        } else {
-          toast('Ad skipped.');
         }
       }).catch(() => {
         state.extraSpinsUsed++;
@@ -869,7 +920,6 @@
     const timerEl = document.getElementById('spinTimer');
     const btn = document.getElementById('spinBtn');
     if (!btn) return;
-
     if (state.lastSpin === today && state.extraSpinsUsed >= 5) {
       btn.disabled = true;
       btn.textContent = '✅ ALL SPINS USED TODAY';
@@ -880,12 +930,10 @@
       const diff = tomorrow - now;
       const h = Math.floor(diff / 3600000);
       const m = Math.floor((diff % 3600000) / 60000);
-      const s = Math.floor((diff % 60000) / 1000);
-      if (timerEl) timerEl.textContent = '⏰ Next spin in: ' + String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+      if (timerEl) timerEl.textContent = '⏰ Next: ' + String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0');
     } else if (state.lastSpin === today) {
-      const remaining = 5 - state.extraSpinsUsed;
       btn.disabled = false;
-      btn.textContent = '🎬 SPIN AGAIN (' + remaining + ' left)';
+      btn.textContent = '🎬 SPIN AGAIN (' + (5 - state.extraSpinsUsed) + ' left)';
       if (timerEl) timerEl.textContent = '🎬 Watch ad for extra spin';
     } else {
       btn.disabled = false;
@@ -894,6 +942,9 @@
     }
   }
 
+  // ============================================
+  // CHECK-IN
+  // ============================================
   function renderCheckin() {
     const grid = document.getElementById('checkinGrid');
     if (!grid) return;
@@ -901,7 +952,6 @@
     const rewards = [10, 10, 10, 10, 10, 10, 70];
     const today = new Date().toDateString();
     const alreadyChecked = state.lastCheckin === today;
-
     for (let i = 0; i < 7; i++) {
       const div = document.createElement('div');
       div.className = 'checkin-day';
@@ -910,56 +960,58 @@
       div.innerHTML = '<div class="checkin-num">Day ' + (i+1) + '</div><div class="checkin-reward">+' + rewards[i] + '</div>';
       grid.appendChild(div);
     }
-
     const btn = document.getElementById('checkinBtn');
     if (btn) {
-      if (alreadyChecked) {
-        btn.disabled = true;
-        btn.textContent = '✅ ALREADY CHECKED IN TODAY';
-      } else {
-        btn.disabled = false;
-        btn.textContent = '✅ CHECK IN TODAY';
-      }
+      if (alreadyChecked) { btn.disabled = true; btn.textContent = '✅ ALREADY CHECKED IN'; }
+      else { btn.disabled = false; btn.textContent = '✅ CHECK IN TODAY'; }
     }
   }
 
   function doCheckin() {
     const today = new Date().toDateString();
     if (state.lastCheckin === today) return toast('Already checked in today!');
-
     const rewards = [10, 10, 10, 10, 10, 10, 70];
     const reward = rewards[state.checkinStreak] || 10;
-
     state.balance += reward;
-    state.earned += reward;
-    state.profit += reward;
     state.checkinStreak = state.checkinStreak + 1;
     if (state.checkinStreak > 6) state.checkinStreak = 0;
     state.lastCheckin = today;
-
-    updateBalance();
+    updateBalanceDisplay();
     renderCheckin();
     toast('🎁 +' + reward + ' GROV!');
   }
 
+  // ============================================
+  // REFERRAL
+  // ============================================
   function referFriend() {
-    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
-      const userId = tg.initDataUnsafe.user.id;
-      const link = 'https://t.me/GroverMiningBot?start=ref_' + userId;
-      tg.openTelegramLink('https://t.me/share/url?url=' + encodeURIComponent(link) + '&text=' + encodeURIComponent('Join Grover Minner and earn GROV coins!'));
+    const code = getOrCreateReferralCode();
+    const link = 'https://t.me/GroverMiningBot/Grovcoin?startapp=ref_' + code;
+    const text = '⛏️ Join Grover Minner and earn GROV coins!\n\nMy referral code: ' + code;
+    if (tg && tg.openTelegramLink) {
+      tg.openTelegramLink('https://t.me/share/url?url=' + encodeURIComponent(link) + '&text=' + encodeURIComponent(text));
     } else {
-      toast('Refer link copied!');
+      if (navigator.clipboard) navigator.clipboard.writeText(link);
+      toast('📋 Link copied!');
     }
   }
 
-  function openVip() {
-    document.getElementById('vipModal').classList.add('show');
+  function showMyLink() {
+    const code = getOrCreateReferralCode();
+    const link = 'https://t.me/GroverMiningBot/Grovcoin?startapp=ref_' + code;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(link);
+      toast('📋 Your link copied!\nCode: ' + code);
+    } else {
+      toast('Your code: ' + code);
+    }
   }
 
-  function closeVip() {
-    document.getElementById('vipModal').classList.remove('show');
-  }
-
+  // ============================================
+  // VIP
+  // ============================================
+  function openVip() { document.getElementById('vipModal').classList.add('show'); }
+  function closeVip() { document.getElementById('vipModal').classList.remove('show'); }
   function buyVip(level) {
     const prices = { 2: 2, 3: 3, 4: 5, 5: 7 };
     toast('👑 Buying VIP Level ' + level + ' for ' + prices[level] + ' TON...');
@@ -968,41 +1020,13 @@
       closeVip();
       toast('✅ VIP Level ' + level + ' activated!');
       updateAdsView();
+      updateMiningCounter();
     }, 1500);
   }
 
-  function unlockApp() {
-    state.hasPaid = true;
-    document.getElementById('gateScreen').classList.remove('active');
-    document.getElementById('homeScreen').classList.add('active');
-    document.getElementById('bottomNav').style.display = 'flex';
-
-    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
-      const u = tg.initDataUnsafe.user;
-      const name = (u.first_name || '') + (u.last_name ? ' ' + u.last_name : '');
-      const handle = u.username ? '@' + u.username : '@user';
-      const initial = (u.first_name || 'G').charAt(0).toUpperCase();
-      const hn = document.getElementById('homeName');
-      const hh = document.getElementById('homeHandle');
-      const ha = document.getElementById('homeAvatar');
-      const pn = document.getElementById('profileName');
-      const ph = document.getElementById('profileHandle');
-      const pa = document.getElementById('profileAvatar');
-      if (hn) hn.textContent = name || 'Grover User';
-      if (hh) hh.textContent = handle;
-      if (ha) ha.textContent = initial;
-      if (pn) pn.textContent = name || 'Grover User';
-      if (ph) ph.textContent = handle;
-      if (pa) pa.textContent = initial;
-    }
-
-    updateBalance();
-    updateAdsView();
-    updateTargetBar();
-    toast('🎉 Welcome to Grover!');
-  }
-
-  // VIP button: 1 tap = VIP panel, 7 taps = admin
+  // ============================================
+  // VIP button: 1 tap = VIP, 7 taps = admin
+  // ============================================
   const vipBtnEl = document.getElementById('vipBtn');
   if (vipBtnEl) {
     vipBtnEl.addEventListener('click', () => {
@@ -1026,19 +1050,61 @@
       document.getElementById('adminModal').classList.remove('show');
       document.getElementById('adminPin').value = '';
       toast('🔓 Admin access granted!');
-      setTimeout(() => toast('📋 Admin panel coming in Session 2!'), 1500);
     } else {
       toast('❌ Wrong PIN');
       document.getElementById('adminPin').value = '';
     }
   }
-
   function closeAdmin() {
     document.getElementById('adminModal').classList.remove('show');
     document.getElementById('adminPin').value = '';
   }
 
-  // TON Connect
+  // ============================================
+  // UNLOCK APP
+  // ============================================
+  function unlockApp() {
+    state.hasPaid = true;
+    if (!state.lastClaimTime) state.lastClaimTime = Date.now();
+
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('gateScreen').classList.remove('active');
+    document.getElementById('homeScreen').classList.add('active');
+    document.getElementById('bottomNav').style.display = 'flex';
+
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      const u = tg.initDataUnsafe.user;
+      const name = (u.first_name || '') + (u.last_name ? ' ' + u.last_name : '');
+      const handle = u.username ? '@' + u.username : '@user';
+      const initial = (u.first_name || 'G').charAt(0).toUpperCase();
+      const hn = document.getElementById('homeName');
+      const hh = document.getElementById('homeHandle');
+      const ha = document.getElementById('homeAvatar');
+      const pn = document.getElementById('profileName');
+      const ph = document.getElementById('profileHandle');
+      const pa = document.getElementById('profileAvatar');
+      if (hn) hn.textContent = name || 'Grover User';
+      if (hh) hh.textContent = handle;
+      if (ha) ha.textContent = initial;
+      if (pn) pn.textContent = name || 'Grover User';
+      if (ph) ph.textContent = handle;
+      if (pa) pa.textContent = initial;
+    }
+
+    // Update referral count
+    const rc = document.getElementById('myReferralCount');
+    if (rc) rc.textContent = state.referralCount + ' invited';
+
+    updateBalanceDisplay();
+    updateAdsView();
+    updateTargetBar();
+    updateMiningCounter();
+    toast('🎉 Welcome to Grover!');
+  }
+
+  // ============================================
+  // TON CONNECT
+  // ============================================
   let connectedWallet = null;
   let tonConnectUI = null;
   const PROJECT_WALLET = 'UQBiiE8EcQ-tRSIi4HjKnCYjGJ0Wjh5SA84xyzbc-qdq5ws2';
@@ -1049,17 +1115,12 @@
     s.textContent = msg;
     s.className = 'status show ' + type;
   }
-  function hideStatus() {
-    const s = document.getElementById('status');
-    if (s) s.className = 'status';
-  }
 
   try {
     tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
       manifestUrl: 'https://buywithus225-wq.github.io/Grover-miner-app/tonconnect-manifest.json',
       buttonRootId: null
     });
-
     tonConnectUI.onStatusChange(wallet => {
       const wi = document.getElementById('walletInfo');
       const cb = document.getElementById('connectBtn');
@@ -1076,17 +1137,16 @@
         if (wi) wi.classList.remove('show');
         if (cb) cb.style.display = 'block';
         if (pb) pb.classList.remove('show');
-        hideStatus();
       }
     });
-  } catch (e) { console.log('TON Connect init error:', e); }
+  } catch (e) { console.log('TON error:', e); }
 
   async function handleConnect() {
-    if (!tonConnectUI) { showStatus('TON Connect not loaded. Refresh.', 'error'); return; }
+    if (!tonConnectUI) { showStatus('TON Connect not loaded.', 'error'); return; }
     try {
       showStatus('Opening wallet...', 'loading');
       await tonConnectUI.openModal();
-    } catch (e) { showStatus('Connection cancelled.', 'error'); }
+    } catch (e) { showStatus('Cancelled.', 'error'); }
   }
 
   async function handlePay() {
@@ -1102,11 +1162,16 @@
     } catch (e) { showStatus('Payment cancelled.', 'error'); }
   }
 
+  // ============================================
+  // INIT
+  // ============================================
   renderCheckin();
   updateSpinTimer();
   updateTargetBar();
+  updateMiningCounter();
+  setInterval(updateMiningCounter, 1000);
   setInterval(updateSpinTimer, 1000);
 </script>
 
 </body>
-</html>
+ </html>
