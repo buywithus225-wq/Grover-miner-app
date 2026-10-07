@@ -20,17 +20,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .splash.hide{opacity:0;visibility:hidden;pointer-events:none}
 .splash-logo-wrap{position:relative;animation:splashEnter 1s ease-out}
 @keyframes splashEnter{0%{transform:scale(.3);opacity:0}100%{transform:scale(1);opacity:1}}
-.splash-logo-wrap::before{content:'';position:absolute;inset:-50px;background:radial-gradient(circle,rgba(0,212,255,.5),transparent 70%);border-radius:50%;animation:splashGlow 2s ease-in-out infinite}
-@keyframes splashGlow{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.3);opacity:1}}
-.splash-logo{width:220px;height:220px;object-fit:contain;position:relative;z-index:2;filter:drop-shadow(0 0 50px rgba(0,212,255,.9));animation:splashFloat 3s ease-in-out infinite}
-@keyframes splashFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
-.splash-title{font-size:40px;font-weight:900;letter-spacing:8px;margin-top:24px;background:linear-gradient(135deg,#f5b800,#ffdd00,#f5b800);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:titleShine 3s linear infinite}
-@keyframes titleShine{0%{background-position:200% 0}100%{background-position:-200% 0}}
-.splash-subtitle{font-size:12px;color:#00d4ff;letter-spacing:10px;text-transform:uppercase;font-weight:700;margin-top:6px;text-shadow:0 0 20px rgba(0,212,255,.8)}
+.splash-logo{width:220px;height:220px;object-fit:contain;position:relative;z-index:2;filter:drop-shadow(0 0 50px rgba(0,212,255,.9))}
+.splash-title{font-size:40px;font-weight:900;letter-spacing:8px;margin-top:24px;background:linear-gradient(135deg,#f5b800,#ffdd00);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.splash-subtitle{font-size:12px;color:#00d4ff;letter-spacing:10px;text-transform:uppercase;font-weight:700;margin-top:6px}
 .loading-bar{position:absolute;bottom:80px;width:200px;height:4px;background:rgba(0,212,255,.15);border-radius:2px;overflow:hidden}
-.loading-fill{height:100%;width:0;background:linear-gradient(90deg,#00d4ff,#f5b800,#00d4ff);border-radius:2px;box-shadow:0 0 15px #00d4ff;animation:loadBar 8s linear forwards}
+.loading-fill{height:100%;width:0;background:linear-gradient(90deg,#00d4ff,#f5b800,#00d4ff);border-radius:2px;animation:loadBar 8s linear forwards}
 @keyframes loadBar{0%{width:0}100%{width:100%}}
-.frame{width:100vw;height:100vh;max-width:100vw;max-height:100vh;background:linear-gradient(160deg,#0a2a5a 0%,#061a3a 50%,#030a1a 100%);position:relative;overflow:hidden;z-index:1;box-shadow:inset 0 0 80px rgba(0,212,255,.15);display:flex;flex-direction:column;opacity:0;transition:opacity .8s ease}
+.frame{width:100vw;height:100vh;background:linear-gradient(160deg,#0a2a5a 0%,#061a3a 50%,#030a1a 100%);position:relative;overflow:hidden;z-index:1;display:flex;flex-direction:column;opacity:0;transition:opacity .8s ease}
 .frame.show{opacity:1}
 .screen{display:none;flex-direction:column;flex:1;overflow-y:auto;padding:20px 18px 100px;position:relative;z-index:2}
 .screen::-webkit-scrollbar{display:none}
@@ -96,8 +92,7 @@ button:active{transform:scale(.97)}
 .nav-mine .nav-icon{font-size:26px;margin-bottom:0}
 .nav-mine .nav-label{color:#0a1428;font-size:8px;font-weight:900}
 .mine-hero{text-align:center;padding:22px 0;background:radial-gradient(circle at center,rgba(0,212,255,.2),transparent 70%);border-radius:20px;margin-bottom:14px}
-.pickaxe-spin{font-size:70px;display:inline-block;animation:pickaxeSpin 4s ease-in-out infinite}
-@keyframes pickaxeSpin{0%,100%{transform:rotate(-15deg)}50%{transform:rotate(15deg)}}
+.pickaxe-spin{font-size:70px;display:inline-block}
 .mine-rate{font-size:13px;color:#6ba3ff;margin-top:12px;font-weight:700}
 .mine-rate strong{color:#f5b800;font-size:18px}
 .progress-bar{width:100%;height:10px;background:rgba(0,212,255,.1);border-radius:5px;overflow:hidden;margin:16px 0 10px}
@@ -152,7 +147,6 @@ button:active{transform:scale(.97)}
 <body>
 <div class="ocean-bg"><div class="wave"></div><div class="wave"></div><div class="wave"></div></div>
 
-<!-- SPLASH -->
 <div class="splash" id="splash">
   <div class="splash-logo-wrap">
     <img src="file_000000004a1481f4ad0c20442e76e9f7.png" alt="Grover" class="splash-logo">
@@ -401,6 +395,9 @@ button:active{transform:scale(.97)}
   const tg = window.Telegram?.WebApp;
   if (tg) { tg.ready(); tg.expand(); tg.setHeaderColor('#030a1a'); tg.setBackgroundColor('#030a1a'); }
 
+  // ============================================
+  // USER ISOLATION
+  // ============================================
   function getCurrentUserId() {
     if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) return String(tg.initDataUnsafe.user.id);
     return 'guest_' + (localStorage.getItem('grover_device_id') || (() => {
@@ -411,6 +408,7 @@ button:active{transform:scale(.97)}
   }
   const CURRENT_USER = getCurrentUserId();
   const LAST_USER_KEY = 'grover_last_user';
+
   const lastUser = localStorage.getItem(LAST_USER_KEY);
   if (lastUser && lastUser !== CURRENT_USER) {
     Object.keys(localStorage).forEach(k => {
@@ -419,6 +417,9 @@ button:active{transform:scale(.97)}
   }
   localStorage.setItem(LAST_USER_KEY, CURRENT_USER);
 
+  // ============================================
+  // STATE + PERSISTENCE
+  // ============================================
   const MINING_RATES = { 1: 5, 2: 7, 3: 10, 4: 15, 5: 20 };
   const AD_REWARDS = { 1: 5, 2: 10, 3: 12, 4: 15, 5: 20 };
   const DAY_MS = 24 * 60 * 60 * 1000;
@@ -459,11 +460,17 @@ button:active{transform:scale(.97)}
   let vipTapCount = 0;
   let vipTapTimer = null;
 
+  // ============================================
+  // SPLASH (8 seconds)
+  // ============================================
   setTimeout(() => {
     document.getElementById('splash').classList.add('hide');
     document.getElementById('frame').classList.add('show');
   }, 8000);
 
+  // ============================================
+  // TOAST
+  // ============================================
   function toast(msg) {
     const el = document.getElementById('toast');
     el.textContent = msg;
@@ -471,6 +478,9 @@ button:active{transform:scale(.97)}
     setTimeout(() => el.classList.remove('show'), 2500);
   }
 
+  // ============================================
+  // MINING COUNTER
+  // ============================================
   function getMiningRate() { return MINING_RATES[state.vipLevel] || 5; }
 
   function calculatePending() {
@@ -522,6 +532,9 @@ button:active{transform:scale(.97)}
     if (gateProfit) gateProfit.textContent = state.balance.toFixed(0);
   }
 
+  // ============================================
+  // CLAIM (24hr gate)
+  // ============================================
   function claimMining() {
     const elapsed = Date.now() - state.lastClaimTime;
     const remaining = DAY_MS - elapsed;
@@ -539,6 +552,9 @@ button:active{transform:scale(.97)}
     toast('💰 +' + rate + ' GROV claimed!');
   }
 
+  // ============================================
+  // TARGET BAR
+  // ============================================
   function updateTargetBar() {
     const percent = Math.max(1, (currentUsers / TARGET_MAX) * 100);
     const fill = document.getElementById('targetFill');
@@ -547,6 +563,9 @@ button:active{transform:scale(.97)}
     if (count) count.textContent = currentUsers.toLocaleString();
   }
 
+  // ============================================
+  // SWITCH TAB
+  // ============================================
   function switchTab(tab) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -561,6 +580,9 @@ button:active{transform:scale(.97)}
     if (tab === 'spin') updateSpinTimer();
   }
 
+  // ============================================
+  // ADS
+  // ============================================
   function updateAdsView() {
     const el = document.getElementById('adsCount');
     const btn = document.getElementById('watchAdBtn');
@@ -603,6 +625,9 @@ button:active{transform:scale(.97)}
     }
   }
 
+  // ============================================
+  // SPIN (ultra-rare 200)
+  // ============================================
   function spinWheel(isRespin) {
     const today = new Date().toDateString();
     if (!isRespin) {
@@ -706,6 +731,9 @@ button:active{transform:scale(.97)}
     }
   }
   
+  // ============================================
+  // CHECK-IN
+  // ============================================
   function renderCheckin() {
     const grid = document.getElementById('checkinGrid');
     if (!grid) return;
@@ -743,6 +771,9 @@ button:active{transform:scale(.97)}
     toast('🎁 +' + reward + ' GROV!');
   }
 
+  // ============================================
+  // REFERRAL
+  // ============================================
   function referFriend() {
     const code = getOrCreateReferralCode();
     const link = 'https://t.me/GroverMiningBot/Grovcoin?startapp=ref_' + code;
@@ -766,6 +797,9 @@ button:active{transform:scale(.97)}
     }
   }
 
+  // ============================================
+  // VIP
+  // ============================================
   function openVip() { document.getElementById('vipModal').classList.add('show'); }
   function closeVip() { document.getElementById('vipModal').classList.remove('show'); }
   function buyVip(level) {
@@ -781,6 +815,9 @@ button:active{transform:scale(.97)}
     }, 1500);
   }
 
+  // ============================================
+  // VIP BUTTON (1 tap = VIP, 7 taps = admin)
+  // ============================================
   const vipBtnEl = document.getElementById('vipBtn');
   if (vipBtnEl) {
     vipBtnEl.addEventListener('click', () => {
@@ -814,6 +851,9 @@ button:active{transform:scale(.97)}
     document.getElementById('adminPin').value = '';
   }
 
+  // ============================================
+  // FILL USER INFO
+  // ============================================
   function fillUserInfo() {
     if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
       const u = tg.initDataUnsafe.user;
@@ -835,9 +875,13 @@ button:active{transform:scale(.97)}
     }
   }
 
+  // ============================================
+  // UNLOCK APP
+  // ============================================
   function unlockApp() {
     state.hasPaid = true;
     if (!state.lastClaimTime) state.lastClaimTime = Date.now();
+    localStorage.setItem('grover_wallet_user', CURRENT_USER);
     saveState();
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById('gateScreen').classList.remove('active');
@@ -853,6 +897,9 @@ button:active{transform:scale(.97)}
     toast('🎉 Welcome to Grover!');
   }
 
+  // ============================================
+  // TON CONNECT (with per-user wallet isolation)
+  // ============================================
   let connectedWallet = null;
   let tonConnectUI = null;
   const PROJECT_WALLET = 'UQBiiE8EcQ-tRSIi4HjKnCYjGJ0Wjh5SA84xyzbc-qdq5ws2';
@@ -869,11 +916,30 @@ button:active{transform:scale(.97)}
       manifestUrl: 'https://buywithus225-wq.github.io/Grover-miner-app/tonconnect-manifest.json',
       buttonRootId: null
     });
+
     tonConnectUI.onStatusChange(wallet => {
       const wi = document.getElementById('walletInfo');
       const cb = document.getElementById('connectBtn');
       const pb = document.getElementById('payBtn');
+
       if (wallet) {
+        // Wallet-user isolation check
+        const walletUserKey = 'grover_wallet_user';
+        const lastWalletUser = localStorage.getItem(walletUserKey);
+
+        if (lastWalletUser && lastWalletUser !== CURRENT_USER) {
+          // Different Telegram user → force disconnect
+          try { tonConnectUI.disconnect(); } catch(e){}
+          connectedWallet = null;
+          if (wi) wi.classList.remove('show');
+          if (cb) cb.style.display = 'block';
+          if (pb) pb.classList.remove('show');
+          toast('🔒 Different user detected. Please connect your own wallet.');
+          return;
+        }
+
+        // Save which user owns this wallet
+        localStorage.setItem(walletUserKey, CURRENT_USER);
         connectedWallet = wallet;
         const addr = wallet.account.address;
         if (wi) { wi.textContent = '✅ Connected: ' + addr.slice(0, 6) + '...' + addr.slice(-4); wi.classList.add('show'); }
@@ -910,7 +976,23 @@ button:active{transform:scale(.97)}
     } catch (e) { showStatus('Payment cancelled.', 'error'); }
   }
 
+  // ============================================
+  // INIT
+  // ============================================
   loadState();
+
+  // Force wallet disconnect if different user
+  (function checkWalletUser() {
+    const walletUserKey = 'grover_wallet_user';
+    const lastWalletUser = localStorage.getItem(walletUserKey);
+    if (lastWalletUser && lastWalletUser !== CURRENT_USER) {
+      setTimeout(() => {
+        try { if (tonConnectUI) tonConnectUI.disconnect(); } catch(e){}
+        localStorage.removeItem(walletUserKey);
+      }, 1000);
+    }
+  })();
+
   renderCheckin();
   updateSpinTimer();
   updateTargetBar();
@@ -919,6 +1001,7 @@ button:active{transform:scale(.97)}
   setInterval(updateMiningCounter, 1000);
   setInterval(updateSpinTimer, 1000);
 
+  // AUTO-SKIP GATE IF ALREADY PAID
   if (state.hasPaid === true) {
     setTimeout(() => {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
