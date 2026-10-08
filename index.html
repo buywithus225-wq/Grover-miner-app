@@ -81,7 +81,12 @@ button:active{transform:scale(.97)}
 .status.error{background:rgba(255,50,50,.15);color:#ff6b6b;border:1px solid rgba(255,50,50,.4)}
 .status.success{background:rgba(0,255,204,.15);color:#00ffcc;border:1px solid rgba(0,255,204,.4)}
 .status.loading{background:rgba(0,212,255,.15);color:#00d4ff;border:1px solid rgba(0,212,255,.4)}
-  .profile-header{text-align:center;padding:20px 0;margin-bottom:14px}
+</style>
+</head>
+<body>
+<div class="ocean-bg"><div class="wave"></div><div class="wave"></div><div class="wave"></div></div>
+
+.profile-header{text-align:center;padding:20px 0;margin-bottom:14px}
 .profile-avatar{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#f5b800,#ff6b00);display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:900;color:#0a1428;margin:0 auto 12px;border:3px solid rgba(245,184,0,.5)}
 .profile-name{font-size:18px;font-weight:900;margin-bottom:4px}
 .profile-handle{font-size:11px;color:#6ba3ff}
@@ -463,7 +468,7 @@ button:active{transform:scale(.97)}
         <input type="text" class="admin-input" id="fakePoolInput" placeholder="Fake Pool $100">
         <input type="text" class="admin-input" id="realPoolInput" placeholder="Real Pool $10">
         <input type="number" class="admin-input" id="payoutDayInput" placeholder="Payout Day 30">
-        <button class="admin-btn admin-btn-green" onclick="adminSavePool()">SAVE</button>
+        <button class="admin-btn admin-btn-green" onclick="adminSavePool()">SAVE FOR ALL USERS</button>
       </div>
       <div class="admin-panel" id="panel-grov">
         <div class="admin-stat"><div class="admin-stat-label">Total Supply</div><div class="admin-stat-value">10,000,000,000</div></div>
@@ -479,7 +484,7 @@ button:active{transform:scale(.97)}
         <button class="admin-btn" id="demoToggleBtn" onclick="adminToggleDemo()">Demo Mode: OFF</button>
         <input type="number" class="admin-input" id="maintFeeInput" placeholder="Maintenance Fee %">
         <input type="password" class="admin-input" id="newPinInput" placeholder="New PIN" maxlength="8">
-        <button class="admin-btn admin-btn-green" onclick="adminSaveSystem()">SAVE</button>
+        <button class="admin-btn admin-btn-green" onclick="adminSaveSystem()">SAVE FOR ALL USERS</button>
       </div>
       <div class="admin-panel" id="panel-tasks">
         <div id="adminTaskList"></div>
@@ -540,7 +545,7 @@ button:active{transform:scale(.97)}
     welcomeClaimed: false
   };
 
-  let globalUsers = 999;
+  let globalUsers = 1000;
 
   function saveState() {
     try { localStorage.setItem('grover_state_' + CURRENT_USER, JSON.stringify(state)); } catch(e){}
@@ -943,7 +948,7 @@ async function saveSettingsToBackend() {
     });
     const data = await res.json();
     if (data.success) toast('✅ Saved for ALL users');
-    else toast('❌ Save failed: ' + (data.error || 'unknown'));
+    else toast('❌ Save failed');
   } catch (e) { toast('❌ Network error'); }
 }
 
@@ -1350,8 +1355,11 @@ function unlockApp() {
   updateMiningCounter();
   updateReferTarget();
   toast('🎉 Welcome to Grover!');
-}
+  }
   
+  // ============================================
+  // TON CONNECT (with wallet isolation)
+  // ============================================
   let connectedWallet = null;
   let tonConnectUI = null;
   const PROJECT_WALLET = 'UQBiiE8EcQ-tRSIi4HjKnCYjGJ0Wjh5SA84xyzbc-qdq5ws2';
@@ -1433,6 +1441,35 @@ function unlockApp() {
   }
 
   // ============================================
+  // LANGUAGE SELECTOR
+  // ============================================
+  function renderLangSelector() {
+    const sel = document.getElementById('langSelector');
+    if (!sel) return;
+    const langs = [
+      { code:'en', name:'🇬🇧 English' },
+      { code:'ru', name:'🇷🇺 Русский' },
+      { code:'ar', name:'🇸🇦 العربية' },
+      { code:'hi', name:'🇮🇳 हिन्दी' },
+      { code:'ta', name:'🇮🇳 தமிழ்' }
+    ];
+    const current = localStorage.getItem('grover_lang') || 'en';
+    sel.innerHTML = '';
+    langs.forEach(l => {
+      const d = document.createElement('div');
+      d.className = 'lang-option' + (current === l.code ? ' active' : '');
+      d.textContent = l.name;
+      d.onclick = () => {
+        localStorage.setItem('grover_lang', l.code);
+        document.getElementById('currentLang').textContent = l.name.split(' ').slice(1).join(' ');
+        renderLangSelector();
+        toast('✅ Language: ' + l.name);
+      };
+      sel.appendChild(d);
+    });
+  }
+
+  // ============================================
   // INIT
   // ============================================
   loadState();
@@ -1442,6 +1479,7 @@ function unlockApp() {
   updateBalanceDisplay();
   updateReferTarget();
   renderUserEvents();
+  renderLangSelector();
   setInterval(updateMiningCounter, 1000);
   setInterval(updateSpinTimer, 1000);
 
@@ -1470,23 +1508,37 @@ function unlockApp() {
       if (data.exists && data.paid === true) {
         state.hasPaid = true;
         state.balance = data.balance || 0;
+        state.referralCount = data.referral_count || 0;
         saveState();
-        if (state.hasPaid === true) {
-          setTimeout(() => {
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById('gateScreen').classList.remove('active');
-            document.getElementById('homeScreen').classList.add('active');
-            document.getElementById('bottomNav').style.display = 'flex';
-            fillUserInfo();
-            updateBalanceDisplay();
-            updateAdsView();
-            updateMiningCounter();
-            updateReferTarget();
-          }, 100);
-        }
+        setTimeout(() => {
+          document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+          document.getElementById('gateScreen').classList.remove('active');
+          document.getElementById('homeScreen').classList.add('active');
+          document.getElementById('bottomNav').style.display = 'flex';
+          fillUserInfo();
+          updateBalanceDisplay();
+          updateAdsView();
+          updateMiningCounter();
+          updateReferTarget();
+        }, 100);
       }
     } catch (e) {}
   })();
+
+  // Auto-skip gate if already paid (local storage)
+  if (state.hasPaid === true) {
+    setTimeout(() => {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('gateScreen').classList.remove('active');
+      document.getElementById('homeScreen').classList.add('active');
+      document.getElementById('bottomNav').style.display = 'flex';
+      fillUserInfo();
+      updateBalanceDisplay();
+      updateAdsView();
+      updateMiningCounter();
+      updateReferTarget();
+    }, 100);
+  }
 </script>
 
 </body>
