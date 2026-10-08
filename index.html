@@ -6,7 +6,7 @@
 <title>Grover Minner</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script src="https://unpkg.com/@tonconnect/ui@latest/dist/tonconnect-ui.min.js"></script>
-<script src='//libtl.com/sdk.js' data-zone='11979593' data-sdk='show_11979593'></script>
+<script src="https://libtl.com/sdk.js" data-zone="11979593" data-sdk="show_11979593"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100vh;width:100vw;overflow:hidden}
@@ -33,22 +33,22 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .vip-btn{background:linear-gradient(135deg,#f5b800,#ff6b00);border:1.5px solid rgba(255,255,255,.3);color:#0a1428;font-weight:900;font-size:11px;padding:8px 12px;border-radius:18px;cursor:pointer;font-family:inherit}
 .profile-btn{background:linear-gradient(135deg,#00d4ff,#0088ff);border:1.5px solid rgba(255,255,255,.3);color:#fff;font-weight:900;font-size:11px;padding:8px 12px;border-radius:18px;cursor:pointer;font-family:inherit}
 .logo-hero{text-align:center;padding:8px 0 6px}
-.hero-logo{width:180px;height:180px;object-fit:contain;filter:drop-shadow(0 0 40px rgba(0,212,255,.9))}
+.hero-logo{width:170px;height:170px;object-fit:contain;filter:drop-shadow(0 0 40px rgba(0,212,255,.9))}
 .earned-counter{text-align:center;margin-bottom:10px}
-.earned-value{font-size:36px;font-weight:900;line-height:1;background:linear-gradient(135deg,#00d4ff,#00ffcc);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-variant-numeric:tabular-nums}
+.earned-value{font-size:34px;font-weight:900;line-height:1;background:linear-gradient(135deg,#00d4ff,#00ffcc);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-variant-numeric:tabular-nums}
 .earned-label{font-size:10px;color:#6ba3ff;letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-top:4px}
 .balance-box{background:linear-gradient(135deg,rgba(0,212,255,.12),rgba(245,184,0,.08));border:1.5px solid rgba(245,184,0,.4);border-radius:14px;padding:12px;text-align:center;margin-bottom:10px}
 .balance-label{font-size:9px;color:#6ba3ff;letter-spacing:2.5px;text-transform:uppercase;font-weight:700;margin-bottom:4px}
 .balance-value{font-size:24px;font-weight:900;background:linear-gradient(135deg,#f5b800,#ffdd00);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .balance-value span{font-size:12px;color:#f5b800;margin-left:3px;font-weight:700}
-.claim-btn{width:100%;padding:18px;background:linear-gradient(135deg,#f5b800,#ffdd00);color:#0a1428;border:none;border-radius:16px;font-size:18px;font-weight:900;letter-spacing:3px;text-transform:uppercase;cursor:pointer;font-family:inherit;margin-bottom:8px}
+.claim-btn{width:100%;padding:18px;background:linear-gradient(135deg,#f5b800,#ffdd00);color:#0a1428;border:none;border-radius:16px;font-size:18px;font-weight:900;letter-spacing:3px;text-transform:uppercase;cursor:pointer;font-family:inherit;margin-bottom:8px;position:relative}
 .claim-btn:active{transform:scale(.97)}
-.mystery-btn{width:100%;padding:14px;background:linear-gradient(135deg,#ec4899,#8b5cf6);color:#fff;border:none;border-radius:14px;font-size:14px;font-weight:900;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:inherit;margin-bottom:8px}
+.mystery-btn{width:100%;padding:13px;background:linear-gradient(135deg,#ec4899,#8b5cf6);color:#fff;border:none;border-radius:14px;font-size:13px;font-weight:900;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:inherit;margin-bottom:8px}
 .checkin-btn{width:100%;padding:12px;background:linear-gradient(135deg,#00d4ff,#0088ff);color:#fff;border:none;border-radius:14px;font-size:13px;font-weight:900;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:inherit}
 .notif-dot{position:absolute;top:-2px;right:-2px;width:14px;height:14px;background:#ef4444;border-radius:50%;border:2px solid #0a2a5a;animation:pulseNotif 1.5s infinite}
 @keyframes pulseNotif{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
 .logo-wrap{position:relative;margin:8px auto 12px;width:fit-content}
-.logo{width:160px;height:160px;object-fit:contain;filter:drop-shadow(0 0 40px rgba(0,212,255,.9))}
+.logo{width:150px;height:150px;object-fit:contain;filter:drop-shadow(0 0 40px rgba(0,212,255,.9))}
 .title{font-size:24px;font-weight:900;letter-spacing:4px;text-align:center;background:linear-gradient(135deg,#f5b800,#ffdd00);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}
 .subtitle{font-size:10px;color:#00d4ff;letter-spacing:5px;text-transform:uppercase;font-weight:700;text-align:center;margin-bottom:14px}
 .mining-locked{width:100%;background:linear-gradient(135deg,rgba(0,50,100,.4),rgba(0,30,70,.3));border:1.5px solid rgba(0,212,255,.3);border-radius:14px;padding:12px;text-align:center;margin-bottom:10px}
@@ -81,34 +81,6 @@ button:active{transform:scale(.97)}
 .status.error{background:rgba(255,50,50,.15);color:#ff6b6b;border:1px solid rgba(255,50,50,.4)}
 .status.success{background:rgba(0,255,204,.15);color:#00ffcc;border:1px solid rgba(0,255,204,.4)}
 .status.loading{background:rgba(0,212,255,.15);color:#00d4ff;border:1px solid rgba(0,212,255,.4)}
-.bottom-nav{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(180deg,rgba(10,30,60,.95),rgba(3,10,26,.98));border-top:1px solid rgba(0,212,255,.3);display:flex;justify-content:space-around;align-items:center;padding:8px 4px 14px;z-index:50}
-.nav-item{flex:1;text-align:center;cursor:pointer;padding:6px 2px;position:relative}
-.nav-icon{font-size:20px;display:block;margin-bottom:2px}
-.nav-label{font-size:8px;color:#4a7aaa;font-weight:700;text-transform:uppercase}
-.nav-item.active .nav-label{color:#00d4ff}
-.nav-item.active .nav-icon{filter:drop-shadow(0 0 8px rgba(0,212,255,.8))}
-.nav-mine{background:linear-gradient(135deg,#f5b800,#ff6b00);width:52px;height:52px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-top:-20px;border:3px solid #030a1a}
-.nav-mine .nav-icon{font-size:24px;margin-bottom:0}
-.nav-mine .nav-label{color:#0a1428;font-size:7px;font-weight:900}
-.mine-hero{text-align:center;padding:20px 0;background:radial-gradient(circle at center,rgba(0,212,255,.2),transparent 70%);border-radius:20px;margin-bottom:12px}
-.pickaxe-spin{font-size:60px;display:inline-block}
-.mine-rate{font-size:12px;color:#6ba3ff;margin-top:10px;font-weight:700}
-.mine-rate strong{color:#f5b800;font-size:16px}
-.progress-bar{width:100%;height:10px;background:rgba(0,212,255,.1);border-radius:5px;overflow:hidden;margin:14px 0 8px}
-.progress-fill{height:100%;background:linear-gradient(90deg,#00d4ff,#0088ff);border-radius:5px;width:0;transition:width 1s ease}
-.collect-btn{background:linear-gradient(135deg,#f5b800,#ff6b00);color:#0a1428;margin-top:8px}
-.ads-counter{background:linear-gradient(135deg,rgba(0,212,255,.15),rgba(0,136,255,.08));border:1.5px solid rgba(0,212,255,.5);border-radius:14px;padding:18px;text-align:center;margin-bottom:14px}
-.ads-count{font-size:36px;font-weight:900;color:#00d4ff}
-.ads-label{font-size:11px;color:#6ba3ff;margin-top:4px;font-weight:700}
-.ad-btn{background:linear-gradient(135deg,#00d4ff,#0088ff);color:#fff;margin-bottom:10px}
-.ad-btn:disabled{opacity:.4}
-.wheel-container{text-align:center;padding:8px 0}
-.checkin-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;width:100%;margin-bottom:12px}
-.checkin-day{background:linear-gradient(135deg,rgba(0,212,255,.12),rgba(0,136,255,.08));border:1px solid rgba(0,212,255,.25);border-radius:10px;padding:10px 4px;text-align:center}
-.checkin-day.claimed{background:rgba(0,255,204,.15);border-color:rgba(0,255,204,.4)}
-.checkin-day.today{background:rgba(245,184,0,.25);border-color:rgba(245,184,0,.6)}
-.checkin-num{font-size:9px;color:#6ba3ff;font-weight:700;margin-bottom:4px}
-.checkin-reward{font-size:13px;color:#f5b800;font-weight:900}
   .profile-header{text-align:center;padding:20px 0;margin-bottom:14px}
 .profile-avatar{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#f5b800,#ff6b00);display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:900;color:#0a1428;margin:0 auto 12px;border:3px solid rgba(245,184,0,.5)}
 .profile-name{font-size:18px;font-weight:900;margin-bottom:4px}
@@ -188,6 +160,36 @@ button:active{transform:scale(.97)}
 .spin-result-prize{font-size:56px;font-weight:900;background:linear-gradient(135deg,#f5b800,#ffdd00);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin:12px 0}
 .spin-result-label{font-size:12px;color:#6ba3ff;text-transform:uppercase;letter-spacing:2px;font-weight:700}
 .spin-result-btn{width:100%;padding:14px;background:linear-gradient(135deg,#f5b800,#ff6b00);color:#0a1428;border:none;border-radius:12px;font-size:14px;font-weight:900;cursor:pointer;font-family:inherit;margin-top:16px;text-transform:uppercase}
+.bottom-nav{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(180deg,rgba(10,30,60,.95),rgba(3,10,26,.98));border-top:1px solid rgba(0,212,255,.3);display:flex;justify-content:space-around;align-items:center;padding:8px 4px 14px;z-index:50}
+.nav-item{flex:1;text-align:center;cursor:pointer;padding:6px 2px;position:relative}
+.nav-icon{font-size:20px;display:block;margin-bottom:2px}
+.nav-label{font-size:8px;color:#4a7aaa;font-weight:700;text-transform:uppercase}
+.nav-item.active .nav-label{color:#00d4ff}
+.nav-mine{background:linear-gradient(135deg,#f5b800,#ff6b00);width:52px;height:52px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-top:-20px;border:3px solid #030a1a}
+.nav-mine .nav-icon{font-size:24px;margin-bottom:0}
+.nav-mine .nav-label{color:#0a1428;font-size:7px;font-weight:900}
+.mine-hero{text-align:center;padding:20px 0;background:radial-gradient(circle at center,rgba(0,212,255,.2),transparent 70%);border-radius:20px;margin-bottom:12px}
+.pickaxe-spin{font-size:60px;display:inline-block}
+.mine-rate{font-size:12px;color:#6ba3ff;margin-top:10px;font-weight:700}
+.mine-rate strong{color:#f5b800;font-size:16px}
+.progress-bar{width:100%;height:10px;background:rgba(0,212,255,.1);border-radius:5px;overflow:hidden;margin:14px 0 8px}
+.progress-fill{height:100%;background:linear-gradient(90deg,#00d4ff,#0088ff);border-radius:5px;width:0;transition:width 1s ease}
+.collect-btn{background:linear-gradient(135deg,#f5b800,#ff6b00);color:#0a1428;margin-top:8px}
+.ads-counter{background:linear-gradient(135deg,rgba(0,212,255,.15),rgba(0,136,255,.08));border:1.5px solid rgba(0,212,255,.5);border-radius:14px;padding:18px;text-align:center;margin-bottom:14px}
+.ads-count{font-size:36px;font-weight:900;color:#00d4ff}
+.ads-label{font-size:11px;color:#6ba3ff;margin-top:4px;font-weight:700}
+.ad-btn{background:linear-gradient(135deg,#00d4ff,#0088ff);color:#fff;margin-bottom:10px}
+.ad-btn:disabled{opacity:.4}
+.wheel-container{text-align:center;padding:8px 0}
+.checkin-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;width:100%;margin-bottom:12px}
+.checkin-day{background:linear-gradient(135deg,rgba(0,212,255,.12),rgba(0,136,255,.08));border:1px solid rgba(0,212,255,.25);border-radius:10px;padding:10px 4px;text-align:center}
+.checkin-day.claimed{background:rgba(0,255,204,.15);border-color:rgba(0,255,204,.4)}
+.checkin-day.today{background:rgba(245,184,0,.25);border-color:rgba(245,184,0,.6)}
+.checkin-num{font-size:9px;color:#6ba3ff;font-weight:700;margin-bottom:4px}
+.checkin-reward{font-size:13px;color:#f5b800;font-weight:900}
+.welcome-banner{background:linear-gradient(135deg,#22c55e,#16a34a);border-radius:12px;padding:12px;text-align:center;margin-bottom:12px;box-shadow:0 0 20px rgba(34,197,94,.4)}
+.welcome-banner-title{font-size:14px;font-weight:900;color:#fff;margin-bottom:2px}
+.welcome-banner-text{font-size:11px;color:rgba(255,255,255,.9)}
 </style>
 </head>
 <body>
@@ -202,60 +204,57 @@ button:active{transform:scale(.97)}
 
 <div class="frame" id="frame">
 
-  <!-- GATE SCREEN -->
   <div class="screen active" id="gateScreen">
     <div class="logo-wrap"><img src="file_000000004a1481f4ad0c20442e76e9f7.png" alt="Grover" class="logo"></div>
     <div class="title">GROVER</div>
     <div class="subtitle">Minner</div>
+    <div class="welcome-banner">
+      <div class="welcome-banner-title">🎉 +50 GROV Welcome Bonus!</div>
+      <div class="welcome-banner-text">Claim after entry</div>
+    </div>
     <div class="mining-locked">
       <span class="lock-icon">🔒</span>
-      <div class="mining-label">⛏️ <span data-i18n="miningLocked">Mining Locked</span></div>
+      <div class="mining-label">⛏️ Mining Locked</div>
       <div class="mining-value">0.00<span class="unit">GROV</span></div>
-      <div class="mining-rate">⚡ <span data-i18n="level1">Level 1</span> · 5 GROV / 24hrs</div>
-      <div class="mining-lock-text" data-i18n="unlockBy">Unlock by paying 0.05 TON</div>
-    </div>
-    <div class="stats2">
-      <div class="stat"><div class="stat-label">💰 <span data-i18n="balance">Balance</span></div><div class="stat-value" id="gateBalance">0</div></div>
-      <div class="stat"><div class="stat-label">📈 <span data-i18n="profit">Profit</span></div><div class="stat-value" id="gateProfit">0</div></div>
+      <div class="mining-rate">⚡ Level 1 · 5 GROV / 24hrs</div>
+      <div class="mining-lock-text">Unlock by paying 0.05 TON</div>
     </div>
     <div class="fee-box">
-      <div class="fee-label">⚡ <span data-i18n="entryFee">One-Time Entry Fee</span> ⚡</div>
+      <div class="fee-label">⚡ One-Time Entry Fee ⚡</div>
       <div class="fee-value">0.05<span>TON</span></div>
     </div>
-    <div class="notice">🔒 <span data-i18n="walletNotice">Wallet must be 7+ days old to unlock mining</span></div>
-    <button id="connectBtn" onclick="handleConnect()">🔗 <span data-i18n="connectWallet">Connect Wallet</span></button>
-    <button id="payBtn" onclick="handlePay()">💎 <span data-i18n="pay05">Pay 0.05 TON</span></button>
-    <button class="demo-btn" onclick="unlockApp()">🎮 <span data-i18n="demoMode">Demo Mode (Test)</span></button>
+    <div class="notice">🔒 Wallet must be <strong>7+ days old</strong> to unlock mining.</div>
+    <button id="connectBtn" onclick="handleConnect()">🔗 Connect Wallet</button>
+    <button id="payBtn" onclick="handlePay()">💎 Pay 0.05 TON</button>
+    <button class="demo-btn" onclick="unlockApp()">🎮 Demo Mode (Test Only)</button>
     <div id="walletInfo" class="wallet-info"></div>
     <div id="status" class="status"></div>
   </div>
 
-  <!-- HOME SCREEN -->
   <div class="screen" id="homeScreen">
     <div class="home-top-bar">
       <button class="vip-btn" id="vipBtn">👑 VIP</button>
-      <button class="profile-btn" onclick="switchTab('profile')">👤 <span data-i18n="profile">Profile</span></button>
+      <button class="profile-btn" onclick="switchTab('profile')">👤 Profile</button>
     </div>
     <div class="logo-hero"><img src="file_000000004a1481f4ad0c20442e76e9f7.png" alt="Grover" class="hero-logo"></div>
     <div class="earned-counter">
       <div class="earned-value" id="earnedValue">+0.00000000</div>
-      <div class="earned-label">⛏️ <span data-i18n="miningLive">Mining Live</span></div>
+      <div class="earned-label">⛏️ Mining Live</div>
       <div style="font-size:10px;color:#00d4ff;margin-top:4px;font-weight:700;" id="nextClaimTimer">Loading...</div>
     </div>
     <div class="balance-box">
-      <div class="balance-label">💰 <span data-i18n="balance">Balance</span></div>
+      <div class="balance-label">💰 Balance</div>
       <div class="balance-value" id="balanceDisplay">0.00<span>GROV</span></div>
     </div>
     <button class="claim-btn" onclick="claimMining()">CLAIM</button>
-    <button class="mystery-btn" onclick="openMysteryBox()">🎁 <span data-i18n="mysteryBox">Mystery Box</span></button>
-    <button class="checkin-btn" onclick="switchTab('tasks')">🎯 <span data-i18n="dailyCheckin">Daily Check-in</span></button>
+    <button class="mystery-btn" onclick="openMysteryBox()">🎁 Mystery Box</button>
+    <button class="checkin-btn" onclick="switchTab('tasks')">🎯 Daily Check-in</button>
   </div>
 
-  <!-- SPIN SCREEN -->
   <div class="screen" id="spinScreen">
     <div style="text-align:center;margin-bottom:8px;">
-      <div style="font-size:22px;font-weight:900;color:#f5b800;">🎡 <span data-i18n="spinWheel">SPIN WHEEL</span></div>
-      <div style="font-size:11px;color:#00d4ff;margin-top:2px;" data-i18n="spinSubtitle">1 free spin per day</div>
+      <div style="font-size:22px;font-weight:900;color:#f5b800;">🎡 SPIN WHEEL</div>
+      <div style="font-size:11px;color:#00d4ff;margin-top:2px;">1 free spin per day</div>
     </div>
     <div class="wheel-container">
       <svg viewBox="0 0 300 300" style="width:260px;height:260px;margin:0 auto;display:block;">
@@ -286,74 +285,69 @@ button:active{transform:scale(.97)}
         <polygon points="150,5 135,30 165,30" fill="#f5b800" stroke="#030a1a" stroke-width="2"/>
       </svg>
     </div>
-    <button class="collect-btn" id="spinBtn" onclick="spinWheel(false)">🎡 <span data-i18n="spinNow">SPIN NOW</span></button>
-    <div class="notice" style="margin-top:10px;" data-i18n="spinNotice">🎰 Jackpot: 200 GROV!</div>
+    <button class="collect-btn" id="spinBtn" onclick="spinWheel(false)">🎡 SPIN NOW</button>
+    <div class="notice" style="margin-top:10px;">🎰 Jackpot: 200 GROV!</div>
     <div id="spinTimer" style="text-align:center;font-size:11px;color:#00d4ff;margin-top:8px;font-weight:700;"></div>
   </div>
 
-  <!-- ADS SCREEN -->
   <div class="screen" id="adsScreen">
     <div style="text-align:center;margin-bottom:14px;">
-      <div style="font-size:22px;font-weight:900;color:#00d4ff;">🎬 <span data-i18n="watchAds">WATCH ADS</span></div>
+      <div style="font-size:22px;font-weight:900;color:#00d4ff;">🎬 WATCH ADS</div>
     </div>
     <div class="ads-counter">
       <div class="ads-count" id="adsCount">0 / 10</div>
-      <div class="ads-label" data-i18n="adsWatched">Ads watched today</div>
+      <div class="ads-label">Ads watched today</div>
     </div>
-    <button class="ad-btn" id="watchAdBtn" onclick="watchAd()">🎬 <span data-i18n="watchAd">WATCH AD</span></button>
-    <div class="notice" style="text-align:left;" data-i18n="adsNotice">Each ad = 15 seconds. Max 10 ads/day.</div>
+    <button class="ad-btn" id="watchAdBtn" onclick="watchAd()">🎬 WATCH AD</button>
+    <div class="notice" style="text-align:left;">Each ad = 15 seconds. Max 10 ads/day.</div>
   </div>
 
-  <!-- MINE SCREEN -->
   <div class="screen" id="mineScreen">
     <div class="mine-hero">
       <div class="pickaxe-spin">⛏️</div>
-      <div class="mine-rate"><span data-i18n="miningAt">Mining at</span> <strong id="mineRateText">5 GROV/day</strong></div>
+      <div class="mine-rate">Mining at <strong id="mineRateText">5 GROV/day</strong></div>
       <div class="mine-rate" style="font-size:10px;margin-top:4px;color:#4a7aaa;" id="mineLevelText">Level 1</div>
     </div>
     <div class="progress-bar"><div class="progress-fill" id="mineProgressFill"></div></div>
     <div style="text-align:center;font-size:10px;color:#00d4ff;margin-bottom:10px;" id="mineProgressText">Collect on Home</div>
-    <button class="collect-btn" onclick="switchTab('home')">💰 <span data-i18n="goClaim">GO TO CLAIM</span></button>
-    <button style="background:linear-gradient(135deg,#00d4ff,#0088ff);color:#fff;margin-top:8px;" onclick="openVip()">👑 <span data-i18n="upgradeVip">UPGRADE TO VIP</span></button>
+    <button class="collect-btn" onclick="switchTab('home')">💰 GO TO CLAIM</button>
+    <button style="background:linear-gradient(135deg,#00d4ff,#0088ff);color:#fff;margin-top:8px;" onclick="openVip()">👑 UPGRADE TO VIP</button>
     <div class="stats2" style="margin-top:12px;">
-      <div class="stat"><div class="stat-label">⚡ <span data-i18n="level">Level</span></div><div class="stat-value" id="mineLevel">1</div></div>
-      <div class="stat"><div class="stat-label">📊 <span data-i18n="rate">Rate</span></div><div class="stat-value" id="mineRate">5/day</div></div>
+      <div class="stat"><div class="stat-label">⚡ Level</div><div class="stat-value" id="mineLevel">1</div></div>
+      <div class="stat"><div class="stat-label">📊 Rate</div><div class="stat-value" id="mineRate">5/day</div></div>
     </div>
   </div>
 
-  <!-- TASKS SCREEN -->
   <div class="screen" id="tasksScreen">
     <div style="text-align:center;margin-bottom:12px;">
-      <div style="font-size:22px;font-weight:900;color:#f5b800;">📋 <span data-i18n="tasks">TASKS</span></div>
-      <div style="font-size:11px;color:#00d4ff;margin-top:2px;" data-i18n="tasksSubtitle">Complete to earn GROV</div>
+      <div style="font-size:22px;font-weight:900;color:#f5b800;">📋 TASKS</div>
+      <div style="font-size:11px;color:#00d4ff;margin-top:2px;">Complete to earn GROV</div>
     </div>
     <div id="tasksList"></div>
   </div>
 
-  <!-- REFER SCREEN -->
   <div class="screen" id="referScreen">
     <div style="text-align:center;margin-bottom:12px;">
-      <div style="font-size:22px;font-weight:900;color:#f5b800;">👥 <span data-i18n="referFriends">REFER FRIENDS</span></div>
+      <div style="font-size:22px;font-weight:900;color:#f5b800;">👥 REFER FRIENDS</div>
     </div>
     <div class="refer-hero">
       <div class="refer-count" id="referCount">0</div>
-      <div class="refer-label" data-i18n="invitedFriends">Friends Invited</div>
+      <div class="refer-label">Friends Invited</div>
     </div>
     <div class="target-bar-refer"><div class="target-fill-refer" id="targetFillRefer"></div></div>
-    <div class="target-text" id="targetText"><span id="targetCountRefer">1,000</span> / 100,000 USERS</div>
-    <div class="notice" style="margin-top:12px;" data-i18n="referEarn"><strong>Earn 200 GROV</strong> per friend + 50 + 20 tiers!</div>
-    <button class="collect-btn" onclick="referFriend()">🔗 <span data-i18n="shareLink">SHARE YOUR LINK</span></button>
-    <button style="background:rgba(0,212,255,.15);color:#00d4ff;margin-top:8px;border:1px solid rgba(0,212,255,.3);" onclick="showMyLink()">📋 <span data-i18n="copyLink">COPY MY LINK</span></button>
-    <div class="notice" style="margin-top:14px;background:rgba(236,72,153,.1);border-color:#ec4899;" id="eventBox">
-      <div style="font-size:11px;color:#ec4899;font-weight:800;margin-bottom:6px;" data-i18n="upcomingEvents">📅 UPCOMING EVENTS</div>
+    <div class="target-text"><span id="targetCountRefer">1,000</span> / 100,000 USERS</div>
+    <div class="notice" style="margin-top:12px;"><strong>Earn 200 GROV</strong> per friend + 50 + 20 tiers!</div>
+    <button class="collect-btn" onclick="referFriend()">🔗 SHARE YOUR LINK</button>
+    <button style="background:rgba(0,212,255,.15);color:#00d4ff;margin-top:8px;border:1px solid rgba(0,212,255,.3);" onclick="showMyLink()">📋 COPY MY LINK</button>
+    <div class="notice" style="margin-top:14px;background:rgba(236,72,153,.1);border-color:#ec4899;">
+      <div style="font-size:11px;color:#ec4899;font-weight:800;margin-bottom:6px;">📅 UPCOMING EVENTS</div>
       <div id="eventsList"></div>
     </div>
   </div>
 
-  <!-- PROFILE SCREEN -->
   <div class="screen" id="profileScreen">
     <div style="text-align:center;margin-bottom:12px;">
-      <div style="font-size:22px;font-weight:900;color:#f5b800;">👤 <span data-i18n="profile">PROFILE</span></div>
+      <div style="font-size:22px;font-weight:900;color:#f5b800;">👤 PROFILE</div>
     </div>
     <div class="profile-header">
       <div class="profile-avatar" id="profileAvatar">G</div>
@@ -361,125 +355,92 @@ button:active{transform:scale(.97)}
       <div class="profile-handle" id="profileHandle">@user</div>
     </div>
     <div class="profile-item" onclick="openWallet()">
-      <div class="profile-item-label">💰 <span data-i18n="wallet">Wallet</span></div>
+      <div class="profile-item-label">💰 Wallet</div>
       <div class="profile-item-value">›</div>
     </div>
     <div class="profile-item" onclick="toast('Stats coming soon!')">
-      <div class="profile-item-label">📊 <span data-i18n="myStats">My Stats</span></div>
+      <div class="profile-item-label">📊 My Stats</div>
       <div class="profile-item-value">›</div>
     </div>
     <div class="profile-item" onclick="toast('History coming soon!')">
-      <div class="profile-item-label">📜 <span data-i18n="history">History</span></div>
+      <div class="profile-item-label">📜 History</div>
       <div class="profile-item-value">›</div>
     </div>
     <div class="profile-item" onclick="openLanguage()">
-      <div class="profile-item-label">🌐 <span data-i18n="language">Language</span></div>
+      <div class="profile-item-label">🌐 Language</div>
       <div class="profile-item-value" id="currentLang">English</div>
     </div>
     <div class="profile-item" onclick="toast('Support coming soon!')">
-      <div class="profile-item-label">❓ <span data-i18n="help">Help & Support</span></div>
+      <div class="profile-item-label">❓ Help & Support</div>
       <div class="profile-item-value">›</div>
     </div>
   </div>
 
-  <!-- WALLET SCREEN (inside profile) -->
   <div class="screen" id="walletScreen">
     <div style="text-align:center;margin-bottom:12px;">
-      <div style="font-size:22px;font-weight:900;color:#f5b800;">💰 <span data-i18n="wallet">WALLET</span></div>
+      <div style="font-size:22px;font-weight:900;color:#f5b800;">💰 WALLET</div>
     </div>
     <div class="placeholder">
       <div class="placeholder-icon">💰</div>
-      <div class="placeholder-title" data-i18n="comingSoon">Coming Soon</div>
-      <div class="placeholder-text">
-        <span data-i18n="minWithdraw">Min: 10,000 GROV</span><br>
-        <span data-i18n="maxWithdraw">Max: 12,000 GROV</span><br>
-        <span data-i18n="fee">Fee: 15%</span>
-      </div>
+      <div class="placeholder-title">Coming Soon</div>
+      <div class="placeholder-text">Min: 10,000 GROV<br>Max: 12,000 GROV<br>Fee: 15%</div>
     </div>
-    <button style="background:rgba(0,212,255,.15);color:#00d4ff;border:1px solid rgba(0,212,255,.3);" onclick="switchTab('profile')">← <span data-i18n="back">Back to Profile</span></button>
+    <button style="background:rgba(0,212,255,.15);color:#00d4ff;border:1px solid rgba(0,212,255,.3);" onclick="switchTab('profile')">← Back to Profile</button>
   </div>
 
-  <!-- LANGUAGE SCREEN -->
   <div class="screen" id="languageScreen">
     <div style="text-align:center;margin-bottom:14px;">
-      <div style="font-size:22px;font-weight:900;color:#f5b800;">🌐 <span data-i18n="language">LANGUAGE</span></div>
+      <div style="font-size:22px;font-weight:900;color:#f5b800;">🌐 LANGUAGE</div>
     </div>
     <div class="lang-selector" id="langSelector"></div>
-    <button style="background:rgba(0,212,255,.15);color:#00d4ff;border:1px solid rgba(0,212,255,.3);" onclick="switchTab('profile')">← <span data-i18n="back">Back to Profile</span></button>
+    <button style="background:rgba(0,212,255,.15);color:#00d4ff;border:1px solid rgba(0,212,255,.3);" onclick="switchTab('profile')">← Back to Profile</button>
   </div>
 
-  <!-- BOTTOM NAV -->
   <div class="bottom-nav" id="bottomNav" style="display:none;">
-    <div class="nav-item" onclick="switchTab('spin')" data-tab="spin"><span class="nav-icon">🎡</span><span class="nav-label" data-i18n="spin">Spin</span></div>
-    <div class="nav-item" onclick="switchTab('tasks')" data-tab="tasks"><span class="nav-icon">📋</span><span class="nav-label" data-i18n="tasks">Tasks</span><span class="notif-dot" id="tasksDot" style="display:none;"></span></div>
-    <div class="nav-item nav-mine" onclick="switchTab('mine')" data-tab="mine"><span class="nav-icon">⛏️</span><span class="nav-label" data-i18n="mine">Mine</span></div>
-    <div class="nav-item" onclick="switchTab('ads')" data-tab="ads"><span class="nav-icon">🎬</span><span class="nav-label" data-i18n="ads">Ads</span></div>
-    <div class="nav-item" onclick="switchTab('refer')" data-tab="refer"><span class="nav-icon">👥</span><span class="nav-label" data-i18n="refer">Refer</span></div>
+    <div class="nav-item" onclick="switchTab('spin')" data-tab="spin"><span class="nav-icon">🎡</span><span class="nav-label">Spin</span></div>
+    <div class="nav-item" onclick="switchTab('tasks')" data-tab="tasks"><span class="nav-icon">📋</span><span class="nav-label">Tasks</span></div>
+    <div class="nav-item nav-mine" onclick="switchTab('mine')" data-tab="mine"><span class="nav-icon">⛏️</span><span class="nav-label">Mine</span></div>
+    <div class="nav-item" onclick="switchTab('ads')" data-tab="ads"><span class="nav-icon">🎬</span><span class="nav-label">Ads</span></div>
+    <div class="nav-item" onclick="switchTab('refer')" data-tab="refer"><span class="nav-icon">👥</span><span class="nav-label">Refer</span></div>
   </div>
 
 </div>
 
-<!-- VIP MODAL -->
 <div class="vip-modal" id="vipModal">
   <div class="vip-content">
     <div class="vip-header"><h2>👑 VIP</h2><button class="vip-close" onclick="closeVip()">✕</button></div>
-    <div class="vip-tier">
-      <div class="vip-tier-top"><div class="vip-tier-name">Level 2</div><div class="vip-tier-price">2 TON</div></div>
-      <div class="vip-tier-benefits">⚡ 15 GROV/day<br>🎬 10 GROV/ad<br>💸 12% fee</div>
-      <button class="vip-buy-btn" onclick="buyVip(2)">BUY</button>
-    </div>
-    <div class="vip-tier">
-      <div class="vip-tier-top"><div class="vip-tier-name">Level 3</div><div class="vip-tier-price">3 TON</div></div>
-      <div class="vip-tier-benefits">⚡ 25 GROV/day<br>🎬 12 GROV/ad<br>💸 10% fee</div>
-      <button class="vip-buy-btn" onclick="buyVip(3)">BUY</button>
-    </div>
-    <div class="vip-tier">
-      <div class="vip-tier-top"><div class="vip-tier-name">Level 4</div><div class="vip-tier-price">5 TON</div></div>
-      <div class="vip-tier-benefits">⚡ 40 GROV/day<br>🎬 15 GROV/ad<br>💸 8% fee</div>
-      <button class="vip-buy-btn" onclick="buyVip(4)">BUY</button>
-    </div>
-    <div class="vip-tier">
-      <div class="vip-tier-top"><div class="vip-tier-name">Level 5 (MAX)</div><div class="vip-tier-price">7 TON</div></div>
-      <div class="vip-tier-benefits">⚡ 60 GROV/day<br>🎬 20 GROV/ad<br>💸 5% fee</div>
-      <button class="vip-buy-btn" onclick="buyVip(5)">BUY</button>
-    </div>
+    <div class="vip-tier"><div class="vip-tier-top"><div class="vip-tier-name">Level 2</div><div class="vip-tier-price">2 TON</div></div><div class="vip-tier-benefits">⚡ 15 GROV/day<br>🎬 10 GROV/ad<br>💸 12% fee</div><button class="vip-buy-btn" onclick="buyVip(2)">BUY</button></div>
+    <div class="vip-tier"><div class="vip-tier-top"><div class="vip-tier-name">Level 3</div><div class="vip-tier-price">3 TON</div></div><div class="vip-tier-benefits">⚡ 25 GROV/day<br>🎬 12 GROV/ad<br>💸 10% fee</div><button class="vip-buy-btn" onclick="buyVip(3)">BUY</button></div>
+    <div class="vip-tier"><div class="vip-tier-top"><div class="vip-tier-name">Level 4</div><div class="vip-tier-price">5 TON</div></div><div class="vip-tier-benefits">⚡ 40 GROV/day<br>🎬 15 GROV/ad<br>💸 8% fee</div><button class="vip-buy-btn" onclick="buyVip(4)">BUY</button></div>
+    <div class="vip-tier"><div class="vip-tier-top"><div class="vip-tier-name">Level 5 (MAX)</div><div class="vip-tier-price">7 TON</div></div><div class="vip-tier-benefits">⚡ 60 GROV/day<br>🎬 20 GROV/ad<br>💸 5% fee</div><button class="vip-buy-btn" onclick="buyVip(5)">BUY</button></div>
   </div>
 </div>
 
-<!-- MYSTERY BOX MODAL -->
 <div class="spin-result" id="mysteryModal">
   <div class="spin-result-content">
-    <div class="spin-result-label" data-i18n="youWon">You Won!</div>
+    <div class="spin-result-label">You Won!</div>
     <div class="spin-result-prize" id="mysteryPrize">+5</div>
     <div class="spin-result-label">GROV</div>
-    <button class="spin-result-btn" onclick="closeMysteryBox()" data-i18n="claimPrize">CLAIM PRIZE</button>
+    <button class="spin-result-btn" onclick="closeMysteryBox()">CLAIM</button>
   </div>
 </div>
 
-<!-- SPIN RESULT MODAL -->
 <div class="spin-result" id="spinResultModal">
   <div class="spin-result-content">
-    <div class="spin-result-label" data-i18n="youWon">You Won!</div>
+    <div class="spin-result-label">You Won!</div>
     <div class="spin-result-prize" id="spinResultPrize">+50</div>
     <div class="spin-result-label">GROV</div>
-    <button class="spin-result-btn" onclick="closeSpinResult()" data-i18n="claimPrize">CLAIM PRIZE</button>
+    <button class="spin-result-btn" onclick="closeSpinResult()">CLAIM</button>
   </div>
 </div>
 
-<!-- ADMIN MODAL -->
 <div class="admin-modal" id="adminModal">
   <div class="admin-content">
-    <div class="admin-header">
-      <h3>🔐 ADMIN PANEL</h3>
-      <button class="admin-close" onclick="closeAdmin()">✕</button>
-    </div>
-
-    <div class="admin-pin-view" id="adminPinView">
+    <div class="admin-header"><h3>🔐 ADMIN PANEL</h3><button class="admin-close" onclick="closeAdmin()">✕</button></div>
+    <div id="adminPinView">
       <input type="password" class="admin-input" id="adminPin" placeholder="Enter PIN" maxlength="8">
       <button class="admin-btn" onclick="checkAdminPin()">UNLOCK</button>
-      <button class="admin-close" onclick="closeAdmin()" style="width:100%;margin-top:8px;">Cancel</button>
     </div>
-
     <div class="admin-panels" id="adminPanels" style="display:none;">
       <div class="admin-tabs">
         <button class="admin-tab active" onclick="adminTab('leaderboard')" data-tab="leaderboard">🏆</button>
@@ -490,65 +451,40 @@ button:active{transform:scale(.97)}
         <button class="admin-tab" onclick="adminTab('tasks')" data-tab="tasks">📋</button>
         <button class="admin-tab" onclick="adminTab('events')" data-tab="events">📅</button>
       </div>
-
-      <!-- TAB 1: LEADERBOARD -->
       <div class="admin-panel active" id="panel-leaderboard">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
-          <button class="admin-btn admin-btn-gold" onclick="adminFakeMode()">FAKE USERS</button>
-          <button class="admin-btn admin-btn-green" onclick="adminRealMode()">REAL USERS</button>
+          <button class="admin-btn admin-btn-gold" onclick="adminFakeMode()">FAKE</button>
+          <button class="admin-btn admin-btn-green" onclick="adminRealMode()">REAL</button>
         </div>
         <div id="adminLeaderboardList"></div>
         <button class="admin-btn" onclick="adminAddFake()" style="margin-top:10px;">+ ADD FAKE USER</button>
       </div>
-
-      <!-- TAB 2: PRIZE POOL -->
       <div class="admin-panel" id="panel-pool">
-        <div style="font-size:11px;color:#6ba3ff;margin-bottom:6px;">Fake Pool (Shown to users)</div>
-        <input type="text" class="admin-input" id="fakePoolInput" placeholder="$100">
-        <div style="font-size:11px;color:#6ba3ff;margin-bottom:6px;">Real Pool (Actual payout)</div>
-        <input type="text" class="admin-input" id="realPoolInput" placeholder="$10">
-        <div style="font-size:11px;color:#6ba3ff;margin-bottom:6px;">Payout Day</div>
-        <input type="number" class="admin-input" id="payoutDayInput" placeholder="30" min="1" max="31">
+        <input type="text" class="admin-input" id="fakePoolInput" placeholder="Fake Pool $100">
+        <input type="text" class="admin-input" id="realPoolInput" placeholder="Real Pool $10">
+        <input type="number" class="admin-input" id="payoutDayInput" placeholder="Payout Day 30">
         <button class="admin-btn admin-btn-green" onclick="adminSavePool()">SAVE</button>
       </div>
-
-      <!-- TAB 3: GROV DISTRIBUTION -->
       <div class="admin-panel" id="panel-grov">
         <div class="admin-stat"><div class="admin-stat-label">Total Supply</div><div class="admin-stat-value">10,000,000,000</div></div>
         <div class="admin-stat"><div class="admin-stat-label">Distributed</div><div class="admin-stat-value" id="grovDistributed">0</div></div>
         <div class="admin-stat"><div class="admin-stat-label">Remaining</div><div class="admin-stat-value" id="grovRemaining">10,000,000,000</div></div>
-        <div class="admin-stat"><div class="admin-stat-label">Burned (Fees)</div><div class="admin-stat-value" id="grovBurned">0</div></div>
         <div class="admin-stat"><div class="admin-stat-label">% Used</div><div class="admin-stat-value" id="grovPercent">0%</div></div>
-        <div class="admin-stat"><div class="admin-stat-label">Days Until Empty</div><div class="admin-stat-value" id="grovDaysLeft">∞</div></div>
       </div>
-
-      <!-- TAB 4: LIVE STATS -->
       <div class="admin-panel" id="panel-stats">
         <div class="admin-stat"><div class="admin-stat-label">Total Users</div><div class="admin-stat-value" id="statTotalUsers">0</div></div>
-        <div class="admin-stat"><div class="admin-stat-label">Active Today</div><div class="admin-stat-value" id="statActiveToday">0</div></div>
-        <div class="admin-stat"><div class="admin-stat-label">VIP Sales Revenue</div><div class="admin-stat-value" id="statVipRevenue">₦0</div></div>
-        <div class="admin-stat"><div class="admin-stat-label">Ad Revenue</div><div class="admin-stat-value" id="statAdRevenue">₦0</div></div>
         <div class="admin-stat"><div class="admin-stat-label">Balance Owed</div><div class="admin-stat-value" id="statBalanceOwed">0 GROV</div></div>
       </div>
-
-      <!-- TAB 5: SYSTEM CONTROLS -->
       <div class="admin-panel" id="panel-system">
-        <div style="font-size:11px;color:#6ba3ff;margin-bottom:6px;">Demo Mode</div>
         <button class="admin-btn" id="demoToggleBtn" onclick="adminToggleDemo()">Demo Mode: OFF</button>
-        <div style="font-size:11px;color:#6ba3ff;margin-top:12px;margin-bottom:6px;">Maintenance Fee %</div>
-        <input type="number" class="admin-input" id="maintFeeInput" placeholder="15" min="0" max="50">
-        <div style="font-size:11px;color:#6ba3ff;margin-bottom:6px;">Change Admin PIN</div>
+        <input type="number" class="admin-input" id="maintFeeInput" placeholder="Maintenance Fee %">
         <input type="password" class="admin-input" id="newPinInput" placeholder="New PIN" maxlength="8">
-        <button class="admin-btn admin-btn-green" onclick="adminSaveSystem()">SAVE ALL</button>
+        <button class="admin-btn admin-btn-green" onclick="adminSaveSystem()">SAVE</button>
       </div>
-
-      <!-- TAB 6: TASK MANAGER -->
       <div class="admin-panel" id="panel-tasks">
         <div id="adminTaskList"></div>
         <button class="admin-btn" onclick="adminAddTask()" style="margin-top:10px;">+ ADD TASK</button>
       </div>
-
-      <!-- TAB 7: EVENT CALENDAR -->
       <div class="admin-panel" id="panel-events">
         <div id="adminEventList"></div>
         <button class="admin-btn" onclick="adminAddEvent()" style="margin-top:10px;">+ ADD EVENT</button>
@@ -563,9 +499,6 @@ button:active{transform:scale(.97)}
   const tg = window.Telegram?.WebApp;
   if (tg) { tg.ready(); tg.expand(); tg.setHeaderColor('#030a1a'); tg.setBackgroundColor('#030a1a'); }
 
-  // ============================================
-  // USER ISOLATION
-  // ============================================
   function getCurrentUserId() {
     if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) return String(tg.initDataUnsafe.user.id);
     return 'guest_' + (localStorage.getItem('grover_device_id') || (() => {
@@ -584,59 +517,10 @@ button:active{transform:scale(.97)}
   }
   localStorage.setItem(LAST_USER_KEY, CURRENT_USER);
 
-  // ============================================
-  // TRANSLATIONS
-  // ============================================
-  const translations = {
-    en: { miningLocked:"Mining Locked", level1:"Level 1", unlockBy:"Unlock by paying 0.05 TON", balance:"Balance", profit:"Profit", entryFee:"One-Time Entry Fee", walletNotice:"Wallet must be 7+ days old to unlock mining", connectWallet:"Connect Wallet", pay05:"Pay 0.05 TON", demoMode:"Demo Mode (Test)", profile:"Profile", miningLive:"Mining Live", mysteryBox:"Mystery Box", dailyCheckin:"Daily Check-in", spinWheel:"SPIN WHEEL", spinSubtitle:"1 free spin per day", spinNow:"SPIN NOW", spinNotice:"🎰 Jackpot: 200 GROV!", watchAds:"WATCH ADS", adsWatched:"Ads watched today", watchAd:"WATCH AD", adsNotice:"Each ad = 15 seconds. Max 10 ads/day.", miningAt:"Mining at", goClaim:"GO TO CLAIM", upgradeVip:"UPGRADE TO VIP", level:"Level", rate:"Rate", tasks:"Tasks", tasksSubtitle:"Complete to earn GROV", referFriends:"REFER FRIENDS", invitedFriends:"Friends Invited", referEarn:"Earn 200 GROV per friend + 50 + 20 tiers!", shareLink:"SHARE YOUR LINK", copyLink:"COPY MY LINK", upcomingEvents:"📅 UPCOMING EVENTS", wallet:"Wallet", myStats:"My Stats", history:"History", language:"Language", help:"Help & Support", comingSoon:"Coming Soon", minWithdraw:"Min: 10,000 GROV", maxWithdraw:"Max: 12,000 GROV", fee:"Fee: 15%", back:"Back", youWon:"You Won!", claimPrize:"CLAIM PRIZE", spin:"Spin", mine:"Mine", ads:"Ads", refer:"Refer" },
-    ru: { miningLocked:"Майнинг заблокирован", level1:"Уровень 1", unlockBy:"Разблокируйте за 0.05 TON", balance:"Баланс", profit:"Прибыль", entryFee:"Единоразовый взнос", walletNotice:"Кошелек должен быть старше 7 дней", connectWallet:"Подключить кошелек", pay05:"Оплатить 0.05 TON", demoMode:"Демо-режим", profile:"Профиль", miningLive:"Майнинг идет", mysteryBox:"Коробка сюрпризов", dailyCheckin:"Ежедневная отметка", spinWheel:"КОЛЕСО ФОРТУНЫ", spinSubtitle:"1 бесплатное вращение в день", spinNow:"КРУТИТЬ", spinNotice:"🎰 Джекпот: 200 GROV!", watchAds:"СМОТРЕТЬ РЕКЛАМУ", adsWatched:"Реклама сегодня", watchAd:"СМОТРЕТЬ", adsNotice:"15 секунд. Макс 10/день.", miningAt:"Майнинг", goClaim:"К ЗАБОРУ", upgradeVip:"VIP", level:"Уровень", rate:"Ставка", tasks:"Задания", tasksSubtitle:"Выполните и заработайте", referFriends:"ПРИГЛАСИТЬ ДРУЗЕЙ", invitedFriends:"Приглашено", referEarn:"200 GROV за друга + 50 + 20!", shareLink:"ПОДЕЛИТЬСЯ", copyLink:"КОПИРОВАТЬ", upcomingEvents:"📅 СОБЫТИЯ", wallet:"Кошелек", myStats:"Статистика", history:"История", language:"Язык", help:"Помощь", comingSoon:"Скоро", minWithdraw:"Мин: 10,000 GROV", maxWithdraw:"Макс: 12,000 GROV", fee:"Комиссия: 15%", back:"Назад", youWon:"Вы выиграли!", claimPrize:"ПОЛУЧИТЬ", spin:"Крутить", mine:"Майнинг", ads:"Реклама", refer:"Пригласить" },
-    ar: { miningLocked:"التعدين مقفل", level1:"المستوى 1", unlockBy:"افتح مقابل 0.05 TON", balance:"الرصيد", profit:"الربح", entryFee:"رسوم الدخول", walletNotice:"يجب أن تكون المحفظة أقدم من 7 أيام", connectWallet:"ربط المحفظة", pay05:"ادفع 0.05 TON", demoMode:"الوضع التجريبي", profile:"الملف", miningLive:"التعدين مباشر", mysteryBox:"صندوق الغموض", dailyCheckin:"تسجيل يومي", spinWheel:"عجلة الحظ", spinSubtitle:"دورة مجانية يومياً", spinNow:"أدر", spinNotice:"🎰 الجائزة: 200 GROV!", watchAds:"شاهد الإعلانات", adsWatched:"إعلانات اليوم", watchAd:"شاهد", adsNotice:"15 ثانية. 10 كحد أقصى.", miningAt:"التعدين", goClaim:"اذهب للمطالبة", upgradeVip:"ترقية VIP", level:"المستوى", rate:"المعدل", tasks:"المهام", tasksSubtitle:"أكمل واربح", referFriends:"ادعُ أصدقاءك", invitedFriends:"المدعوون", referEarn:"200 GROV لكل صديق!", shareLink:"مشاركة", copyLink:"نسخ", upcomingEvents:"📅 الأحداث", wallet:"المحفظة", myStats:"إحصائياتي", history:"السجل", language:"اللغة", help:"المساعدة", comingSoon:"قريباً", minWithdraw:"الحد الأدنى: 10,000 GROV", maxWithdraw:"الحد الأقصى: 12,000 GROV", fee:"الرسوم: 15%", back:"رجوع", youWon:"لقد فزت!", claimPrize:"احصل", spin:"أدر", mine:"تعدين", ads:"إعلانات", refer:"ادعُ" },
-    hi: { miningLocked:"माइनिंग लॉक", level1:"लेवल 1", unlockBy:"0.05 TON भरें", balance:"बैलेंस", profit:"लाभ", entryFee:"प्रवेश शुल्क", walletNotice:"वॉलेट 7+ दिन पुराना हो", connectWallet:"वॉलेट जोड़ें", pay05:"0.05 TON भरें", demoMode:"डेमो मोड", profile:"प्रोफाइल", miningLive:"माइनिंग चालू", mysteryBox:"मिस्ट्री बॉक्स", dailyCheckin:"डेली चेक-इन", spinWheel:"स्पिन व्हील", spinSubtitle:"1 फ्री स्पिन रोज़", spinNow:"स्पिन करें", spinNotice:"🎰 जैकपॉट: 200 GROV!", watchAds:"विज्ञापन देखें", adsWatched:"आज के विज्ञापन", watchAd:"देखें", adsNotice:"15 सेकंड। रोज़ 10 तक।", miningAt:"माइनिंग", goClaim:"क्लेम करें", upgradeVip:"VIP अपग्रेड", level:"लेवल", rate:"रेट", tasks:"टास्क", tasksSubtitle:"पूरा करें और कमाएं", referFriends:"दोस्तों को बुलाएं", invitedFriends:"आमंत्रित", referEarn:"200 GROV प्रति दोस्त!", shareLink:"शेयर करें", copyLink:"कॉपी करें", upcomingEvents:"📅 आगामी इवेंट", wallet:"वॉलेट", myStats:"मेरे आंकड़े", history:"इतिहास", language:"भाषा", help:"मदद", comingSoon:"जल्द आ रहा है", minWithdraw:"न्यूनतम: 10,000 GROV", maxWithdraw:"अधिकतम: 12,000 GROV", fee:"शुल्क: 15%", back:"वापस", youWon:"आपने जीता!", claimPrize:"इनाम लें", spin:"स्पिन", mine:"माइन", ads:"विज्ञापन", refer:"रेफर" },
-    ta: { miningLocked:"மைனிங் பூட்டப்பட்டது", level1:"நிலை 1", unlockBy:"0.05 TON செலுத்தவும்", balance:"இருப்பு", profit:"லாபம்", entryFee:"நுழைவுக் கட்டணம்", walletNotice:"வாலட் 7+ நாட்கள் பழையதாக இருக்க வேண்டும்", connectWallet:"வாலட்டை இணைக்க", pay05:"0.05 TON செலுத்து", demoMode:"டெமோ பயன்முறை", profile:"சுயவிவரம்", miningLive:"மைனிங் நேரடி", mysteryBox:"மர்மப் பெட்டி", dailyCheckin:"தினசரி செக்-இன்", spinWheel:"சுழல் சக்கரம்", spinSubtitle:"நாளுக்கு 1 இலவச சுழல்", spinNow:"சுழற்று", spinNotice:"🎰 ஜாக்பாட்: 200 GROV!", watchAds:"விளம்பரங்களைப் பார்", adsWatched:"இன்றைய விளம்பரங்கள்", watchAd:"பார்", adsNotice:"15 வினாடிகள். அதிகபட்சம் 10.", miningAt:"மைனிங்", goClaim:"கிளைம் செய்", upgradeVip:"VIP மேம்படுத்து", level:"நிலை", rate:"விகிதம்", tasks:"பணிகள்", tasksSubtitle:"முடித்து சம்பாதிக்கவும்", referFriends:"நண்பர்களை அழை", invitedFriends:"அழைக்கப்பட்டவர்கள்", referEarn:"200 GROV ஒரு நண்பருக்கு!", shareLink:"பங்கிடு", copyLink:"நகலெடு", upcomingEvents:"📅 நிகழ்வுகள்", wallet:"வாலட்", myStats:"புள்ளிவிவரங்கள்", history:"வரலாறு", language:"மொழி", help:"உதவி", comingSoon:"விரைவில்", minWithdraw:"குறைந்தபட்சம்: 10,000 GROV", maxWithdraw:"அதிகபட்சம்: 12,000 GROV", fee:"கட்டணம்: 15%", back:"பின்செல்", youWon:"நீங்கள் வென்றீர்கள்!", claimPrize:"பரிசைப் பெறு", spin:"சுழல்", mine:"மைன்", ads:"விளம்பரங்கள்", refer:"பரிந்துரை" }
-  };
-
-  let currentLang = localStorage.getItem('grover_lang') || 'en';
-
-  function applyLanguage(lang) {
-    currentLang = lang;
-    localStorage.setItem('grover_lang', lang);
-    const t = translations[lang] || translations.en;
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-      const key = el.getAttribute('data-i18n');
-      if (t[key]) el.textContent = t[key];
-    });
-    const cl = document.getElementById('currentLang');
-    const names = { en:'English', ru:'Русский', ar:'العربية', hi:'हिन्दी', ta:'தமிழ்' };
-    if (cl) cl.textContent = names[lang] || 'English';
-    renderLangSelector();
-  }
-
-  function renderLangSelector() {
-    const sel = document.getElementById('langSelector');
-    if (!sel) return;
-    const langs = [
-      { code:'en', name:'🇬🇧 English' },
-      { code:'ru', name:'🇷🇺 Русский' },
-      { code:'ar', name:'🇸🇦 العربية' },
-      { code:'hi', name:'🇮🇳 हिन्दी' },
-      { code:'ta', name:'🇮🇳 தமிழ்' }
-    ];
-    sel.innerHTML = '';
-    langs.forEach(l => {
-      const d = document.createElement('div');
-      d.className = 'lang-option' + (currentLang === l.code ? ' active' : '');
-      d.textContent = l.name;
-      d.onclick = () => { applyLanguage(l.code); toast('Language changed ✅'); };
-      sel.appendChild(d);
-    });
-  }
-
-  // ============================================
-  // STATE + PERSISTENCE
-  // ============================================
   const MINING_RATES = { 1: 5, 2: 15, 3: 25, 4: 40, 5: 60 };
   const AD_REWARDS = { 1: 5, 2: 10, 3: 12, 4: 15, 5: 20 };
   const DAY_MS = 24 * 60 * 60 * 1000;
+  const WELCOME_BONUS = 50;
 
   let state = {
     balance: 0,
@@ -652,10 +536,11 @@ button:active{transform:scale(.97)}
     referralCode: null,
     lastMysteryBox: null,
     completedTasks: [],
-    miningBoostUntil: 0
+    miningBoostUntil: 0,
+    welcomeClaimed: false
   };
 
-  let globalUsers = 999; // Start showing 1,000 with first user
+  let globalUsers = 999;
 
   function saveState() {
     try { localStorage.setItem('grover_state_' + CURRENT_USER, JSON.stringify(state)); } catch(e){}
@@ -673,22 +558,15 @@ button:active{transform:scale(.97)}
     return state.referralCode;
   }
 
-  const ADMIN_PIN_DEFAULT = "1905";
-  let ADMIN_PIN = localStorage.getItem('grover_admin_pin') || ADMIN_PIN_DEFAULT;
+  let ADMIN_PIN = localStorage.getItem('grover_admin_pin') || "1905";
   let vipTapCount = 0;
   let vipTapTimer = null;
 
-  // ============================================
-  // SPLASH (8 seconds)
-  // ============================================
   setTimeout(() => {
     document.getElementById('splash').classList.add('hide');
     document.getElementById('frame').classList.add('show');
   }, 8000);
 
-  // ============================================
-  // TOAST
-  // ============================================
   function toast(msg) {
     const el = document.getElementById('toast');
     el.textContent = msg;
@@ -696,9 +574,6 @@ button:active{transform:scale(.97)}
     setTimeout(() => el.classList.remove('show'), 2500);
   }
 
-  // ============================================
-  // MINING (with booster support)
-  // ============================================
   function getMiningRate() {
     let rate = MINING_RATES[state.vipLevel] || 5;
     if (state.miningBoostUntil && Date.now() < state.miningBoostUntil) rate *= 2;
@@ -743,17 +618,6 @@ button:active{transform:scale(.97)}
     if (mLevelText) mLevelText.textContent = 'Level ' + state.vipLevel;
     if (mProgFill) mProgFill.style.width = Math.min(100, (pending / rate) * 100) + '%';
     if (mProgText) mProgText.textContent = pending >= rate ? '✅ Ready to claim' : 'Mining... ' + pending.toFixed(6) + ' GROV';
-
-    // Badge on Claim when full
-    if (pending >= rate) {
-      const btn = document.querySelector('.claim-btn');
-      if (btn && !btn.querySelector('.notif-dot')) {
-        const dot = document.createElement('span');
-        dot.className = 'notif-dot';
-        btn.style.position = 'relative';
-        btn.appendChild(dot);
-      }
-    }
   }
 
   function updateBalanceDisplay() {
@@ -782,9 +646,6 @@ button:active{transform:scale(.97)}
     toast('💰 +' + rate + ' GROV claimed!');
   }
 
-  // ============================================
-  // MYSTERY BOX (1-10 GROV daily)
-  // ============================================
   function openMysteryBox() {
     const today = new Date().toDateString();
     if (state.lastMysteryBox === today) return toast('Come back tomorrow!');
@@ -800,9 +661,6 @@ button:active{transform:scale(.97)}
     document.getElementById('mysteryModal').classList.remove('show');
   }
 
-  // ============================================
-  // SPIN (ultra-rare 200)
-  // ============================================
   function spinWheel(isRespin) {
     const today = new Date().toDateString();
     if (!isRespin) {
@@ -838,9 +696,8 @@ button:active{transform:scale(.97)}
         setTimeout(() => spinWheel(true), 1500);
         return;
       }
-      if (isRespin && isReSpinSegment) { prize = 1; toast('🎯 RE-SPIN → 1 GROV'); }
+      if (isRespin && isReSpinSegment) { prize = 1; }
       else if (prize === 200) toast('🎰 JACKPOT! +200 GROV!');
-      else toast('🎉 You won ' + prize + ' GROV!');
 
       state.balance += prize;
       if (!isRespin) {
@@ -865,18 +722,14 @@ button:active{transform:scale(.97)}
   function watchAdForSpin() {
     toast('🎬 Watch ad to spin again...');
     try {
-      const AdController = window.Adsgram ? window.Adsgram.init({ blockId: "11979593" }) : null;
-      if (AdController) {
-        AdController.show().then(result => {
-          if (result && result.done) {
+      if (typeof window.show_11979593 === 'function') {
+        window.show_11979593({
+          type: 'reward',
+          onReward: () => {
             state.extraSpinsUsed++;
             saveState();
             setTimeout(() => spinWheel(false), 500);
           }
-        }).catch(() => {
-          state.extraSpinsUsed++;
-          saveState();
-          spinWheel(false);
         });
       } else {
         state.extraSpinsUsed++;
@@ -917,9 +770,6 @@ button:active{transform:scale(.97)}
     }
   }
 
-  // ============================================
-  // ADS (Monetag)
-  // ============================================
   function updateAdsView() {
     const el = document.getElementById('adsCount');
     const btn = document.getElementById('watchAdBtn');
@@ -944,10 +794,8 @@ button:active{transform:scale(.97)}
     const reward = AD_REWARDS[state.vipLevel] || 5;
 
     try {
-      const zoneId = "11979593";
-      const sdk = window.show_11979593;
-      if (typeof sdk === 'function') {
-        await sdk({
+      if (typeof window.show_11979593 === 'function') {
+        window.show_11979593({
           type: 'reward',
           onReward: () => {
             state.adsWatched++;
@@ -959,7 +807,6 @@ button:active{transform:scale(.97)}
           }
         });
       } else {
-        // Fallback if SDK not loaded yet
         setTimeout(() => {
           state.adsWatched++;
           state.balance += reward;
@@ -967,17 +814,14 @@ button:active{transform:scale(.97)}
           updateAdsView();
           saveState();
           toast('✅ +' + reward + ' GROV!');
-        }, 1000);
+        }, 1500);
       }
     } catch (e) {
       btn.disabled = false;
-      toast('Ad not available. Try later.');
+      toast('Ad not available.');
     }
   }
 
-  // ============================================
-  // TASKS
-  // ============================================
   const DEFAULT_TASKS = [
     { id:'follow_x', icon:'🐦', name:'Follow on X', link:'https://x.com/grovmining', reward:50, type:'follow' },
     { id:'join_tg', icon:'📢', name:'Join Telegram', link:'https://t.me/GrovOfficial', reward:50, type:'join' },
@@ -1027,9 +871,6 @@ button:active{transform:scale(.97)}
     }, 2000);
   }
 
-  // ============================================
-  // CHECK-IN (with streak)
-  // ============================================
   function doCheckin() {
     const today = new Date().toDateString();
     if (state.lastCheckin === today) return toast('Already checked in today!');
@@ -1043,437 +884,386 @@ button:active{transform:scale(.97)}
     updateBalanceDisplay();
     saveState();
     renderTasks();
-    toast('🎁 +' + reward + ' GROV! Day ' + (state.checkinStreak + 1));
+    toast('🎁 +' + reward + ' GROV!');
   }
-</script>
+  
+function referFriend() {
+  const code = getOrCreateReferralCode();
+  const link = 'https://t.me/GroverMiningBot/Grovcoin?startapp=ref_' + code;
+  const text = '⛏️ Join Grover Minner and earn GROV coins!\n\nMy referral code: ' + code;
+  if (tg && tg.openTelegramLink) {
+    tg.openTelegramLink('https://t.me/share/url?url=' + encodeURIComponent(link) + '&text=' + encodeURIComponent(text));
+  } else {
+    if (navigator.clipboard) navigator.clipboard.writeText(link);
+    toast('📋 Link copied!');
+  }
+}
 
-  // ============================================
-  // REFERRAL
-  // ============================================
-  function referFriend() {
-    const code = getOrCreateReferralCode();
-    const link = 'https://t.me/GroverMiningBot/Grovcoin?startapp=ref_' + code;
-    const text = '⛏️ Join Grover Minner and earn GROV coins!\n\nMy referral code: ' + code;
-    if (tg && tg.openTelegramLink) {
-      tg.openTelegramLink('https://t.me/share/url?url=' + encodeURIComponent(link) + '&text=' + encodeURIComponent(text));
-    } else {
-      if (navigator.clipboard) navigator.clipboard.writeText(link);
-      toast('📋 Link copied!');
-    }
+function showMyLink() {
+  const code = getOrCreateReferralCode();
+  const link = 'https://t.me/GroverMiningBot/Grovcoin?startapp=ref_' + code;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(link);
+    toast('📋 Copied! Code: ' + code);
+  } else {
+    toast('Your code: ' + code);
   }
+}
 
-  function showMyLink() {
-    const code = getOrCreateReferralCode();
-    const link = 'https://t.me/GroverMiningBot/Grovcoin?startapp=ref_' + code;
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(link);
-      toast('📋 Copied! Code: ' + code);
-    } else {
-      toast('Your code: ' + code);
-    }
-  }
+function updateReferTarget() {
+  const percent = Math.max(1, (globalUsers / 100000) * 100);
+  const fill = document.getElementById('targetFillRefer');
+  const cnt = document.getElementById('targetCountRefer');
+  const rc = document.getElementById('referCount');
+  if (fill) fill.style.width = percent + '%';
+  if (cnt) cnt.textContent = globalUsers.toLocaleString();
+  if (rc) rc.textContent = state.referralCount;
+}
 
-  function updateReferTarget() {
-    const percent = Math.max(1, (globalUsers / 100000) * 100);
-    const fill = document.getElementById('targetFillRefer');
-    const cnt = document.getElementById('targetCountRefer');
-    const rc = document.getElementById('referCount');
-    if (fill) fill.style.width = percent + '%';
-    if (cnt) cnt.textContent = globalUsers.toLocaleString();
-    if (rc) rc.textContent = state.referralCount;
-  }
-
-  // ============================================
-  // VIP
-  // ============================================
-  function openVip() { document.getElementById('vipModal').classList.add('show'); }
-  function closeVip() { document.getElementById('vipModal').classList.remove('show'); }
-  function buyVip(level) {
-    const prices = { 2: 2, 3: 3, 4: 5, 5: 7 };
-    toast('👑 Buying VIP Level ' + level + ' for ' + prices[level] + ' TON...');
-    setTimeout(() => {
-      state.vipLevel = level;
-      closeVip();
-      saveState();
-      toast('✅ VIP Level ' + level + ' activated!');
-      updateAdsView();
-      updateMiningCounter();
-    }, 1500);
-  }
-
-  // ============================================
-  // VIP BUTTON (1 tap = VIP, 7 taps = admin)
-  // ============================================
-  const vipBtnEl = document.getElementById('vipBtn');
-  if (vipBtnEl) {
-    vipBtnEl.addEventListener('click', () => {
-      vipTapCount++;
-      clearTimeout(vipTapTimer);
-      if (vipTapCount >= 7) {
-        vipTapCount = 0;
-        openAdminPin();
-        return;
-      }
-      vipTapTimer = setTimeout(() => {
-        if (vipTapCount === 1) openVip();
-        vipTapCount = 0;
-      }, 400);
-    });
-  }
-
-  function openAdminPin() {
-    document.getElementById('adminModal').classList.add('show');
-    document.getElementById('adminPinView').style.display = 'block';
-    document.getElementById('adminPanels').style.display = 'none';
-    document.getElementById('adminPin').value = '';
-  }
-  function closeAdmin() {
-    document.getElementById('adminModal').classList.remove('show');
-  }
-  function checkAdminPin() {
-    const pin = document.getElementById('adminPin').value;
-    if (pin === ADMIN_PIN) {
-      document.getElementById('adminPinView').style.display = 'none';
-      document.getElementById('adminPanels').style.display = 'block';
-      loadAdminData();
-      toast('🔓 Admin access granted!');
-    } else {
-      toast('❌ Wrong PIN');
-      document.getElementById('adminPin').value = '';
-    }
-  }
-
-  // ============================================
-  // ADMIN — TABS
-  // ============================================
-  function adminTab(tab) {
-    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
-    document.querySelector('[data-tab="' + tab + '"]').classList.add('active');
-    document.getElementById('panel-' + tab).classList.add('active');
-  }
-
-  // ============================================
-  // ADMIN — LEADERBOARD (Fake/Real)
-  // ============================================
-  let adminMode = localStorage.getItem('grover_admin_mode') || 'fake';
-  let fakeUsers = JSON.parse(localStorage.getItem('grover_fake_users') || 'null') || [
-    { name:'Chidi Okafor', refs:2145 },
-    { name:'Aisha Bello', refs:1832 },
-    { name:'Emeka Nwosu', refs:1567 },
-    { name:'Fatima Yusuf', refs:1234 },
-    { name:'Tunde Adeyemi', refs:987 },
-    { name:'Ngozi Eze', refs:856 },
-    { name:'Seyi Balogun', refs:721 },
-    { name:'Blessing Okon', refs:645 },
-    { name:'Ibrahim Musa', refs:512 },
-    { name:'Chioma Nnaji', refs:423 }
-  ];
-
-  function adminFakeMode() {
-    adminMode = 'fake';
-    localStorage.setItem('grover_admin_mode', 'fake');
-    loadAdminData();
-    toast('🎭 FAKE mode active');
-  }
-  function adminRealMode() {
-    adminMode = 'real';
-    localStorage.setItem('grover_admin_mode', 'real');
-    loadAdminData();
-    toast('👥 REAL mode active — fake users removed');
-  }
-  function adminAddFake() {
-    const name = prompt('Enter name:');
-    if (!name) return;
-    const refs = parseInt(prompt('Referral count:') || '0');
-    fakeUsers.push({ name, refs });
-    localStorage.setItem('grover_fake_users', JSON.stringify(fakeUsers));
-    loadAdminData();
-    toast('✅ Added ' + name);
-  }
-  function adminRemoveFake(idx) {
-    if (!confirm('Remove ' + fakeUsers[idx].name + '?')) return;
-    fakeUsers.splice(idx, 1);
-    localStorage.setItem('grover_fake_users', JSON.stringify(fakeUsers));
-    loadAdminData();
-  }
-  function adminEditFake(idx) {
-    const u = fakeUsers[idx];
-    const name = prompt('Name:', u.name);
-    if (!name) return;
-    const refs = parseInt(prompt('Referral count:', u.refs) || u.refs);
-    fakeUsers[idx] = { name, refs };
-    localStorage.setItem('grover_fake_users', JSON.stringify(fakeUsers));
-    loadAdminData();
-  }
-
-  function loadAdminData() {
-    const list = document.getElementById('adminLeaderboardList');
-    if (!list) return;
-    list.innerHTML = '';
-    if (adminMode === 'fake') {
-      fakeUsers.sort((a,b) => b.refs - a.refs);
-      fakeUsers.forEach((u, i) => {
-        const row = document.createElement('div');
-        row.className = 'admin-row';
-        row.innerHTML = '<div class="admin-row-info"><div class="admin-row-name">#' + (i+1) + ' ' + u.name + '</div><div class="admin-row-detail">' + u.refs + ' referrals</div></div><button class="admin-small-btn" onclick="adminEditFake(' + i + ')">Edit</button><button class="admin-small-btn red" onclick="adminRemoveFake(' + i + ')">Del</button>';
-        list.appendChild(row);
-      });
-    } else {
-      list.innerHTML = '<div style="text-align:center;color:#6ba3ff;font-size:11px;padding:20px;">Showing REAL users from backend.<br>Fake users hidden.</div>';
-    }
-
-    // Update GROV distribution
-    const distributed = state.balance + (state.completedTasks.length * 50);
-    document.getElementById('grovDistributed').textContent = distributed.toLocaleString();
-    document.getElementById('grovRemaining').textContent = (10000000000 - distributed).toLocaleString();
-    const pct = (distributed / 10000000000) * 100;
-    document.getElementById('grovPercent').textContent = pct.toFixed(6) + '%';
-
-    // Live stats
-    document.getElementById('statTotalUsers').textContent = globalUsers.toLocaleString();
-    document.getElementById('statActiveToday').textContent = '1';
-    document.getElementById('statBalanceOwed').textContent = state.balance.toFixed(2) + ' GROV';
-
-    // System
-    const demoToggle = document.getElementById('demoToggleBtn');
-    const demoOn = localStorage.getItem('grover_demo_mode') === 'on';
-    if (demoToggle) demoToggle.textContent = 'Demo Mode: ' + (demoOn ? 'ON' : 'OFF');
-
-    // Tasks
-    renderAdminTasks();
-    // Events
-    renderAdminEvents();
-  }
-
-  // ============================================
-  // ADMIN — POOL
-  // ============================================
-  function adminSavePool() {
-    const fake = document.getElementById('fakePoolInput').value;
-    const real = document.getElementById('realPoolInput').value;
-    const day = document.getElementById('payoutDayInput').value;
-    localStorage.setItem('grover_fake_pool', fake);
-    localStorage.setItem('grover_real_pool', real);
-    localStorage.setItem('grover_payout_day', day);
-    toast('✅ Pool saved');
-  }
-
-  // ============================================
-  // ADMIN — SYSTEM
-  // ============================================
-  function adminToggleDemo() {
-    const current = localStorage.getItem('grover_demo_mode');
-    localStorage.setItem('grover_demo_mode', current === 'on' ? 'off' : 'on');
-    loadAdminData();
-    toast('Demo Mode: ' + (current === 'on' ? 'OFF' : 'ON'));
-  }
-  function adminSaveSystem() {
-    const fee = document.getElementById('maintFeeInput').value;
-    const newPin = document.getElementById('newPinInput').value;
-    if (fee) localStorage.setItem('grover_maint_fee', fee);
-    if (newPin) {
-      ADMIN_PIN = newPin;
-      localStorage.setItem('grover_admin_pin', newPin);
-      toast('✅ PIN updated');
-    }
-    toast('✅ System saved');
-  }
-
-  // ============================================
-  // ADMIN — TASKS
-  // ============================================
-  function renderAdminTasks() {
-    const list = document.getElementById('adminTaskList');
-    if (!list) return;
-    list.innerHTML = '';
-    const tasks = getTasks();
-    tasks.forEach((t, i) => {
-      const row = document.createElement('div');
-      row.className = 'admin-row';
-      row.innerHTML = '<div class="admin-row-info"><div class="admin-row-name">' + t.icon + ' ' + t.name + '</div><div class="admin-row-detail">+' + t.reward + ' GROV</div></div><button class="admin-small-btn" onclick="adminEditTask(' + i + ')">Edit</button><button class="admin-small-btn red" onclick="adminRemoveTask(' + i + ')">Del</button>';
-      list.appendChild(row);
-    });
-  }
-  function adminAddTask() {
-    const name = prompt('Task name:');
-    if (!name) return;
-    const icon = prompt('Icon emoji:', '📌') || '📌';
-    const link = prompt('Link URL:', 'https://') || '';
-    const reward = parseInt(prompt('Reward GROV:', '50') || '50');
-    const tasks = getTasks();
-    tasks.push({ id:'custom_' + Date.now(), icon, name, link, reward, type:'custom' });
-    saveTasks(tasks);
-    renderAdminTasks();
-    renderTasks();
-    toast('✅ Task added');
-  }
-  function adminEditTask(i) {
-    const tasks = getTasks();
-    const t = tasks[i];
-    const name = prompt('Name:', t.name);
-    if (!name) return;
-    t.name = name;
-    t.icon = prompt('Icon:', t.icon) || t.icon;
-    t.link = prompt('Link:', t.link) || t.link;
-    t.reward = parseInt(prompt('Reward:', t.reward) || t.reward);
-    saveTasks(tasks);
-    renderAdminTasks();
-    renderTasks();
-    toast('✅ Updated');
-  }
-  function adminRemoveTask(i) {
-    if (!confirm('Delete this task?')) return;
-    const tasks = getTasks();
-    tasks.splice(i, 1);
-    saveTasks(tasks);
-    renderAdminTasks();
-    renderTasks();
-    toast('🗑️ Removed');
-  }
-
-  // ============================================
-  // ADMIN — EVENTS
-  // ============================================
-  function getEvents() {
-    try { return JSON.parse(localStorage.getItem('grover_events') || '[]'); } catch(e) { return []; }
-  }
-  function saveEvents(events) { localStorage.setItem('grover_events', JSON.stringify(events)); }
-
-  function renderAdminEvents() {
-    const list = document.getElementById('adminEventList');
-    if (!list) return;
-    list.innerHTML = '';
-    const events = getEvents();
-    if (events.length === 0) {
-      list.innerHTML = '<div style="text-align:center;color:#6ba3ff;font-size:11px;padding:20px;">No events yet</div>';
-    }
-    events.forEach((ev, i) => {
-      const row = document.createElement('div');
-      row.className = 'admin-row';
-      row.innerHTML = '<div class="admin-row-info"><div class="admin-row-name">' + ev.title + '</div><div class="admin-row-detail">' + ev.date + '</div></div><button class="admin-small-btn" onclick="adminEditEvent(' + i + ')">Edit</button><button class="admin-small-btn red" onclick="adminRemoveEvent(' + i + ')">Del</button>';
-      list.appendChild(row);
-    });
-  }
-  function adminAddEvent() {
-    const title = prompt('Event title:');
-    if (!title) return;
-    const date = prompt('Date (e.g. Jan 15):') || '';
-    const desc = prompt('Description:') || '';
-    const events = getEvents();
-    events.push({ title, date, desc });
-    saveEvents(events);
-    renderAdminEvents();
-    renderUserEvents();
-    toast('✅ Event added');
-  }
-  function adminEditEvent(i) {
-    const events = getEvents();
-    const ev = events[i];
-    ev.title = prompt('Title:', ev.title) || ev.title;
-    ev.date = prompt('Date:', ev.date) || ev.date;
-    ev.desc = prompt('Description:', ev.desc) || ev.desc;
-    saveEvents(events);
-    renderAdminEvents();
-    renderUserEvents();
-  }
-  function adminRemoveEvent(i) {
-    if (!confirm('Delete event?')) return;
-    const events = getEvents();
-    events.splice(i, 1);
-    saveEvents(events);
-    renderAdminEvents();
-    renderUserEvents();
-  }
-
-  function renderUserEvents() {
-    const list = document.getElementById('eventsList');
-    if (!list) return;
-    const events = getEvents();
-    list.innerHTML = '';
-    if (events.length === 0) {
-      list.innerHTML = '<div style="font-size:10px;color:#6ba3ff;">No events scheduled</div>';
-      return;
-    }
-    events.slice(0, 3).forEach(ev => {
-      const d = document.createElement('div');
-      d.className = 'event-item';
-      d.innerHTML = '<div class="event-title">' + ev.title + '</div><div class="event-date">📅 ' + ev.date + '</div><div class="event-desc">' + ev.desc + '</div>';
-      list.appendChild(d);
-    });
-  }
-
-  // ============================================
-  // LANGUAGE SCREEN
-  // ============================================
-  function openLanguage() {
-    switchTab('language');
-    renderLangSelector();
-  }
-
-  // ============================================
-  // WALLET SCREEN
-  // ============================================
-  function openWallet() {
-    switchTab('wallet');
-  }
-
-  // ============================================
-  // SWITCH TAB
-  // ============================================
-  function switchTab(tab) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    const screens = { mine:'mineScreen', ads:'adsScreen', spin:'spinScreen', wallet:'walletScreen', profile:'profileScreen', tasks:'tasksScreen', refer:'referScreen', home:'homeScreen', language:'languageScreen' };
-    const el = document.getElementById(screens[tab]);
-    if (el) el.classList.add('active');
-    document.querySelectorAll('.nav-item').forEach(n => {
-      if (n.dataset.tab === tab) n.classList.add('active');
-    });
-    if (tab === 'ads') updateAdsView();
-    if (tab === 'tasks') renderTasks();
-    if (tab === 'spin') updateSpinTimer();
-    if (tab === 'refer') { updateReferTarget(); renderUserEvents(); }
-  }
-
-  // ============================================
-  // UNLOCK APP
-  // ============================================
-  function fillUserInfo() {
-    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
-      const u = tg.initDataUnsafe.user;
-      const name = (u.first_name || '') + (u.last_name ? ' ' + u.last_name : '');
-      const handle = u.username ? '@' + u.username : '@user';
-      const initial = (u.first_name || 'G').charAt(0).toUpperCase();
-      const pn = document.getElementById('profileName');
-      const ph = document.getElementById('profileHandle');
-      const pa = document.getElementById('profileAvatar');
-      if (pn) pn.textContent = name || 'Grover User';
-      if (ph) ph.textContent = handle;
-      if (pa) pa.textContent = initial;
-    }
-  }
-
-  function unlockApp() {
-    state.hasPaid = true;
-    if (!state.lastClaimTime) state.lastClaimTime = Date.now();
-    localStorage.setItem('grover_wallet_user', CURRENT_USER);
+function openVip() { document.getElementById('vipModal').classList.add('show'); }
+function closeVip() { document.getElementById('vipModal').classList.remove('show'); }
+function buyVip(level) {
+  const prices = { 2: 2, 3: 3, 4: 5, 5: 7 };
+  toast('👑 Buying VIP Level ' + level + ' for ' + prices[level] + ' TON...');
+  setTimeout(() => {
+    state.vipLevel = level;
+    closeVip();
     saveState();
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById('gateScreen').classList.remove('active');
-    document.getElementById('homeScreen').classList.add('active');
-    document.getElementById('bottomNav').style.display = 'flex';
-    fillUserInfo();
-    updateBalanceDisplay();
+    toast('✅ VIP Level ' + level + ' activated!');
     updateAdsView();
     updateMiningCounter();
-    updateReferTarget();
-    toast('🎉 Welcome to Grover!');
+  }, 1500);
+}
+
+const vipBtnEl = document.getElementById('vipBtn');
+if (vipBtnEl) {
+  vipBtnEl.addEventListener('click', () => {
+    vipTapCount++;
+    clearTimeout(vipTapTimer);
+    if (vipTapCount >= 7) {
+      vipTapCount = 0;
+      openAdminPin();
+      return;
+    }
+    vipTapTimer = setTimeout(() => {
+      if (vipTapCount === 1) openVip();
+      vipTapCount = 0;
+    }, 400);
+  });
+}
+
+function openAdminPin() {
+  document.getElementById('adminModal').classList.add('show');
+  document.getElementById('adminPinView').style.display = 'block';
+  document.getElementById('adminPanels').style.display = 'none';
+  document.getElementById('adminPin').value = '';
+}
+function closeAdmin() {
+  document.getElementById('adminModal').classList.remove('show');
+}
+function checkAdminPin() {
+  const pin = document.getElementById('adminPin').value;
+  if (pin === ADMIN_PIN) {
+    document.getElementById('adminPinView').style.display = 'none';
+    document.getElementById('adminPanels').style.display = 'block';
+    loadAdminData();
+    toast('🔓 Admin access granted!');
+  } else {
+    toast('❌ Wrong PIN');
+    document.getElementById('adminPin').value = '';
+  }
+}
+
+function adminTab(tab) {
+  document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+  const tabBtn = document.querySelector('[data-tab="' + tab + '"]');
+  if (tabBtn) tabBtn.classList.add('active');
+  const panel = document.getElementById('panel-' + tab);
+  if (panel) panel.classList.add('active');
+}
+
+let adminMode = localStorage.getItem('grover_admin_mode') || 'fake';
+let fakeUsers = JSON.parse(localStorage.getItem('grover_fake_users') || 'null') || [
+  { name:'Chidi Okafor', refs:2145 },
+  { name:'Aisha Bello', refs:1832 },
+  { name:'Emeka Nwosu', refs:1567 },
+  { name:'Fatima Yusuf', refs:1234 },
+  { name:'Tunde Adeyemi', refs:987 },
+  { name:'Ngozi Eze', refs:856 },
+  { name:'Seyi Balogun', refs:721 },
+  { name:'Blessing Okon', refs:645 },
+  { name:'Ibrahim Musa', refs:512 },
+  { name:'Chioma Nnaji', refs:423 }
+];
+
+function adminFakeMode() {
+  adminMode = 'fake';
+  localStorage.setItem('grover_admin_mode', 'fake');
+  loadAdminData();
+  toast('🎭 FAKE mode');
+}
+function adminRealMode() {
+  adminMode = 'real';
+  localStorage.setItem('grover_admin_mode', 'real');
+  loadAdminData();
+  toast('👥 REAL mode');
+}
+function adminAddFake() {
+  const name = prompt('Name:');
+  if (!name) return;
+  const refs = parseInt(prompt('Referrals:') || '0');
+  fakeUsers.push({ name, refs });
+  localStorage.setItem('grover_fake_users', JSON.stringify(fakeUsers));
+  loadAdminData();
+}
+function adminRemoveFake(idx) {
+  if (!confirm('Remove?')) return;
+  fakeUsers.splice(idx, 1);
+  localStorage.setItem('grover_fake_users', JSON.stringify(fakeUsers));
+  loadAdminData();
+}
+function adminEditFake(idx) {
+  const u = fakeUsers[idx];
+  const name = prompt('Name:', u.name);
+  if (!name) return;
+  const refs = parseInt(prompt('Refs:', u.refs) || u.refs);
+  fakeUsers[idx] = { name, refs };
+  localStorage.setItem('grover_fake_users', JSON.stringify(fakeUsers));
+  loadAdminData();
+}
+
+function loadAdminData() {
+  const list = document.getElementById('adminLeaderboardList');
+  if (!list) return;
+  list.innerHTML = '';
+  if (adminMode === 'fake') {
+    fakeUsers.sort((a,b) => b.refs - a.refs);
+    fakeUsers.forEach((u, i) => {
+      const row = document.createElement('div');
+      row.className = 'admin-row';
+      row.innerHTML = '<div class="admin-row-info"><div class="admin-row-name">#' + (i+1) + ' ' + u.name + '</div><div class="admin-row-detail">' + u.refs + ' referrals</div></div><button class="admin-small-btn" onclick="adminEditFake(' + i + ')">Edit</button><button class="admin-small-btn red" onclick="adminRemoveFake(' + i + ')">Del</button>';
+      list.appendChild(row);
+    });
+  } else {
+    list.innerHTML = '<div style="text-align:center;color:#6ba3ff;font-size:11px;padding:20px;">REAL mode active</div>';
   }
 
-  // ============================================
-  // TON CONNECT (with user isolation)
-  // ============================================
+  const distributed = state.balance + (state.completedTasks.length * 50);
+  const gd = document.getElementById('grovDistributed');
+  const gr = document.getElementById('grovRemaining');
+  const gp = document.getElementById('grovPercent');
+  if (gd) gd.textContent = distributed.toLocaleString();
+  if (gr) gr.textContent = (10000000000 - distributed).toLocaleString();
+  if (gp) gp.textContent = ((distributed / 10000000000) * 100).toFixed(6) + '%';
+
+  const stu = document.getElementById('statTotalUsers');
+  const sbo = document.getElementById('statBalanceOwed');
+  if (stu) stu.textContent = globalUsers.toLocaleString();
+  if (sbo) sbo.textContent = state.balance.toFixed(2) + ' GROV';
+
+  const demoToggle = document.getElementById('demoToggleBtn');
+  const demoOn = localStorage.getItem('grover_demo_mode') === 'on';
+  if (demoToggle) demoToggle.textContent = 'Demo Mode: ' + (demoOn ? 'ON' : 'OFF');
+
+  renderAdminTasks();
+  renderAdminEvents();
+}
+
+function adminSavePool() {
+  const fake = document.getElementById('fakePoolInput').value;
+  const real = document.getElementById('realPoolInput').value;
+  const day = document.getElementById('payoutDayInput').value;
+  localStorage.setItem('grover_fake_pool', fake);
+  localStorage.setItem('grover_real_pool', real);
+  localStorage.setItem('grover_payout_day', day);
+  toast('✅ Pool saved');
+}
+
+function adminToggleDemo() {
+  const current = localStorage.getItem('grover_demo_mode');
+  localStorage.setItem('grover_demo_mode', current === 'on' ? 'off' : 'on');
+  loadAdminData();
+  toast('Demo: ' + (current === 'on' ? 'OFF' : 'ON'));
+}
+function adminSaveSystem() {
+  const fee = document.getElementById('maintFeeInput').value;
+  const newPin = document.getElementById('newPinInput').value;
+  if (fee) localStorage.setItem('grover_maint_fee', fee);
+  if (newPin) {
+    ADMIN_PIN = newPin;
+    localStorage.setItem('grover_admin_pin', newPin);
+  }
+  toast('✅ Saved');
+}
+
+function renderAdminTasks() {
+  const list = document.getElementById('adminTaskList');
+  if (!list) return;
+  list.innerHTML = '';
+  const tasks = getTasks();
+  tasks.forEach((t, i) => {
+    const row = document.createElement('div');
+    row.className = 'admin-row';
+    row.innerHTML = '<div class="admin-row-info"><div class="admin-row-name">' + t.icon + ' ' + t.name + '</div><div class="admin-row-detail">+' + t.reward + ' GROV</div></div><button class="admin-small-btn" onclick="adminEditTask(' + i + ')">Edit</button><button class="admin-small-btn red" onclick="adminRemoveTask(' + i + ')">Del</button>';
+    list.appendChild(row);
+  });
+}
+function adminAddTask() {
+  const name = prompt('Task name:');
+  if (!name) return;
+  const icon = prompt('Icon:', '📌') || '📌';
+  const link = prompt('Link:', 'https://') || '';
+  const reward = parseInt(prompt('Reward:', '50') || '50');
+  const tasks = getTasks();
+  tasks.push({ id:'custom_' + Date.now(), icon, name, link, reward, type:'custom' });
+  saveTasks(tasks);
+  renderAdminTasks();
+  renderTasks();
+}
+function adminEditTask(i) {
+  const tasks = getTasks();
+  const t = tasks[i];
+  const name = prompt('Name:', t.name);
+  if (!name) return;
+  t.name = name;
+  t.icon = prompt('Icon:', t.icon) || t.icon;
+  t.link = prompt('Link:', t.link) || t.link;
+  t.reward = parseInt(prompt('Reward:', t.reward) || t.reward);
+  saveTasks(tasks);
+  renderAdminTasks();
+  renderTasks();
+}
+function adminRemoveTask(i) {
+  if (!confirm('Delete?')) return;
+  const tasks = getTasks();
+  tasks.splice(i, 1);
+  saveTasks(tasks);
+  renderAdminTasks();
+  renderTasks();
+}
+
+function getEvents() {
+  try { return JSON.parse(localStorage.getItem('grover_events') || '[]'); } catch(e) { return []; }
+}
+function saveEvents(events) { localStorage.setItem('grover_events', JSON.stringify(events)); }
+
+function renderAdminEvents() {
+  const list = document.getElementById('adminEventList');
+  if (!list) return;
+  list.innerHTML = '';
+  const events = getEvents();
+  if (events.length === 0) {
+    list.innerHTML = '<div style="text-align:center;color:#6ba3ff;font-size:11px;padding:20px;">No events yet</div>';
+  }
+  events.forEach((ev, i) => {
+    const row = document.createElement('div');
+    row.className = 'admin-row';
+    row.innerHTML = '<div class="admin-row-info"><div class="admin-row-name">' + ev.title + '</div><div class="admin-row-detail">' + ev.date + '</div></div><button class="admin-small-btn" onclick="adminEditEvent(' + i + ')">Edit</button><button class="admin-small-btn red" onclick="adminRemoveEvent(' + i + ')">Del</button>';
+    list.appendChild(row);
+  });
+}
+function adminAddEvent() {
+  const title = prompt('Title:');
+  if (!title) return;
+  const date = prompt('Date:') || '';
+  const desc = prompt('Desc:') || '';
+  const events = getEvents();
+  events.push({ title, date, desc });
+  saveEvents(events);
+  renderAdminEvents();
+  renderUserEvents();
+}
+function adminEditEvent(i) {
+  const events = getEvents();
+  events[i].title = prompt('Title:', events[i].title) || events[i].title;
+  events[i].date = prompt('Date:', events[i].date) || events[i].date;
+  events[i].desc = prompt('Desc:', events[i].desc) || events[i].desc;
+  saveEvents(events);
+  renderAdminEvents();
+  renderUserEvents();
+}
+function adminRemoveEvent(i) {
+  if (!confirm('Delete?')) return;
+  const events = getEvents();
+  events.splice(i, 1);
+  saveEvents(events);
+  renderAdminEvents();
+  renderUserEvents();
+}
+
+function renderUserEvents() {
+  const list = document.getElementById('eventsList');
+  if (!list) return;
+  const events = getEvents();
+  list.innerHTML = '';
+  if (events.length === 0) {
+    list.innerHTML = '<div style="font-size:10px;color:#6ba3ff;">No events yet</div>';
+    return;
+  }
+  events.slice(0, 3).forEach(ev => {
+    const d = document.createElement('div');
+    d.className = 'event-item';
+    d.innerHTML = '<div class="event-title">' + ev.title + '</div><div class="event-date">📅 ' + ev.date + '</div><div class="event-desc">' + ev.desc + '</div>';
+    list.appendChild(d);
+  });
+}
+
+function openLanguage() { switchTab('language'); renderLangSelector(); }
+function openWallet() { switchTab('wallet'); }
+
+function switchTab(tab) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const screens = { mine:'mineScreen', ads:'adsScreen', spin:'spinScreen', wallet:'walletScreen', profile:'profileScreen', tasks:'tasksScreen', refer:'referScreen', home:'homeScreen', language:'languageScreen' };
+  const el = document.getElementById(screens[tab]);
+  if (el) el.classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => {
+    if (n.dataset.tab === tab) n.classList.add('active');
+  });
+  if (tab === 'ads') updateAdsView();
+  if (tab === 'tasks') renderTasks();
+  if (tab === 'spin') updateSpinTimer();
+  if (tab === 'refer') { updateReferTarget(); renderUserEvents(); }
+}
+
+function fillUserInfo() {
+  if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+    const u = tg.initDataUnsafe.user;
+    const name = (u.first_name || '') + (u.last_name ? ' ' + u.last_name : '');
+    const handle = u.username ? '@' + u.username : '@user';
+    const initial = (u.first_name || 'G').charAt(0).toUpperCase();
+    const pn = document.getElementById('profileName');
+    const ph = document.getElementById('profileHandle');
+    const pa = document.getElementById('profileAvatar');
+    if (pn) pn.textContent = name || 'Grover User';
+    if (ph) ph.textContent = handle;
+    if (pa) pa.textContent = initial;
+  }
+}
+
+function unlockApp() {
+  state.hasPaid = true;
+  if (!state.lastClaimTime) state.lastClaimTime = Date.now();
+  if (!state.welcomeClaimed) {
+    state.balance += WELCOME_BONUS;
+    state.welcomeClaimed = true;
+    setTimeout(() => toast('🎉 +50 GROV Welcome Bonus!'), 1000);
+  }
+  localStorage.setItem('grover_wallet_user', CURRENT_USER);
+  saveState();
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('gateScreen').classList.remove('active');
+  document.getElementById('homeScreen').classList.add('active');
+  document.getElementById('bottomNav').style.display = 'flex';
+  fillUserInfo();
+  updateBalanceDisplay();
+  updateAdsView();
+  updateMiningCounter();
+  updateReferTarget();
+  toast('🎉 Welcome to Grover!');
+}
+  
   let connectedWallet = null;
   let tonConnectUI = null;
   const PROJECT_WALLET = 'UQBiiE8EcQ-tRSIi4HjKnCYjGJ0Wjh5SA84xyzbc-qdq5ws2';
@@ -1504,7 +1294,6 @@ button:active{transform:scale(.97)}
           if (wi) wi.classList.remove('show');
           if (cb) cb.style.display = 'block';
           if (pb) pb.classList.remove('show');
-          toast('🔒 Different user — connect your own wallet');
           return;
         }
         localStorage.setItem(walletUserKey, CURRENT_USER);
@@ -1548,18 +1337,14 @@ button:active{transform:scale(.97)}
         await fetch('https://grover-backup.onrender.com/api/verify-payment', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ telegram_id: telegramId, username, wallet: walletAddr, tx_hash: txHash })
+          body: JSON.stringify({ telegram_id: telegramId, username: username, wallet: walletAddr, tx_hash: txHash })
         });
-      } catch (err) { console.log('Backend save error:', err); }
+      } catch (err) { console.log('Backend save:', err); }
       setTimeout(unlockApp, 1500);
     } catch (e) { showStatus('Cancelled.', 'error'); }
   }
 
-  // ============================================
-  // INIT
-  // ============================================
   loadState();
-  applyLanguage(currentLang);
   renderTasks();
   updateSpinTimer();
   updateMiningCounter();
@@ -1569,7 +1354,6 @@ button:active{transform:scale(.97)}
   setInterval(updateMiningCounter, 1000);
   setInterval(updateSpinTimer, 1000);
 
-  // Check backend for paid status + user count
   (async function checkBackend() {
     try {
       const telegramId = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user.id : null;
@@ -1579,13 +1363,11 @@ button:active{transform:scale(.97)}
       if (data.exists && data.paid === true) {
         state.hasPaid = true;
         state.balance = data.balance || 0;
-        state.referralCount = data.referral_count || 0;
         saveState();
       }
-    } catch (e) { console.log('Backend check:', e); }
+    } catch (e) {}
   })();
 
-  // Auto-skip gate if already paid
   if (state.hasPaid === true) {
     setTimeout(() => {
       document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -1603,7 +1385,3 @@ button:active{transform:scale(.97)}
 
 </body>
 </html>
-```
-
----
-  
