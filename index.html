@@ -887,6 +887,69 @@ button:active{transform:scale(.97)}
     toast('🎁 +' + reward + ' GROV!');
   }
   
+// ============================================
+// BACKEND SETTINGS SYNC
+// ============================================
+const BACKEND_URL = 'https://grover-backup.onrender.com';
+
+let globalSettings = {
+  fakePool: '$100',
+  realPool: '$10',
+  payoutDay: 30,
+  maintFee: 15,
+  demoMode: 'off'
+};
+
+async function fetchGlobalSettings() {
+  try {
+    const res = await fetch(BACKEND_URL + '/api/admin/settings');
+    const data = await res.json();
+    if (data && !data.error) {
+      if (data.fakePool) globalSettings.fakePool = data.fakePool;
+      if (data.realPool) globalSettings.realPool = data.realPool;
+      if (data.payoutDay) globalSettings.payoutDay = data.payoutDay;
+      if (data.maintFee) globalSettings.maintFee = data.maintFee;
+      if (data.demoMode) globalSettings.demoMode = data.demoMode;
+      if (data.tasks) saveTasks(data.tasks);
+      if (data.events) saveEvents(data.events);
+      if (data.fakeUsers) {
+        fakeUsers = data.fakeUsers;
+        localStorage.setItem('grover_fake_users', JSON.stringify(fakeUsers));
+      }
+      renderTasks();
+      renderUserEvents();
+    }
+  } catch (e) { console.log('Settings fetch:', e); }
+}
+
+async function saveSettingsToBackend() {
+  try {
+    const res = await fetch(BACKEND_URL + '/api/admin/save-settings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        pin: ADMIN_PIN,
+        settings: {
+          fakePool: globalSettings.fakePool,
+          realPool: globalSettings.realPool,
+          payoutDay: globalSettings.payoutDay,
+          maintFee: globalSettings.maintFee,
+          demoMode: globalSettings.demoMode,
+          tasks: getTasks(),
+          events: getEvents(),
+          fakeUsers: fakeUsers
+        }
+      })
+    });
+    const data = await res.json();
+    if (data.success) toast('✅ Saved for ALL users');
+    else toast('❌ Save failed: ' + (data.error || 'unknown'));
+  } catch (e) { toast('❌ Network error'); }
+}
+
+// ============================================
+// REFERRAL
+// ============================================
 function referFriend() {
   const code = getOrCreateReferralCode();
   const link = 'https://t.me/GroverMiningBot/Grovcoin?startapp=ref_' + code;
@@ -920,6 +983,9 @@ function updateReferTarget() {
   if (rc) rc.textContent = state.referralCount;
 }
 
+// ============================================
+// VIP
+// ============================================
 function openVip() { document.getElementById('vipModal').classList.add('show'); }
 function closeVip() { document.getElementById('vipModal').classList.remove('show'); }
 function buyVip(level) {
@@ -935,6 +1001,9 @@ function buyVip(level) {
   }, 1500);
 }
 
+// ============================================
+// VIP BUTTON (1 tap = VIP, 7 taps = admin)
+// ============================================
 const vipBtnEl = document.getElementById('vipBtn');
 if (vipBtnEl) {
   vipBtnEl.addEventListener('click', () => {
@@ -1016,12 +1085,14 @@ function adminAddFake() {
   fakeUsers.push({ name, refs });
   localStorage.setItem('grover_fake_users', JSON.stringify(fakeUsers));
   loadAdminData();
+  saveSettingsToBackend();
 }
 function adminRemoveFake(idx) {
   if (!confirm('Remove?')) return;
   fakeUsers.splice(idx, 1);
   localStorage.setItem('grover_fake_users', JSON.stringify(fakeUsers));
   loadAdminData();
+  saveSettingsToBackend();
 }
 function adminEditFake(idx) {
   const u = fakeUsers[idx];
@@ -1031,6 +1102,7 @@ function adminEditFake(idx) {
   fakeUsers[idx] = { name, refs };
   localStorage.setItem('grover_fake_users', JSON.stringify(fakeUsers));
   loadAdminData();
+  saveSettingsToBackend();
 }
 
 function loadAdminData() {
@@ -1049,6 +1121,13 @@ function loadAdminData() {
     list.innerHTML = '<div style="text-align:center;color:#6ba3ff;font-size:11px;padding:20px;">REAL mode active</div>';
   }
 
+  const fp = document.getElementById('fakePoolInput');
+  const rp = document.getElementById('realPoolInput');
+  const pd = document.getElementById('payoutDayInput');
+  if (fp) fp.value = globalSettings.fakePool;
+  if (rp) rp.value = globalSettings.realPool;
+  if (pd) pd.value = globalSettings.payoutDay;
+
   const distributed = state.balance + (state.completedTasks.length * 50);
   const gd = document.getElementById('grovDistributed');
   const gr = document.getElementById('grovRemaining');
@@ -1063,8 +1142,10 @@ function loadAdminData() {
   if (sbo) sbo.textContent = state.balance.toFixed(2) + ' GROV';
 
   const demoToggle = document.getElementById('demoToggleBtn');
-  const demoOn = localStorage.getItem('grover_demo_mode') === 'on';
-  if (demoToggle) demoToggle.textContent = 'Demo Mode: ' + (demoOn ? 'ON' : 'OFF');
+  if (demoToggle) demoToggle.textContent = 'Demo Mode: ' + (globalSettings.demoMode === 'on' ? 'ON' : 'OFF');
+
+  const mfi = document.getElementById('maintFeeInput');
+  if (mfi) mfi.value = globalSettings.maintFee;
 
   renderAdminTasks();
   renderAdminEvents();
@@ -1074,27 +1155,28 @@ function adminSavePool() {
   const fake = document.getElementById('fakePoolInput').value;
   const real = document.getElementById('realPoolInput').value;
   const day = document.getElementById('payoutDayInput').value;
-  localStorage.setItem('grover_fake_pool', fake);
-  localStorage.setItem('grover_real_pool', real);
-  localStorage.setItem('grover_payout_day', day);
-  toast('✅ Pool saved');
+  globalSettings.fakePool = fake;
+  globalSettings.realPool = real;
+  globalSettings.payoutDay = day;
+  saveSettingsToBackend();
 }
 
 function adminToggleDemo() {
-  const current = localStorage.getItem('grover_demo_mode');
-  localStorage.setItem('grover_demo_mode', current === 'on' ? 'off' : 'on');
+  globalSettings.demoMode = (globalSettings.demoMode === 'on' ? 'off' : 'on');
+  saveSettingsToBackend();
   loadAdminData();
-  toast('Demo: ' + (current === 'on' ? 'OFF' : 'ON'));
 }
+
 function adminSaveSystem() {
   const fee = document.getElementById('maintFeeInput').value;
   const newPin = document.getElementById('newPinInput').value;
-  if (fee) localStorage.setItem('grover_maint_fee', fee);
+  if (fee) globalSettings.maintFee = fee;
   if (newPin) {
     ADMIN_PIN = newPin;
     localStorage.setItem('grover_admin_pin', newPin);
   }
-  toast('✅ Saved');
+  saveSettingsToBackend();
+  toast('✅ System saved');
 }
 
 function renderAdminTasks() {
@@ -1120,6 +1202,7 @@ function adminAddTask() {
   saveTasks(tasks);
   renderAdminTasks();
   renderTasks();
+  saveSettingsToBackend();
 }
 function adminEditTask(i) {
   const tasks = getTasks();
@@ -1133,6 +1216,7 @@ function adminEditTask(i) {
   saveTasks(tasks);
   renderAdminTasks();
   renderTasks();
+  saveSettingsToBackend();
 }
 function adminRemoveTask(i) {
   if (!confirm('Delete?')) return;
@@ -1141,6 +1225,7 @@ function adminRemoveTask(i) {
   saveTasks(tasks);
   renderAdminTasks();
   renderTasks();
+  saveSettingsToBackend();
 }
 
 function getEvents() {
@@ -1173,6 +1258,7 @@ function adminAddEvent() {
   saveEvents(events);
   renderAdminEvents();
   renderUserEvents();
+  saveSettingsToBackend();
 }
 function adminEditEvent(i) {
   const events = getEvents();
@@ -1182,6 +1268,7 @@ function adminEditEvent(i) {
   saveEvents(events);
   renderAdminEvents();
   renderUserEvents();
+  saveSettingsToBackend();
 }
 function adminRemoveEvent(i) {
   if (!confirm('Delete?')) return;
@@ -1190,6 +1277,7 @@ function adminRemoveEvent(i) {
   saveEvents(events);
   renderAdminEvents();
   renderUserEvents();
+  saveSettingsToBackend();
 }
 
 function renderUserEvents() {
@@ -1334,7 +1422,7 @@ function unlockApp() {
       const walletAddr = connectedWallet.account.address;
       const txHash = 'tx_' + Date.now();
       try {
-        await fetch('https://grover-backup.onrender.com/api/verify-payment', {
+        await fetch(BACKEND_URL + '/api/verify-payment', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ telegram_id: telegramId, username: username, wallet: walletAddr, tx_hash: txHash })
@@ -1344,6 +1432,9 @@ function unlockApp() {
     } catch (e) { showStatus('Cancelled.', 'error'); }
   }
 
+  // ============================================
+  // INIT
+  // ============================================
   loadState();
   renderTasks();
   updateSpinTimer();
@@ -1354,33 +1445,48 @@ function unlockApp() {
   setInterval(updateMiningCounter, 1000);
   setInterval(updateSpinTimer, 1000);
 
+  // Fetch global settings from backend (applies to ALL users)
+  fetchGlobalSettings();
+
+  // Fetch global user count
+  (async function fetchGlobalUsers() {
+    try {
+      const res = await fetch(BACKEND_URL + '/api/global-users');
+      const data = await res.json();
+      if (data.count) {
+        globalUsers = data.count;
+        updateReferTarget();
+      }
+    } catch (e) {}
+  })();
+
+  // Check if this user has paid
   (async function checkBackend() {
     try {
       const telegramId = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user.id : null;
       if (!telegramId) return;
-      const res = await fetch('https://grover-backup.onrender.com/api/user-status/' + telegramId);
+      const res = await fetch(BACKEND_URL + '/api/user-status/' + telegramId);
       const data = await res.json();
       if (data.exists && data.paid === true) {
         state.hasPaid = true;
         state.balance = data.balance || 0;
         saveState();
+        if (state.hasPaid === true) {
+          setTimeout(() => {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('gateScreen').classList.remove('active');
+            document.getElementById('homeScreen').classList.add('active');
+            document.getElementById('bottomNav').style.display = 'flex';
+            fillUserInfo();
+            updateBalanceDisplay();
+            updateAdsView();
+            updateMiningCounter();
+            updateReferTarget();
+          }, 100);
+        }
       }
     } catch (e) {}
   })();
-
-  if (state.hasPaid === true) {
-    setTimeout(() => {
-      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-      document.getElementById('gateScreen').classList.remove('active');
-      document.getElementById('homeScreen').classList.add('active');
-      document.getElementById('bottomNav').style.display = 'flex';
-      fillUserInfo();
-      updateBalanceDisplay();
-      updateAdsView();
-      updateMiningCounter();
-      updateReferTarget();
-    }, 100);
-  }
 </script>
 
 </body>
