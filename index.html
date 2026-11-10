@@ -561,15 +561,72 @@ button:active{transform:scale(.97)}
   }
   function closeAdmin() { document.getElementById('adminModal').classList.remove('show'); }
   function checkAdminPin() {
-  const pin = document.getElementById('adminPin').value;
-  if (pin === '1905') { 
-    document.getElementById('adminPinView').style.display = 'none'; 
-    document.getElementById('adminPanels').style.display = 'block'; 
-    toast('Unlocked'); 
-  } else { 
-    toast('Wrong PIN'); 
+    const pin = document.getElementById('adminPin').value;
+    if (pin === '1905') { 
+      document.getElementById('adminPinView').style.display = 'none'; 
+      document.getElementById('adminPanels').style.display = 'block'; 
+      loadAdminData(); 
+      toast('🔓 Admin access granted!'); 
+    } else { 
+      toast('❌ Wrong PIN'); 
+    }
   }
-}
+
+  function adminTab(tab) {
+    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+    const tabBtn = document.querySelector('[data-tab="' + tab + '"]');
+    if (tabBtn) tabBtn.classList.add('active');
+    const panel = document.getElementById('panel-' + tab);
+    if (panel) panel.classList.add('active');
+  }
+
+  let fakeUsers = JSON.parse(localStorage.getItem('grover_fake_users')) || [
+    { name:'Chidi Okafor', refs:2145 }, { name:'Aisha Bello', refs:1832 },
+    { name:'Emeka Nwosu', refs:1567 }, { name:'Fatima Yusuf', refs:1234 },
+    { name:'Tunde Adeyemi', refs:987 }, { name:'Ngozi Eze', refs:856 },
+    { name:'Seyi Balogun', refs:721 }, { name:'Blessing Okon', refs:645 },
+    { name:'Ibrahim Musa', refs:512 }, { name:'Chioma Nnaji', refs:423 }
+  ];
+
+  function loadAdminData() {
+    const list = document.getElementById('adminLeaderboardList');
+    if (list) {
+      list.innerHTML = '';
+      fakeUsers.sort((a,b) => b.refs - a.refs);
+      fakeUsers.forEach((u, i) => {
+        const row = document.createElement('div');
+        row.className = 'admin-row';
+        row.innerHTML = '<div class="admin-row-info"><div class="admin-row-name">#' + (i+1) + ' ' + u.name + '</div><div class="admin-row-detail">' + u.refs + ' referrals</div></div><button class="admin-small-btn red" onclick="adminRemoveFake(' + i + ')">Del</button>';
+        list.appendChild(row);
+      });
+    }
+  }
+
+  function adminRemoveFake(idx) {
+    if (!confirm('Remove?')) return;
+    fakeUsers.splice(idx, 1);
+    localStorage.setItem('grover_fake_users', JSON.stringify(fakeUsers));
+    loadAdminData();
+  }
+
+  function adminAddFake() {
+    const name = prompt('Name:');
+    if (!name) return;
+    const refs = parseInt(prompt('Referrals:') || '0');
+    fakeUsers.push({ name, refs });
+    localStorage.setItem('grover_fake_users', JSON.stringify(fakeUsers));
+    loadAdminData();
+  }
+
+  function adminFakeMode() { toast('🎭 Fake Users ON'); }
+  function adminRealMode() { toast('👥 Fake Users OFF'); }
+  function adminSavePool() { toast('✅ Prize Pool Saved'); }
+  function adminSavePromo() { toast('✅ Promo Code Activated'); }
+  function adminFreezeApp() { toast('🚨 App Frozen!'); }
+  function adminRigJackpot() { toast('🎰 Next box will be Jackpot!'); }
+  function renderAdminTasks() { toast('Tasks loaded'); }
+  function adminAddTask() { toast('Task added'); }
 
   // ============================================
   // REAL TON CONNECT & SECRET TESTING BYPASS
