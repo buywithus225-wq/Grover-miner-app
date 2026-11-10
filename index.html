@@ -528,11 +528,15 @@ button:active{transform:scale(.97)}
   }
   function closeAdmin() { document.getElementById('adminModal').classList.remove('show'); }
   function checkAdminPin() {
-    const pin = document.getElementById('adminPin').value;
-    const res = await fetch(BACKEND_URL + '/api/admin/verify-pin', { method: 'POST', body: JSON.stringify({ pin }) });
-    if (pin === '1905') { document.getElementById('adminPinView').style.display = 'none'; document.getElementById('adminPanels').style.display = 'block'; toast('Unlocked'); }
-    else { toast('Wrong PIN'); }
+  const pin = document.getElementById('adminPin').value;
+  if (pin === '1905') { 
+    document.getElementById('adminPinView').style.display = 'none'; 
+    document.getElementById('adminPanels').style.display = 'block'; 
+    toast('Unlocked'); 
+  } else { 
+    toast('Wrong PIN'); 
   }
+}
 
   function handleConnect() { toast('Wallet Connect logic here'); }
   function handlePay() { unlockApp(); }
