@@ -591,18 +591,25 @@ button:active{transform:scale(.97)}
 
   function loadAdminData() {
     const list = document.getElementById('adminLeaderboardList');
-    if (list) {
-      list.innerHTML = '';
-      fakeUsers.sort((a,b) => b.refs - a.refs);
-      fakeUsers.forEach((u, i) => {
-        const row = document.createElement('div');
-        row.className = 'admin-row';
-        row.innerHTML = '<div class="admin-row-info"><div class="admin-row-name">#' + (i+1) + ' ' + u.name + '</div><div class="admin-row-detail">' + u.refs + ' referrals</div></div><button class="admin-small-btn red" onclick="adminRemoveFake(' + i + ')">Del</button>';
-        list.appendChild(row);
-      });
+    if (!list) {
+      console.log("Could not find adminLeaderboardList div!");
+      return;
     }
+    
+    let html = '';
+    fakeUsers.sort((a,b) => b.refs - a.refs);
+    fakeUsers.forEach((u, i) => {
+      html += '<div class="admin-row">';
+      html += '<div class="admin-row-info">';
+      html += '<div class="admin-row-name">#' + (i+1) + ' ' + u.name + '</div>';
+      html += '<div class="admin-row-detail">' + u.refs + ' referrals</div>';
+      html += '</div>';
+      html += '<button class="admin-small-btn red" onclick="adminRemoveFake(' + i + ')">Del</button>';
+      html += '</div>';
+    });
+    
+    list.innerHTML = html;
   }
-
   function adminRemoveFake(idx) {
     if (!confirm('Remove?')) return;
     fakeUsers.splice(idx, 1);
