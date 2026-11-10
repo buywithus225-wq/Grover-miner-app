@@ -538,14 +538,90 @@ button:active{transform:scale(.97)}
   }
 }
 
-  function handleConnect() { toast('Wallet Connect logic here'); }
-  function handlePay() { unlockApp(); }
-  function unlockApp() {
-    state.hasPaid = true; if (!state.welcomeClaimed) { state.balance += WELCOME_BONUS; state.welcomeClaimed = true; }
-    saveState(); document.getElementById('gateScreen').classList.remove('active'); document.getElementById('homeScreen').classList.add('active');
-    document.getElementById('bottomNav').style.display = 'flex'; updateBalanceDisplay(); toast('Welcome to Grover!');
+  // ============================================
+  // REAL TON CONNECT & SECRET TESTING BYPASS
+  // ============================================
+  let connectedWallet = null;
+  let tonConnectUI = null;
+  const PROJECT_WALLET = 'UQBiiE8EcQ-tRSIi4HjKnCYjGJ0Wjh5SA84xyzbc-qdq5ws2';
+
+  try {
+    tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
+      manifestUrl: 'https://buywithus225-wq.github.io/Grover-miner-app/tonconnect-manifest.json',
+      buttonRootId: null
+    });
+
+    tonConnectUI.onStatusChange(wallet => {
+      const wi = document.getElementById('walletInfo');
+      const cb = document.getElementById('connectBtn');
+      const pb = document.getElementById('payBtn');
+      if (wallet) {
+        connectedWallet = wallet;
+        const addr = wallet.account.address;
+        if (wi) { wi.textContent = '✅ ' + addr.slice(0, 6) + '...' + addr.slice(-4); wi.classList.add('show'); }
+        if (cb) cb.style.display = 'none';
+        if (pb) pb.classList.add('show');
+      } else {
+        connectedWallet = null;
+        if (wi) wi.classList.remove('show');
+        if (cb) cb.style.display = 'block';
+        if (pb) pb.classList.remove('show');
+      }
+    });
+  } catch (e) { console.log('TON error:', e); }
+
+  async function handleConnect() {
+    if (!tonConnectUI) { toast('TON not loaded.'); return; }
+    try {
+      toast('Opening wallet...');
+      await tonConnectUI.openModal();
+    } catch (e) { toast('Cancelled.'); }
   }
 
+  async function handlePay() {
+    if (!connectedWallet) return toast('Connect wallet first!');
+    try {
+      toast('Confirm payment...');
+      await tonConnectUI.sendTransaction({
+        validUntil: Math.floor(Date.now() / 1000) + 360,
+        messages: [{ address: PROJECT_WALLET, amount: '100000000' }] // 0.1 TON
+      });
+      unlockApp();
+    } catch (e) { toast('Payment cancelled.'); }
+  }
+
+  function unlockApp() {
+    state.hasPaid = true; 
+    if (!state.welcomeClaimed) { 
+      state.balance += WELCOME_BONUS; 
+      state.welcomeClaimed = true; 
+      setTimeout(() => toast('🎉 +100 GROV Welcome Bonus!'), 1000);
+    }
+    saveState(); 
+    document.getElementById('gateScreen').classList.remove('active'); 
+    document.getElementById('homeScreen').classList.add('active');
+    document.getElementById('bottomNav').style.display = 'flex'; 
+    updateBalanceDisplay(); 
+    updateMiningCounter();
+    toast('Welcome to Grover!');
+  }
+
+  // 🥷 SECRET TESTING BYPASS
+  // Tap the main Grover logo 5 times to bypass the paywall for testing!
+  let secretTapCount = 0;
+  let secretTapTimer = null;
+  const gateLogoEl = document.querySelector('#gateScreen .logo');
+  if (gateLogoEl) {
+    gateLogoEl.addEventListener('click', () => {
+      secretTapCount++;
+      clearTimeout(secretTapTimer);
+      if (secretTapCount >= 5) {
+        secretTapCount = 0;
+        unlockApp(); // Unlocks the app for free
+      }
+      secretTapTimer = setTimeout(() => secretTapCount = 0, 2000);
+    });
+  }
   loadState(); updateMiningCounter(); updateBalanceDisplay(); setInterval(updateMiningCounter, 1000);
 </script>
 </body>
