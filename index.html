@@ -395,24 +395,56 @@ button:active{transform:scale(.97)}
     <button class="spin-result-btn" onclick="closeSpinResult()">CLAIM</button>
   </div>
 </div>
-
 <div class="admin-modal" id="adminModal">
   <div class="admin-content">
     <div class="admin-header"><h3>🔐 ADMIN PANEL</h3><button class="admin-close" onclick="closeAdmin()">✕</button></div>
+    
     <div id="adminPinView">
       <input type="password" class="admin-input" id="adminPin" placeholder="Enter PIN" maxlength="8">
       <button class="admin-btn" onclick="checkAdminPin()">UNLOCK</button>
     </div>
+
     <div class="admin-panels" id="adminPanels" style="display:none;">
       <div class="admin-tabs">
-        <button class="admin-tab active" onclick="adminTab('leaderboard')" data-tab="leaderboard">🏆</button>
+        <button class="admin-tab active" onclick="adminTab('stats')" data-tab="stats">📈</button>
+        <button class="admin-tab" onclick="adminTab('leaderboard')" data-tab="leaderboard">🏆</button>
+        <button class="admin-tab" onclick="adminTab('economy')" data-tab="economy">💰</button>
+        <button class="admin-tab" onclick="adminTab('tasks')" data-tab="tasks">📋</button>
         <button class="admin-tab" onclick="adminTab('system')" data-tab="system">⚙️</button>
       </div>
-      <div class="admin-panel active" id="panel-leaderboard">
-        <div id="adminLeaderboardList"></div>
+
+      <div class="admin-panel active" id="panel-stats">
+        <div class="admin-stat"><div class="admin-stat-label">Total Supply</div><div class="admin-stat-value">10,000,000,000</div></div>
+        <div class="admin-stat"><div class="admin-stat-label">Total Users</div><div class="admin-stat-value" id="statTotalUsers">1,000</div></div>
+        <div class="admin-stat"><div class="admin-stat-label">Total GROV Distributed</div><div class="admin-stat-value" id="grovDistributed">0</div></div>
       </div>
+
+      <div class="admin-panel" id="panel-leaderboard">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+          <button class="admin-btn admin-btn-gold" onclick="adminFakeMode()">FAKE USERS ON</button>
+          <button class="admin-btn admin-btn-red" onclick="adminRealMode()">FAKE USERS OFF</button>
+        </div>
+        <div id="adminLeaderboardList"></div>
+        <button class="admin-btn" onclick="adminAddFake()" style="margin-top:10px;">+ ADD FAKE USER</button>
+      </div>
+
+      <div class="admin-panel" id="panel-economy">
+        <input type="text" class="admin-input" id="prizePoolInput" placeholder="Season TON Prize Pool (e.g. 50)">
+        <button class="admin-btn admin-btn-green" onclick="adminSavePool()">SAVE PRIZE POOL</button>
+        <hr style="border-color:rgba(255,255,255,0.1); margin:15px 0;">
+        <input type="text" class="admin-input" id="promoCodeInput" placeholder="Promo Code (e.g. GROV50)">
+        <input type="number" class="admin-input" id="promoLimitInput" placeholder="Max Users (e.g. 100)">
+        <button class="admin-btn admin-btn-gold" onclick="adminSavePromo()">ACTIVATE PROMO</button>
+      </div>
+
+      <div class="admin-panel" id="panel-tasks">
+        <div id="adminTaskList"></div>
+        <button class="admin-btn" onclick="adminAddTask()" style="margin-top:10px;">+ ADD TASK</button>
+      </div>
+
       <div class="admin-panel" id="panel-system">
-        <button class="admin-btn admin-btn-red" onclick="toast('Freeze Clicked')">🚨 FREEZE ALL</button>
+        <button class="admin-btn admin-btn-red" onclick="adminFreezeApp()">🚨 FREEZE ALL TRANSACTIONS</button>
+        <button class="admin-btn admin-btn-gold" onclick="adminRigJackpot()">🎰 RIG MYSTERY BOX JACKPOT</button>
       </div>
     </div>
   </div>
