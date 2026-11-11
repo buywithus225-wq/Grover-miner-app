@@ -508,21 +508,72 @@ button:active{transform:scale(.97)}
     updateBalanceDisplay(); saveState(); toast('💰 Claimed!');
   }
 
-  function spinWheel() {
+  function spinWheel(isRespin) {
+    const today = new Date().toDateString();
+    
+    // Check if they already used their free spin today
+    if (!isRespin && state.lastSpin === today) {
+      return watchAdForSpin(); // Trigger the ad logic
+    }
+
     const wheelGroup = document.getElementById('wheelGroup');
     wheelGroup.style.transition = 'transform 4s cubic-bezier(.17,.67,.83,.67)';
     wheelGroup.style.transformOrigin = '150px 150px';
     wheelGroup.style.transform = 'rotate(' + (1440 + Math.floor(Math.random() * 360)) + 'deg)';
-    const btn = document.getElementById('spinBtn'); btn.disabled = true;
+    
+    const btn = document.getElementById('spinBtn'); 
+    btn.disabled = true;
+    btn.textContent = '⏳ SPINNING...';
+
     setTimeout(() => {
       const prize = Math.floor(Math.random() * 6) + 1;
-      state.balance += prize; updateBalanceDisplay(); saveState();
-      btn.disabled = false; wheelGroup.style.transition = 'none'; wheelGroup.style.transform = 'rotate(0deg)';
+      state.balance += prize; 
+      updateBalanceDisplay(); 
+      
+      // Save that they spun today
+      if (!isRespin) {
+        state.lastSpin = today;
+      }
+      
+      saveState();
+      
+      wheelGroup.style.transition = 'none'; 
+      wheelGroup.style.transform = 'rotate(0deg)';
+      
       document.getElementById('spinResultPrize').textContent = '+' + prize;
       document.getElementById('spinResultModal').classList.add('show');
+      
+      updateSpinTimer(); // Refresh the button text
     }, 4000);
   }
   function closeSpinResult() { document.getElementById('spinResultModal').classList.remove('show'); }
+    function updateSpinTimer() {
+    const today = new Date().toDateString();
+    const btn = document.getElementById('spinBtn');
+    if (!btn) return;
+
+    if (state.lastSpin === today) {
+      // User already spun today
+      btn.disabled = false; // Keep it enabled so they can click to watch ad
+      btn.textContent = '🎬 WATCH AD TO SPIN AGAIN';
+      btn.style.background = 'linear-gradient(135deg,#00d4ff,#0088ff)'; // Blue color for Ad
+    } else {
+      // User has a free spin available
+      btn.disabled = false;
+      btn.textContent = '🎡 SPIN NOW (FREE)';
+      btn.style.background = 'linear-gradient(135deg,#f5b800,#ff6b00)'; // Orange color for Free
+    }
+  }
+
+  function watchAdForSpin() {
+    toast('🎬 Loading Ad...');
+    
+    // We will use your Monetag SDK here later. For testing, we simulate the ad:
+    setTimeout(() => {
+      toast('✅ Ad watched! Spinning now...');
+      spinWheel(true); // Pass 'true' so it knows this is an ad spin, not a free spin
+    }, 2000);
+  }
   function openMysteryBox() { toast('Mystery Box coming soon!'); }
   function closeMysteryBox() { document.getElementById('mysteryModal').classList.remove('show'); }
 
