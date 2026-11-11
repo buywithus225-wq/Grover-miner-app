@@ -656,8 +656,33 @@ button:active{transform:scale(.97)}
   }
 
   function openVip() { const el = document.getElementById('vipModal'); if(el) el.classList.add('show'); }
-  function closeVip() { const el = document.getElementById('vipModal'); if(el) el.classList.remove('show'); }
-  function buyVip(lvl) { state.vipLevel = lvl; saveState(); closeVip(); toast('VIP Upgraded!'); updateMiningCounter(); }
+  function closeVip() { const el = document.getElementById('vipModal'); if(el) el.classList.remove('async function buyVip(level) {
+    const prices = { 2: 3, 3: 6, 4: 9, 5: 12, 6: 15 };
+    const price = prices[level];
+    
+    if (!connectedWallet) {
+      return toast('❌ Connect your TON wallet first!');
+    }
+    
+    try {
+      toast('💎 Confirm ' + price + ' TON payment...');
+      
+      await tonConnectUI.sendTransaction({
+        validUntil: Math.floor(Date.now() / 1000) + 360,
+        messages: [{ address: PROJECT_WALLET, amount: (price * 1000000000).toString() }]
+      });
+      
+      state.vipLevel = level;
+      saveState();
+      closeVip();
+      toast('✅ VIP Level ' + level + ' activated!');
+      updateMiningCounter();
+      
+    } catch (e) {
+      console.log(e);
+      toast('❌ Payment cancelled.');
+    }
+  } 
   
   function referFriend() {
     const code = getOrCreateReferralCode();
