@@ -490,10 +490,18 @@ button:active{transform:scale(.97)}
     if (earnedEl) earnedEl.textContent = '+' + pending.toFixed(8);
     const rate = getMiningRate();
     const timerEl = document.getElementById('nextClaimTimer');
-    if (timerEl) {
-      if (pending >= rate) { timerEl.textContent = '✅ Ready to claim!'; timerEl.style.color = '#f5b800'; }
-      else { const sLeft = Math.max(0, Math.floor((DAY_MS - (Date.now() - state.lastClaimTime)) / 1000)); const h = Math.floor(sLeft / 3600); const m = Math.floor((sLeft % 3600) / 60); timerEl.textContent = '⛏️ Full in ' + h + 'h ' + m + 'm'; timerEl.style.color = '#00d4ff'; }
-    }
+   if (timerEl) {
+      if (pending >= rate) {
+        timerEl.textContent = '🛑 Mining Stopped! Claim Now';
+        timerEl.style.color = '#ef4444'; // Make it red
+      } else {
+        const sLeft = Math.max(0, Math.floor((DAY_MS - (Date.now() - state.lastClaimTime)) / 1000));
+        const h = Math.floor(sLeft / 3600);
+        const m = Math.floor((sLeft % 3600) / 60);
+        timerEl.textContent = '⛏️ Full in ' + h + 'h ' + m + 'm';
+        timerEl.style.color = '#00d4ff';
+      }
+    } 
   }
 
   function updateBalanceDisplay() {
@@ -510,6 +518,48 @@ button:active{transform:scale(.97)}
 
   function spinWheel(isRespin) {
     const today = new Date().toDateString();
+    
+    // Check limits
+    if (!isRespin) {
+      if (state.lastSpin === today) {
+        if (state.extraSpinsUsed >= 10) {
+          return toast('❌ Daily spin limit reached! (Max 10 ads)');
+        }
+        return watchAdForSpin();
+      }
+    }
+
+    const wheelGroup = document.getElementById('wheelGroup');
+    wheelGroup.style.transition = 'transform 4s cubic-bezier(.17,.67,.83,.67)';
+    wheelGroup.style.transformOrigin = '150px 150px';
+    wheelGroup.style.transform = 'rotate(' + (1440 + Math.floor(Math.random() * 360)) + 'deg)';
+    
+    const btn = document.getElementById('spinBtn'); 
+    btn.disabled = true;
+    btn.textContent = '⏳ SPINNING...';
+
+    setTimeout(() => {
+      const prize = Math.floor(Math.random() * 6) + 1;
+      state.balance += prize; 
+      updateBalanceDisplay(); 
+      
+      if (!isRespin) {
+        state.lastSpin = today;
+      } else {
+        state.extraSpinsUsed++;
+      }
+      
+      saveState();
+      
+      wheelGroup.style.transition = 'none'; 
+      wheelGroup.style.transform = 'rotate(0deg)';
+      
+      document.getElementById('spinResultPrize').textContent = '+' + prize;
+      document.getElementById('spinResultModal').classList.add('show');
+      
+      updateSpinTimer();
+    }, 4000);
+  }
     
     // Check if they already used their free spin today
     if (!isRespin && state.lastSpin === today) {
@@ -553,15 +603,19 @@ button:active{transform:scale(.97)}
     if (!btn) return;
 
     if (state.lastSpin === today) {
-      // User already spun today
-      btn.disabled = false; // Keep it enabled so they can click to watch ad
-      btn.textContent = '🎬 WATCH AD TO SPIN AGAIN';
-      btn.style.background = 'linear-gradient(135deg,#00d4ff,#0088ff)'; // Blue color for Ad
+      if (state.extraSpinsUsed >= 10) {
+        btn.disabled = true;
+        btn.textContent = '✅ ALL SPINS USED TODAY';
+        btn.style.background = '#4a7aaa';
+      } else {
+        btn.disabled = false;
+        btn.textContent = '🎬 WATCH AD (' + (10 - state.extraSpinsUsed) + ' left)';
+        btn.style.background = 'linear-gradient(135deg,#00d4ff,#0088ff)';
+      }
     } else {
-      // User has a free spin available
       btn.disabled = false;
       btn.textContent = '🎡 SPIN NOW (FREE)';
-      btn.style.background = 'linear-gradient(135deg,#f5b800,#ff6b00)'; // Orange color for Free
+      btn.style.background = 'linear-gradient(135deg,#f5b800,#ff6b00)';
     }
   }
 
