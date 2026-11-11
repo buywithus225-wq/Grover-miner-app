@@ -463,6 +463,7 @@ button:active{transform:scale(.97)}
       return id;
     })());
   }
+  
   const CURRENT_USER = getCurrentUserId();
   const MINING_RATES = { 1: 5, 2: 15, 3: 30, 4: 50, 5: 75, 6: 100 };
   const DAY_MS = 24 * 60 * 60 * 1000;
@@ -472,17 +473,45 @@ button:active{transform:scale(.97)}
     balance: 0, lastClaimTime: Date.now(), lastSpin: null, extraSpinsUsed: 0,
     vipLevel: 1, hasPaid: false, referralCount: 0, referralCode: null, welcomeClaimed: false
   };
+  
+  let globalUsers = 1000;
 
   function saveState() { try { localStorage.setItem('grover_state_' + CURRENT_USER, JSON.stringify(state)); } catch(e){} }
   function loadState() { try { const saved = localStorage.getItem('grover_state_' + CURRENT_USER); if (saved) state = Object.assign(state, JSON.parse(saved)); } catch(e){} }
-  function getOrCreateReferralCode() { if (state.referralCode) return state.referralCode; state.referralCode = 'GRV' + CURRENT_USER.slice(-6).toUpperCase(); saveState(); return state.referralCode; }
+  
+  function getOrCreateReferralCode() {
+    if (state.referralCode) return state.referralCode;
+    state.referralCode = 'GRV' + CURRENT_USER.slice(-6).toUpperCase();
+    saveState();
+    const codeEl = document.getElementById('myInviteCode');
+    if (codeEl) codeEl.textContent = state.referralCode;
+    return state.referralCode;
+  }
 
-  setTimeout(() => { document.getElementById('splash').classList.add('hide'); document.getElementById('frame').classList.add('show'); }, 2000);
+  // Splash Screen Timer
+  setTimeout(() => { 
+    const splash = document.getElementById('splash');
+    const frame = document.getElementById('frame');
+    if (splash) splash.classList.add('hide'); 
+    if (frame) frame.classList.add('show'); 
+  }, 2000);
 
-  function toast(msg) { const el = document.getElementById('toast'); el.textContent = msg; el.classList.add('show'); setTimeout(() => el.classList.remove('show'), 2500); }
+  function toast(msg) { 
+    const el = document.getElementById('toast'); 
+    if(!el) return;
+    el.textContent = msg; el.classList.add('show'); 
+    setTimeout(() => el.classList.remove('show'), 2500); 
+  }
 
+  // ============================================
+  // MINING LOGIC (24 HOUR CAP)
+  // ============================================
   function getMiningRate() { return MINING_RATES[state.vipLevel] || 5; }
-  function calculatePending() { const rate = getMiningRate(); const elapsed = Date.now() - state.lastClaimTime; return Math.min(rate, (elapsed / DAY_MS) * rate); }
+  function calculatePending() { 
+    const rate = getMiningRate(); 
+    const elapsed = Date.now() - state.lastClaimTime; 
+    return Math.min(rate, (elapsed / DAY_MS) * rate); 
+  }
 
   function updateMiningCounter() {
     const pending = calculatePending();
@@ -527,123 +556,62 @@ button:active{transform:scale(.97)}
 
   function claimMining() {
     const elapsed = Date.now() - state.lastClaimTime;
-    if (DAY_MS - elapsed > 0) { toast('⏳ Not ready yet!'); return; }
+    if (DAY_MS - elapsed > 0) { return toast('⏳ Mining is still in progress!'); }
     state.balance += getMiningRate(); state.lastClaimTime = Date.now();
-    updateBalanceDisplay(); saveState(); toast('💰 Claimed!');
+    updateBalanceDisplay(); saveState(); updateMiningCounter(); toast('💰 Claimed!');
   }
-function spinWheel(isRespin) {
+
+  // ============================================
+  // SPIN LOGIC (DAILY LIMIT + ADS)
+  // ============================================
+  function spinWheel(isRespin) {
     const today = new Date().toDateString();
     
     if (!isRespin) {
       if (state.lastSpin === today) {
-        if (state.extraSpinsUsed >= 10) {
-          return toast('❌ Daily spin limit reached! (Max 10 ads)');
-        }
+        if (state.extraSpinsUsed >= 10) { return toast('❌ Daily spin limit reached! (Max 10 ads)'); }
         return watchAdForSpin();
       }
     }
 
     const wheelGroup = document.getElementById('wheelGroup');
-    wheelGroup.style.transition = 'transform 4s cubic-bezier(.17,.67,.83,.67)';
-    wheelGroup.style.transformOrigin = '150px 150px';
-    wheelGroup.style.transform = 'rotate(' + (1440 + Math.floor(Math.random() * 360)) + 'deg)';
-    
-    const btn = document.getElementById('spinBtn'); 
-    btn.disabled = true;
-    btn.textContent = '⏳ SPINNING...';
-
-    setTimeout(() => {
-      const prize = Math.floor(Math.random() * 6) + 1;
-      state.balance += prize; 
-      updateBalanceDisplay(); 
-      
-      if (!isRespin) {
-        state.lastSpin = today;
-      } else {
-        state.extraSpinsUsed++;
-      }
-      
-      saveState();
-      
-      wheelGroup.style.transition = 'none'; 
-      wheelGroup.style.transform = 'rotate(0deg)';
-      
-      document.getElementById('spinResultPrize').textContent = '+' + prize;
-      document.getElementById('spinResultModal').classList.add('show');
-      
-      updateSpinTimer();
-    }, 4000);
-  }
-  
-    const wheelGroup = document.getElementById('wheelGroup');
-    wheelGroup.style.transition = 'transform 4s cubic-bezier(.17,.67,.83,.67)';
-    wheelGroup.style.transformOrigin = '150px 150px';
-    wheelGroup.style.transform = 'rotate(' + (1440 + Math.floor(Math.random() * 360)) + 'deg)';
-    
-    const btn = document.getElementById('spinBtn'); 
-    btn.disabled = true;
-    btn.textContent = '⏳ SPINNING...';
-
-    setTimeout(() => {
-      const prize = Math.floor(Math.random() * 6) + 1;
-      state.balance += prize; 
-      updateBalanceDisplay(); 
-      
-      if (!isRespin) {
-        state.lastSpin = today;
-      } else {
-        state.extraSpinsUsed++;
-      }
-      
-      saveState();
-      
-      wheelGroup.style.transition = 'none'; 
-      wheelGroup.style.transform = 'rotate(0deg)';
-      
-      document.getElementById('spinResultPrize').textContent = '+' + prize;
-      document.getElementById('spinResultModal').classList.add('show');
-      
-      updateSpinTimer();
-    }, 4000);
-  }
-    
-    // Check if they already used their free spin today
-    if (!isRespin && state.lastSpin === today) {
-      return watchAdForSpin(); // Trigger the ad logic
+    if(wheelGroup) {
+      wheelGroup.style.transition = 'transform 4s cubic-bezier(.17,.67,.83,.67)';
+      wheelGroup.style.transformOrigin = '150px 150px';
+      wheelGroup.style.transform = 'rotate(' + (1440 + Math.floor(Math.random() * 360)) + 'deg)';
     }
-
-    const wheelGroup = document.getElementById('wheelGroup');
-    wheelGroup.style.transition = 'transform 4s cubic-bezier(.17,.67,.83,.67)';
-    wheelGroup.style.transformOrigin = '150px 150px';
-    wheelGroup.style.transform = 'rotate(' + (1440 + Math.floor(Math.random() * 360)) + 'deg)';
     
     const btn = document.getElementById('spinBtn'); 
-    btn.disabled = true;
-    btn.textContent = '⏳ SPINNING...';
+    if(btn) { btn.disabled = true; btn.textContent = '⏳ SPINNING...'; }
 
     setTimeout(() => {
       const prize = Math.floor(Math.random() * 6) + 1;
       state.balance += prize; 
       updateBalanceDisplay(); 
       
-      // Save that they spun today
-      if (!isRespin) {
-        state.lastSpin = today;
-      }
+      if (!isRespin) { state.lastSpin = today; } 
+      else { state.extraSpinsUsed++; }
       
       saveState();
       
-      wheelGroup.style.transition = 'none'; 
-      wheelGroup.style.transform = 'rotate(0deg)';
+      if(wheelGroup) { wheelGroup.style.transition = 'none'; wheelGroup.style.transform = 'rotate(0deg)'; }
       
-      document.getElementById('spinResultPrize').textContent = '+' + prize;
-      document.getElementById('spinResultModal').classList.add('show');
+      const prizeEl = document.getElementById('spinResultPrize');
+      if (prizeEl) prizeEl.textContent = '+' + prize;
       
-      updateSpinTimer(); // Refresh the button text
+      const modal = document.getElementById('spinResultModal');
+      if (modal) modal.classList.add('show');
+      
+      updateSpinTimer();
     }, 4000);
   }
-  function closeSpinResult() { document.getElementById('spinResultModal').classList.remove('show'); }
-    function updateSpinTimer() {
+
+  function closeSpinResult() { 
+    const el = document.getElementById('spinResultModal');
+    if(el) el.classList.remove('show'); 
+  }
+
+  function updateSpinTimer() {
     const today = new Date().toDateString();
     const btn = document.getElementById('spinBtn');
     if (!btn) return;
@@ -667,16 +635,18 @@ function spinWheel(isRespin) {
 
   function watchAdForSpin() {
     toast('🎬 Loading Ad...');
-    
-    // We will use your Monetag SDK here later. For testing, we simulate the ad:
     setTimeout(() => {
       toast('✅ Ad watched! Spinning now...');
-      spinWheel(true); // Pass 'true' so it knows this is an ad spin, not a free spin
+      spinWheel(true); 
     }, 2000);
   }
-  function openMysteryBox() { toast('Mystery Box coming soon!'); }
-  function closeMysteryBox() { document.getElementById('mysteryModal').classList.remove('show'); }
 
+  function openMysteryBox() { toast('Mystery Box coming soon!'); }
+  function closeMysteryBox() { const el = document.getElementById('mysteryModal'); if(el) el.classList.remove('show'); }
+
+  // ============================================
+  // TABS & UI
+  // ============================================
   function switchTab(tab) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -685,42 +655,46 @@ function spinWheel(isRespin) {
     document.querySelectorAll('.nav-item').forEach(n => { if (n.dataset.tab === tab) n.classList.add('active'); });
   }
 
-  function openLanguage() { switchTab('language'); renderLangSelector(); }
-  function renderLangSelector() {
-    const sel = document.getElementById('langSelector'); if (!sel) return;
-    const langs = [ { code:'en', name:'🇬🇧 English' }, { code:'ru', name:'🇷🇺 Русский' }, { code:'ar', name:'🇸🇦 العربية' } ];
-    sel.innerHTML = ''; langs.forEach(l => {
-      const d = document.createElement('div'); d.className = 'lang-option'; d.textContent = l.name;
-      d.onclick = () => { localStorage.setItem('grover_lang', l.code); toast('✅ Language: ' + l.name); }; sel.appendChild(d);
-    });
+  function openVip() { const el = document.getElementById('vipModal'); if(el) el.classList.add('show'); }
+  function closeVip() { const el = document.getElementById('vipModal'); if(el) el.classList.remove('show'); }
+  function buyVip(lvl) { state.vipLevel = lvl; saveState(); closeVip(); toast('VIP Upgraded!'); updateMiningCounter(); }
+  
+  function referFriend() {
+    const code = getOrCreateReferralCode();
+    const link = 'https://t.me/YourBotUsername/app?startapp=ref_' + code;
+    if (tg && tg.openTelegramLink) {
+      tg.openTelegramLink('https://t.me/share/url?url=' + encodeURIComponent(link) + '&text=' + encodeURIComponent('Join Grover Miner!'));
+    } else {
+      if (navigator.clipboard) navigator.clipboard.writeText(link);
+      toast('📋 Link copied!');
+    }
   }
+  function showMyLink() { referFriend(); }
 
-  function openVip() { document.getElementById('vipModal').classList.add('show'); }
-  function closeVip() { document.getElementById('vipModal').classList.remove('show'); }
-  function buyVip(lvl) { state.vipLevel = lvl; saveState(); closeVip(); toast('VIP Upgraded!'); }
-  function referFriend() { toast('Referral link copied!'); }
-  function showMyLink() { toast('Copied!'); }
-
+  // ============================================
+  // ADMIN PANEL
+  // ============================================
   let vipTapCount = 0; let vipTapTimer = null;
   const vipBtnEl = document.getElementById('vipBtn');
   if (vipBtnEl) {
     vipBtnEl.addEventListener('click', () => {
       vipTapCount++; clearTimeout(vipTapTimer);
-      if (vipTapCount >= 7) { vipTapCount = 0; document.getElementById('adminModal').classList.add('show'); return; }
+      if (vipTapCount >= 7) { vipTapCount = 0; const el = document.getElementById('adminModal'); if(el) el.classList.add('show'); return; }
       vipTapTimer = setTimeout(() => { if (vipTapCount === 1) openVip(); vipTapCount = 0; }, 400);
     });
   }
-  function closeAdmin() { document.getElementById('adminModal').classList.remove('show'); }
+
+  function closeAdmin() { const el = document.getElementById('adminModal'); if(el) el.classList.remove('show'); }
   function checkAdminPin() {
-    const pin = document.getElementById('adminPin').value;
+    const pinEl = document.getElementById('adminPin');
+    if(!pinEl) return;
+    const pin = pinEl.value;
     if (pin === '1905') { 
       document.getElementById('adminPinView').style.display = 'none'; 
       document.getElementById('adminPanels').style.display = 'block'; 
       loadAdminData(); 
       toast('🔓 Admin access granted!'); 
-    } else { 
-      toast('❌ Wrong PIN'); 
-    }
+    } else { toast('❌ Wrong PIN'); }
   }
 
   function adminTab(tab) {
@@ -742,25 +716,18 @@ function spinWheel(isRespin) {
 
   function loadAdminData() {
     const list = document.getElementById('adminLeaderboardList');
-    if (!list) {
-      console.log("Could not find adminLeaderboardList div!");
-      return;
+    if (list) {
+      list.innerHTML = '';
+      fakeUsers.sort((a,b) => b.refs - a.refs);
+      fakeUsers.forEach((u, i) => {
+        const row = document.createElement('div');
+        row.className = 'admin-row';
+        row.innerHTML = '<div class="admin-row-info"><div class="admin-row-name">#' + (i+1) + ' ' + u.name + '</div><div class="admin-row-detail">' + u.refs + ' referrals</div></div><button class="admin-small-btn red" onclick="adminRemoveFake(' + i + ')">Del</button>';
+        list.appendChild(row);
+      });
     }
-    
-    let html = '';
-    fakeUsers.sort((a,b) => b.refs - a.refs);
-    fakeUsers.forEach((u, i) => {
-      html += '<div class="admin-row">';
-      html += '<div class="admin-row-info">';
-      html += '<div class="admin-row-name">#' + (i+1) + ' ' + u.name + '</div>';
-      html += '<div class="admin-row-detail">' + u.refs + ' referrals</div>';
-      html += '</div>';
-      html += '<button class="admin-small-btn red" onclick="adminRemoveFake(' + i + ')">Del</button>';
-      html += '</div>';
-    });
-    
-    list.innerHTML = html;
   }
+
   function adminRemoveFake(idx) {
     if (!confirm('Remove?')) return;
     fakeUsers.splice(idx, 1);
@@ -787,7 +754,7 @@ function spinWheel(isRespin) {
   function adminAddTask() { toast('Task added'); }
 
   // ============================================
-  // REAL TON CONNECT & SECRET TESTING BYPASS
+  // TON CONNECT & GATE
   // ============================================
   let connectedWallet = null;
   let tonConnectUI = null;
@@ -832,7 +799,7 @@ function spinWheel(isRespin) {
       toast('Confirm payment...');
       await tonConnectUI.sendTransaction({
         validUntil: Math.floor(Date.now() / 1000) + 360,
-        messages: [{ address: PROJECT_WALLET, amount: '100000000' }] // 0.1 TON
+        messages: [{ address: PROJECT_WALLET, amount: '100000000' }]
       });
       unlockApp();
     } catch (e) { toast('Payment cancelled.'); }
@@ -840,38 +807,43 @@ function spinWheel(isRespin) {
 
   function unlockApp() {
     state.hasPaid = true; 
-    if (!state.welcomeClaimed) { 
-      state.balance += WELCOME_BONUS; 
-      state.welcomeClaimed = true; 
-      setTimeout(() => toast('🎉 +100 GROV Welcome Bonus!'), 1000);
-    }
+    if (!state.welcomeClaimed) { state.balance += WELCOME_BONUS; state.welcomeClaimed = true; setTimeout(() => toast('🎉 +100 GROV Welcome Bonus!'), 1000); }
     saveState(); 
     document.getElementById('gateScreen').classList.remove('active'); 
     document.getElementById('homeScreen').classList.add('active');
     document.getElementById('bottomNav').style.display = 'flex'; 
-    updateBalanceDisplay(); 
-    updateMiningCounter();
-    toast('Welcome to Grover!');
+    updateBalanceDisplay(); updateMiningCounter(); toast('Welcome to Grover!');
   }
 
-  // 🥷 SECRET TESTING BYPASS
-  // Tap the main Grover logo 5 times to bypass the paywall for testing!
-  let secretTapCount = 0;
-  let secretTapTimer = null;
+  let secretTapCount = 0; let secretTapTimer = null;
   const gateLogoEl = document.querySelector('#gateScreen .logo');
   if (gateLogoEl) {
     gateLogoEl.addEventListener('click', () => {
-      secretTapCount++;
-      clearTimeout(secretTapTimer);
-      if (secretTapCount >= 5) {
-        secretTapCount = 0;
-        unlockApp(); // Unlocks the app for free
-      }
+      secretTapCount++; clearTimeout(secretTapTimer);
+      if (secretTapCount >= 5) { secretTapCount = 0; unlockApp(); }
       secretTapTimer = setTimeout(() => secretTapCount = 0, 2000);
     });
   }
-  loadState(); updateMiningCounter(); updateBalanceDisplay(); setInterval(updateMiningCounter, 1000);
-    updatespinTimer();
+
+  // ============================================
+  // INIT (Start the app)
+  // ============================================
+  loadState();
+  updateSpinTimer();
+  updateMiningCounter();
+  updateBalanceDisplay();
+  getOrCreateReferralCode();
+  
+  setInterval(updateMiningCounter, 1000);
+  
+  // Auto-skip if already paid
+  if (state.hasPaid === true) {
+    setTimeout(() => {
+      document.getElementById('gateScreen').classList.remove('active');
+      document.getElementById('homeScreen').classList.add('active');
+      document.getElementById('bottomNav').style.display = 'flex';
+    }, 100);
+  }
 </script>
 </body>
 </html>
