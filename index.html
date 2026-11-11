@@ -488,12 +488,14 @@ button:active{transform:scale(.97)}
     const pending = calculatePending();
     const earnedEl = document.getElementById('earnedValue');
     if (earnedEl) earnedEl.textContent = '+' + pending.toFixed(8);
+
     const rate = getMiningRate();
     const timerEl = document.getElementById('nextClaimTimer');
-   if (timerEl) {
+    
+    if (timerEl) {
       if (pending >= rate) {
         timerEl.textContent = '🛑 Mining Stopped! Claim Now';
-        timerEl.style.color = '#ef4444'; // Make it red
+        timerEl.style.color = '#ef4444';
       } else {
         const sLeft = Math.max(0, Math.floor((DAY_MS - (Date.now() - state.lastClaimTime)) / 1000));
         const h = Math.floor(sLeft / 3600);
@@ -501,7 +503,21 @@ button:active{transform:scale(.97)}
         timerEl.textContent = '⛏️ Full in ' + h + 'h ' + m + 'm';
         timerEl.style.color = '#00d4ff';
       }
-    } 
+    }
+
+    const mRate = document.getElementById('mineRate');
+    const mLevel = document.getElementById('mineLevel');
+    const mRateText = document.getElementById('mineRateText');
+    const mLevelText = document.getElementById('mineLevelText');
+    const mProgFill = document.getElementById('mineProgressFill');
+    const mProgText = document.getElementById('mineProgressText');
+    
+    if (mRate) mRate.textContent = rate + '/day';
+    if (mLevel) mLevel.textContent = state.vipLevel;
+    if (mRateText) mRateText.textContent = rate + ' GROV/day';
+    if (mLevelText) mLevelText.textContent = 'Level ' + state.vipLevel;
+    if (mProgFill) mProgFill.style.width = Math.min(100, (pending / rate) * 100) + '%';
+    if (mProgText) mProgText.textContent = pending >= rate ? '✅ Ready to claim' : 'Mining... ' + pending.toFixed(6) + ' GROV';
   }
 
   function updateBalanceDisplay() {
@@ -515,11 +531,9 @@ button:active{transform:scale(.97)}
     state.balance += getMiningRate(); state.lastClaimTime = Date.now();
     updateBalanceDisplay(); saveState(); toast('💰 Claimed!');
   }
-
-  function spinWheel(isRespin) {
+function spinWheel(isRespin) {
     const today = new Date().toDateString();
     
-    // Check limits
     if (!isRespin) {
       if (state.lastSpin === today) {
         if (state.extraSpinsUsed >= 10) {
@@ -529,6 +543,38 @@ button:active{transform:scale(.97)}
       }
     }
 
+    const wheelGroup = document.getElementById('wheelGroup');
+    wheelGroup.style.transition = 'transform 4s cubic-bezier(.17,.67,.83,.67)';
+    wheelGroup.style.transformOrigin = '150px 150px';
+    wheelGroup.style.transform = 'rotate(' + (1440 + Math.floor(Math.random() * 360)) + 'deg)';
+    
+    const btn = document.getElementById('spinBtn'); 
+    btn.disabled = true;
+    btn.textContent = '⏳ SPINNING...';
+
+    setTimeout(() => {
+      const prize = Math.floor(Math.random() * 6) + 1;
+      state.balance += prize; 
+      updateBalanceDisplay(); 
+      
+      if (!isRespin) {
+        state.lastSpin = today;
+      } else {
+        state.extraSpinsUsed++;
+      }
+      
+      saveState();
+      
+      wheelGroup.style.transition = 'none'; 
+      wheelGroup.style.transform = 'rotate(0deg)';
+      
+      document.getElementById('spinResultPrize').textContent = '+' + prize;
+      document.getElementById('spinResultModal').classList.add('show');
+      
+      updateSpinTimer();
+    }, 4000);
+  }
+  
     const wheelGroup = document.getElementById('wheelGroup');
     wheelGroup.style.transition = 'transform 4s cubic-bezier(.17,.67,.83,.67)';
     wheelGroup.style.transformOrigin = '150px 150px';
