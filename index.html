@@ -449,9 +449,19 @@ button:active{transform:scale(.97)}
   <div class="spin-result-content" style="border-color:#8b5cf6;">
     <div class="spin-result-label" style="color:#00d4ff; font-size:14px;">Mystery Box</div>
     <div style="font-size:70px; margin: 15px 0; filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.8));">🎁</div>
-    <div style="font-size:11px; color:#a8c5ff; margin-bottom:15px; line-height:1.4;">Win GROV (starts at 500!) or a rare <b>Diamond 💎</b>!<br><span style="color:#f5b800;">Diamond Drop Rate: 0.00001%</span></div>
+    <div style="font-size:11px; color:#a8c5ff; margin-bottom:15px; line-height:1.4;">Win GROV (starts at 500!) or a rare <b>Diamond 💎</b>!</div>
     <button id="mysteryPayBtn" class="spin-result-btn" style="background:linear-gradient(135deg,#8b5cf6,#6b46c1); color:#fff;" onclick="payMysteryBox()">💎 OPEN FOR 1,000 GROV</button>
     <button class="spin-result-btn" style="background:rgba(255,255,255,0.1); color:#fff; margin-top:8px; font-size:12px; padding:10px;" onclick="closeMysteryBox()">Cancel</button>
+  </div>
+</div>
+
+<div class="spin-result" id="scratchModal">
+  <div class="spin-result-content" style="border-color:#00d4ff;">
+    <div class="spin-result-label" style="color:#00d4ff; font-size:14px;">Scratch Card</div>
+    <div style="font-size:70px; margin: 15px 0; filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.8));">🎟️</div>
+    <div style="font-size:11px; color:#a8c5ff; margin-bottom:15px; line-height:1.4;">Buy a scratch card for 500 GROV to win up to 200 GROV or a rare <b>Diamond 💎</b>!</div>
+    <button id="scratchPayBtn" class="spin-result-btn" style="background:linear-gradient(135deg,#00d4ff,#0088ff); color:#fff;" onclick="payScratchCard()">BUY FOR 500 GROV</button>
+    <button class="spin-result-btn" style="background:rgba(255,255,255,0.1); color:#fff; margin-top:8px; font-size:12px; padding:10px;" onclick="closeScratchCard()">Cancel</button>
   </div>
 </div>
 
@@ -648,21 +658,28 @@ button:active{transform:scale(.97)}
 
   function buyMiningBoost() {
     if (state.boostUntil && Date.now() < state.boostUntil) return toast('❌ Boost is already active!');
-    toast('🎬 Watch 4 Ads to activate!');
+    
     let adsWatched = 0;
-    function watchOneAd() {
+    function showNextAd() {
       if (adsWatched >= 4) {
         state.boostUntil = Date.now() + DAY_MS;
         saveState(); updateMiningCounter();
         toast('⚡ 2X Boost Activated!');
         return;
       }
-      setTimeout(() => {
-        adsWatched++; toast('Ad ' + adsWatched + '/4 watched');
-        watchOneAd();
-      }, 1500);
+      toast('🎬 Loading Ad ' + (adsWatched + 1) + '/4...');
+      
+      if (typeof window.show_11979593 === 'function') {
+        window.show_11979593({
+          type: 'reward',
+          onReward: () => { adsWatched++; showNextAd(); },
+          onError: () => { toast('❌ Ad failed to load.'); }
+        });
+      } else {
+        toast('⚠️ Ad SDK not loaded.');
+      }
     }
-    watchOneAd();
+    showNextAd();
   }
 
   // --- SPIN ---
@@ -701,7 +718,16 @@ button:active{transform:scale(.97)}
     } else { btn.disabled = false; btn.textContent = '🎡 SPIN NOW (FREE)'; btn.style.background = 'linear-gradient(135deg,#f5b800,#ff6b00)'; }
   }
 
-  function watchAdForSpin() { toast('🎬 Loading Ad...'); setTimeout(() => { toast('✅ Ad watched! Spinning now...'); spinWheel(true); }, 2000); }
+  function watchAdForSpin() { 
+    if (typeof window.show_11979593 === 'function') {
+      window.show_11979593({
+        type: 'reward',
+        onReward: () => { toast('✅ Ad watched! Spinning now...'); spinWheel(true); }
+      });
+    } else {
+      toast('⚠️ Ads not available.');
+    }
+  }
   function closeSpinResult() { const el = document.getElementById('spinResultModal'); if(el) el.classList.remove('show'); }
   // --- CHECK-IN CALENDAR ---
   function openCheckin() { document.getElementById('checkinModal').classList.add('show'); renderCheckinGrid(); }
@@ -710,7 +736,7 @@ button:active{transform:scale(.97)}
   function renderCheckinGrid() {
     const grid = document.getElementById('checkinGrid'); if (!grid) return;
     grid.innerHTML = '';
-    const rewards = [10, 20, 30, 40, 50, 60, 200];
+    const rewards = [1, 2, 3, 6, 8, 10, 200];
     const today = new Date().toDateString();
     for (let i = 1; i <= 7; i++) {
       const isClaimed = state.checkinDay > i;
@@ -783,20 +809,44 @@ button:active{transform:scale(.97)}
     state.balance -= 10000000; hasDiamond = true; localStorage.setItem('grover_diamond_' + CURRENT_USER, 'true'); saveState(); updateBalanceDisplay(); toast('💎 Diamond Purchased with GROV!'); closeVip();
   }
 
-  function buyScratchCard() {
+  // --- SCRATCH CARD ---
+  function buyScratchCard() { 
+    document.getElementById('scratchModal').classList.add('show'); 
+  }
+  function closeScratchCard() { 
+    document.getElementById('scratchModal').classList.remove('show'); 
+    setTimeout(() => {
+      const content = document.querySelector('#scratchModal .spin-result-content');
+      content.innerHTML = `<div class="spin-result-label" style="color:#00d4ff; font-size:14px;">Scratch Card</div><div style="font-size:70px; margin: 15px 0; filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.8));">🎟️</div><div style="font-size:11px; color:#a8c5ff; margin-bottom:15px; line-height:1.4;">Buy a scratch card for 500 GROV to win up to 200 GROV or a rare <b>Diamond 💎</b>!</div><button id="scratchPayBtn" class="spin-result-btn" style="background:linear-gradient(135deg,#00d4ff,#0088ff); color:#fff;" onclick="payScratchCard()">BUY FOR 500 GROV</button><button class="spin-result-btn" style="background:rgba(255,255,255,0.1); color:#fff; margin-top:8px; font-size:12px; padding:10px;" onclick="closeScratchCard()">Cancel</button>`;
+    }, 300);
+  }
+
+  function payScratchCard() {
     if (state.balance < 500) return toast('❌ Need 500 GROV to buy!');
     state.balance -= 500; saveState(); updateBalanceDisplay();
-    toast('🎟️ Scratching...');
+    const btn = document.getElementById('scratchPayBtn'); btn.textContent = '⏳ Scratching...'; btn.disabled = true;
+    
     setTimeout(() => {
       const roll = Math.random() * 100;
+      let prizeText = '';
+      let isDiamond = false;
+      
       if (roll < 0.000001) {
+        prizeText = 'DIAMOND'; isDiamond = true;
         hasDiamond = true; localStorage.setItem('grover_diamond_' + CURRENT_USER, 'true');
-        toast('💎 JACKPOT! You scratched a DIAMOND!');
       } else {
         const prize = Math.floor(Math.random() * 200) + 1;
-        state.balance += prize; saveState(); updateBalanceDisplay();
-        toast('🎟️ You won ' + prize + ' GROV!');
+        state.balance += prize; prizeText = '+' + prize;
       }
+      saveState(); updateBalanceDisplay();
+      
+      const content = document.querySelector('#scratchModal .spin-result-content');
+      if (isDiamond) {
+        content.innerHTML = `<div class="spin-result-label" style="color:#00d4ff;">🎉 JACKPOT! 🎉</div><div style="font-size:70px; margin: 10px 0; filter: drop-shadow(0 0 30px rgba(0, 212, 255, 1));">💎</div><div class="spin-result-prize" style="color:#00d4ff; font-size:30px;">${prizeText}</div><div class="spin-result-label" style="font-size:10px;">Contact Support to claim</div><button class="spin-result-btn" style="background:linear-gradient(135deg,#00d4ff,#0088ff); color:#fff;" onclick="closeScratchCard()">CLAIM</button>`;
+      } else {
+        content.innerHTML = `<div class="spin-result-label" style="color:#00d4ff;">You Won!</div><div class="spin-result-prize">${prizeText}</div><div class="spin-result-label">GROV</div><button class="spin-result-btn" onclick="closeScratchCard()">CLAIM</button>`;
+      }
+      toast('🎟️ Card Scratched!');
     }, 1500);
   }
 
@@ -806,7 +856,7 @@ button:active{transform:scale(.97)}
     document.getElementById('mysteryModal').classList.remove('show'); 
     setTimeout(() => {
       const content = document.querySelector('#mysteryModal .spin-result-content');
-      content.innerHTML = `<div class="spin-result-label" style="color:#00d4ff; font-size:14px;">Mystery Box</div><div style="font-size:70px; margin: 15px 0; filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.8));">🎁</div><div style="font-size:11px; color:#a8c5ff; margin-bottom:15px; line-height:1.4;">Win GROV (starts at 500!) or a rare <b>Diamond 💎</b>!<br><span style="color:#f5b800;">Diamond Drop Rate: 0.00001%</span></div><button id="mysteryPayBtn" class="spin-result-btn" style="background:linear-gradient(135deg,#8b5cf6,#6b46c1); color:#fff;" onclick="payMysteryBox()">💎 OPEN FOR 1,000 GROV</button><button class="spin-result-btn" style="background:rgba(255,255,255,0.1); color:#fff; margin-top:8px; font-size:12px; padding:10px;" onclick="closeMysteryBox()">Cancel</button>`;
+      content.innerHTML = `<div class="spin-result-label" style="color:#00d4ff; font-size:14px;">Mystery Box</div><div style="font-size:70px; margin: 15px 0; filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.8));">🎁</div><div style="font-size:11px; color:#a8c5ff; margin-bottom:15px; line-height:1.4;">Win GROV (starts at 500!) or a rare <b>Diamond 💎</b>!</div><button id="mysteryPayBtn" class="spin-result-btn" style="background:linear-gradient(135deg,#8b5cf6,#6b46c1); color:#fff;" onclick="payMysteryBox()">💎 OPEN FOR 1,000 GROV</button><button class="spin-result-btn" style="background:rgba(255,255,255,0.1); color:#fff; margin-top:8px; font-size:12px; padding:10px;" onclick="closeMysteryBox()">Cancel</button>`;
     }, 300);
   }
 
