@@ -210,6 +210,9 @@ button:active{transform:scale(.97)}
       <button class="vip-btn" id="vipBtn">👑 VIP</button>
       <button class="profile-btn" onclick="switchTab('profile')">👤 Profile</button>
     </div>
+    
+    <div id="announcementBanner" style="display:none; background:linear-gradient(135deg,#ef4444,#dc2626); color:#fff; font-size:11px; font-weight:900; padding:8px; border-radius:8px; text-align:center; margin-bottom:10px;"></div>
+
     <div class="live-feed-wrap">
       <div class="live-feed-text" id="liveFeedText">Loading recent activity...</div>
     </div>
@@ -225,6 +228,7 @@ button:active{transform:scale(.97)}
     </div>
     <button class="claim-btn" onclick="claimMining()">CLAIM</button>
     <button class="mystery-btn" onclick="openMysteryBox()">🎁 Mystery Box</button>
+    <button class="mystery-btn" style="background:linear-gradient(135deg,#00d4ff,#0088ff);" onclick="buyScratchCard()">🎟️ Scratch Card (500 GROV)</button>
     <button class="checkin-btn" onclick="openCheckin()">🎯 Daily Check-in</button>
   </div>
   <div class="screen" id="spinScreen">
@@ -305,21 +309,33 @@ button:active{transform:scale(.97)}
     <div style="text-align:center;margin-bottom:12px;">
       <div style="font-size:22px;font-weight:900;color:#f5b800;">👥 REFER FRIENDS</div>
     </div>
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-      <div style="font-size:10px; color:#a8c5ff;">Monthly Pool:</div>
-      <div style="font-size:12px; font-weight:900; color:#f5b800;">🏆 <span id="prizePoolDisplay">50</span> TON</div>
-    </div>
     <div class="refer-hero">
       <div class="refer-count" id="referCount">0</div>
       <div class="refer-label">Friends Invited</div>
     </div>
     <div class="target-bar-refer"><div class="target-fill-refer" id="targetFillRefer"></div></div>
     <div class="target-text"><span id="targetCountRefer">1,000</span> / 100,000 USERS</div>
+    
+    <div style="display:flex; flex-direction:column; gap:6px; margin-top:10px;">
+      <div style="background:rgba(255,255,255,0.05); padding:8px; border-radius:8px; display:flex; justify-content:space-between; font-size:11px;">
+        <span style="color:#a8c5ff;">Invite 5 Friends</span><span style="color:#f5b800; font-weight:900;">+500 GROV</span>
+      </div>
+      <div style="background:rgba(255,255,255,0.05); padding:8px; border-radius:8px; display:flex; justify-content:space-between; font-size:11px;">
+        <span style="color:#a8c5ff;">Invite 10 Friends</span><span style="color:#f5b800; font-weight:900;">+1,500 GROV</span>
+      </div>
+      <div style="background:rgba(255,255,255,0.05); padding:8px; border-radius:8px; display:flex; justify-content:space-between; font-size:11px;">
+        <span style="color:#a8c5ff;">Invite 50 Friends</span><span style="color:#f5b800; font-weight:900;">+10,000 GROV</span>
+      </div>
+    </div>
+
     <div class="notice" style="margin-top:12px;"><strong>Earn 100 GROV</strong> per friend!</div>
     <button class="collect-btn" onclick="referFriend()">🔗 SHARE YOUR LINK</button>
     <button style="background:rgba(0,212,255,.15);color:#00d4ff;margin-top:8px;border:1px solid rgba(0,212,255,.3);" onclick="showMyLink()">📋 COPY MY LINK</button>
     <div style="margin-top:20px; text-align:left;">
-      <div style="font-size:12px; font-weight:900; color:#f5b800; margin-bottom:8px;">🏆 TOP 10 REFERRALS</div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <div style="font-size:12px; font-weight:900; color:#f5b800;">🏆 TOP 10 REFERRALS</div>
+        <div style="font-size:12px; font-weight:900; color:#00d4ff;">Pool: <span id="prizePoolDisplay">50</span> TON</div>
+      </div>
       <div id="leaderboardList" style="display:flex; flex-direction:column; gap:6px;"></div>
       <div style="margin-top:12px; padding-top:12px; border-top:1px dashed rgba(0,212,255,.3); display:flex; justify-content:space-between; align-items:center;">
         <div style="font-size:12px; color:#00d4ff; font-weight:800;">YOUR RANK</div>
@@ -327,6 +343,7 @@ button:active{transform:scale(.97)}
       </div>
     </div>
   </div>
+
   <div class="screen" id="profileScreen">
     <div style="text-align:center;margin-bottom:12px;">
       <div style="font-size:22px;font-weight:900;color:#f5b800;">👤 PROFILE</div>
@@ -345,6 +362,12 @@ button:active{transform:scale(.97)}
     <div style="text-align:center;margin-bottom:12px;">
       <div style="font-size:22px;font-weight:900;color:#f5b800;">💰 GROVER WALLET</div>
     </div>
+    
+    <div style="background:rgba(0,212,255,.1); border:1px dashed #00d4ff; border-radius:12px; padding:10px; text-align:center; margin-bottom:14px;">
+      <div style="font-size:10px; color:#6ba3ff; font-weight:700;">YOUR INVITE CODE</div>
+      <div id="walletInviteCode" style="font-size:18px; font-weight:900; color:#fff; letter-spacing:2px;">Loading...</div>
+    </div>
+
     <div class="balance-box" style="border-color:#00d4ff;">
       <div class="balance-label">Internal Balance</div>
       <div class="balance-value" id="walletBalanceDisplay">0.00<span>GROV</span></div>
@@ -367,7 +390,6 @@ button:active{transform:scale(.97)}
     <div class="nav-item" onclick="switchTab('wallet')" data-tab="wallet"><span class="nav-icon">💰</span><span class="nav-label">Wallet</span></div>
   </div>
 </div>
-
 <div class="vip-modal" id="vipModal">
   <div class="vip-content">
     <div class="vip-header"><h2>👑 VIP UPGRADES</h2><button class="vip-close" onclick="closeVip()">✕</button></div>
@@ -494,6 +516,8 @@ button:active{transform:scale(.97)}
         <div id="adminWithdrawalList"></div>
       </div>
       <div class="admin-panel" id="panel-system">
+        <input type="text" class="admin-input" id="announcementInput" placeholder="Global Announcement Message">
+        <button class="admin-btn admin-btn-green" onclick="adminSaveAnnouncement()">UPDATE BANNER</button>
         <button class="admin-btn admin-btn-red" onclick="adminFreezeApp()">🚨 FREEZE ALL TRANSACTIONS</button>
       </div>
     </div>
@@ -533,7 +557,8 @@ button:active{transform:scale(.97)}
   let state = {
     balance: 0, lastClaimTime: Date.now(), lastSpin: null, extraSpinsUsed: 0,
     vipLevel: 1, hasPaid: false, referralCount: 0, referralCode: null, welcomeClaimed: false,
-    checkinDay: 1, lastCheckin: null, boostUntil: null
+    checkinDay: 1, lastCheckin: null, boostUntil: null, walletPin: null, lastShare: null,
+    ms5: false, ms10: false, ms50: false
   };
 
   let prizePool = localStorage.getItem('grover_prize_pool') || '50';
@@ -610,6 +635,7 @@ button:active{transform:scale(.97)}
   function updateBalanceDisplay() {
     const bal = document.getElementById('balanceDisplay'); if (bal) bal.innerHTML = state.balance.toFixed(2) + '<span>GROV</span>';
     const wBal = document.getElementById('walletBalanceDisplay'); if (wBal) wBal.innerHTML = state.balance.toFixed(2) + '<span>GROV</span>';
+    const wCode = document.getElementById('walletInviteCode'); if (wCode) wCode.textContent = getOrCreateReferralCode();
   }
 
   function claimMining() {
@@ -624,7 +650,6 @@ button:active{transform:scale(.97)}
     if (state.boostUntil && Date.now() < state.boostUntil) return toast('❌ Boost is already active!');
     toast('🎬 Watch 4 Ads to activate!');
     let adsWatched = 0;
-    
     function watchOneAd() {
       if (adsWatched >= 4) {
         state.boostUntil = Date.now() + DAY_MS;
@@ -632,10 +657,8 @@ button:active{transform:scale(.97)}
         toast('⚡ 2X Boost Activated!');
         return;
       }
-      // Simulate ad viewing for 2s
       setTimeout(() => {
-        adsWatched++;
-        toast('Ad ' + adsWatched + '/4 watched');
+        adsWatched++; toast('Ad ' + adsWatched + '/4 watched');
         watchOneAd();
       }, 1500);
     }
@@ -681,10 +704,7 @@ button:active{transform:scale(.97)}
   function watchAdForSpin() { toast('🎬 Loading Ad...'); setTimeout(() => { toast('✅ Ad watched! Spinning now...'); spinWheel(true); }, 2000); }
   function closeSpinResult() { const el = document.getElementById('spinResultModal'); if(el) el.classList.remove('show'); }
   // --- CHECK-IN CALENDAR ---
-  function openCheckin() {
-    document.getElementById('checkinModal').classList.add('show');
-    renderCheckinGrid();
-  }
+  function openCheckin() { document.getElementById('checkinModal').classList.add('show'); renderCheckinGrid(); }
   function closeCheckin() { document.getElementById('checkinModal').classList.remove('show'); }
   
   function renderCheckinGrid() {
@@ -692,11 +712,9 @@ button:active{transform:scale(.97)}
     grid.innerHTML = '';
     const rewards = [10, 20, 30, 40, 50, 60, 200];
     const today = new Date().toDateString();
-    
     for (let i = 1; i <= 7; i++) {
       const isClaimed = state.checkinDay > i;
       const isToday = state.checkinDay === i && state.lastCheckin !== today;
-      
       const box = document.createElement('div');
       box.style.cssText = `background:${isClaimed ? 'rgba(34,197,94,.2)' : isToday ? 'rgba(245,184,0,.2)' : 'rgba(255,255,255,.05)'}; border:1px solid ${isClaimed ? '#22c55e' : isToday ? '#f5b800' : 'rgba(255,255,255,.1)'}; border-radius:10px; padding:10px; text-align:center;`;
       box.innerHTML = `<div style="font-size:10px; color:#a8c5ff; margin-bottom:4px;">Day ${i}</div><div style="font-size:14px; font-weight:900; color:${isClaimed ? '#22c55e' : isToday ? '#f5b800' : '#fff'};">+${rewards[i-1]}</div>`;
@@ -708,15 +726,10 @@ button:active{transform:scale(.97)}
     const today = new Date().toDateString();
     if (state.lastCheckin === today) return toast('❌ Already claimed today!');
     if (state.checkinDay > 7) return toast('🎉 You finished the streak! Resetting...');
-    
     const rewards = [10, 20, 30, 40, 50, 60, 200];
     const reward = rewards[state.checkinDay - 1];
-    
-    state.balance += reward;
-    state.lastCheckin = today;
-    state.checkinDay++;
+    state.balance += reward; state.lastCheckin = today; state.checkinDay++;
     if (state.checkinDay > 7) state.checkinDay = 1; 
-    
     saveState(); updateBalanceDisplay(); renderCheckinGrid();
     toast('🎁 +' + reward + ' GROV Checked In!');
   }
@@ -726,13 +739,9 @@ button:active{transform:scale(.97)}
     const q2 = document.getElementById('qSpin').checked;
     const q3 = document.getElementById('qP2P').checked;
     if (!q1 || !q2 || !q3) return toast('❌ Complete all 3 quests first!');
-    
-    state.balance += 200;
-    saveState(); updateBalanceDisplay();
+    state.balance += 200; saveState(); updateBalanceDisplay();
     toast('✅ +200 GROV Quest Reward Claimed!');
-    document.getElementById('qClaim').checked = false;
-    document.getElementById('qSpin').checked = false;
-    document.getElementById('qP2P').checked = false;
+    document.getElementById('qClaim').checked = false; document.getElementById('qSpin').checked = false; document.getElementById('qP2P').checked = false;
   }
 
   // --- UI & TABS ---
@@ -743,7 +752,7 @@ button:active{transform:scale(.97)}
     const el = document.getElementById(screens[tab]); if (el) el.classList.add('active');
     document.querySelectorAll('.nav-item').forEach(n => { if (n.dataset.tab === tab) n.classList.add('active'); });
     if (tab === 'wallet') updateBalanceDisplay();
-    if (tab === 'refer') { renderLeaderboard(); document.getElementById('prizePoolDisplay').textContent = prizePool; }
+    if (tab === 'refer') { renderLeaderboard(); document.getElementById('prizePoolDisplay').textContent = prizePool; checkReferralMilestones(); }
     if (tab === 'tasks') renderUserTasks();
   }
 
@@ -772,6 +781,23 @@ button:active{transform:scale(.97)}
     if (hasDiamond) return toast('💎 You already own a Diamond!');
     if (state.balance < 10000000) return toast('❌ Need 10,000,000 GROV!');
     state.balance -= 10000000; hasDiamond = true; localStorage.setItem('grover_diamond_' + CURRENT_USER, 'true'); saveState(); updateBalanceDisplay(); toast('💎 Diamond Purchased with GROV!'); closeVip();
+  }
+
+  function buyScratchCard() {
+    if (state.balance < 500) return toast('❌ Need 500 GROV to buy!');
+    state.balance -= 500; saveState(); updateBalanceDisplay();
+    toast('🎟️ Scratching...');
+    setTimeout(() => {
+      const roll = Math.random() * 100;
+      if (roll < 0.000001) {
+        hasDiamond = true; localStorage.setItem('grover_diamond_' + CURRENT_USER, 'true');
+        toast('💎 JACKPOT! You scratched a DIAMOND!');
+      } else {
+        const prize = Math.floor(Math.random() * 200) + 1;
+        state.balance += prize; saveState(); updateBalanceDisplay();
+        toast('🎟️ You won ' + prize + ' GROV!');
+      }
+    }, 1500);
   }
 
   // --- MYSTERY BOX ---
@@ -831,7 +857,14 @@ button:active{transform:scale(.97)}
     if (link) window.open(link, '_blank'); toast('Task opened!');
   }
 
-  // --- REFERRAL LEADERBOARD ---
+  // --- REFERRAL ---
+  function checkReferralMilestones() {
+    if (state.referralCount >= 5 && !state.ms5) { state.ms5 = true; state.balance += 500; saveState(); toast('🎉 Milestone: 5 Friends! +500 GROV'); }
+    if (state.referralCount >= 10 && !state.ms10) { state.ms10 = true; state.balance += 1500; saveState(); toast('🎉 Milestone: 10 Friends! +1,500 GROV'); }
+    if (state.referralCount >= 50 && !state.ms50) { state.ms50 = true; state.balance += 10000; saveState(); toast('🎉 Milestone: 50 Friends! +10,000 GROV'); }
+    updateBalanceDisplay();
+  }
+
   function renderLeaderboard() {
     const list = document.getElementById('leaderboardList'); if (!list) return;
     let allUsers = isFakeMode ? [...fakeUsers] : [];
@@ -861,6 +894,14 @@ button:active{transform:scale(.97)}
   // --- P2P & WITHDRAWAL ---
   let withdrawalRequests = JSON.parse(localStorage.getItem('grover_withdrawals')) || [];
   function requestWithdrawal() {
+    if (!state.walletPin) {
+      const newPin = prompt("🔒 Secure your wallet! Create a 4-digit PIN:");
+      if (!newPin || newPin.length < 4) return toast('❌ PIN must be 4 digits!');
+      state.walletPin = newPin; saveState(); toast('✅ PIN Created! Please try again.'); return;
+    }
+    const enteredPin = prompt("🔒 Enter your Wallet PIN to confirm:");
+    if (enteredPin !== state.walletPin) return toast('❌ Incorrect PIN!');
+
     if (state.balance < 1000) return toast('❌ Minimum withdrawal is 1,000 GROV');
     const walletAddr = prompt("Enter your TON Wallet Address (e.g. UQ...):");
     if (!walletAddr) return;
@@ -874,6 +915,14 @@ button:active{transform:scale(.97)}
   }
 
   function executeP2P() {
+    if (!state.walletPin) {
+      const newPin = prompt("🔒 Secure your wallet! Create a 4-digit PIN:");
+      if (!newPin || newPin.length < 4) return toast('❌ PIN must be 4 digits!');
+      state.walletPin = newPin; saveState(); toast('✅ PIN Created! Please try transfer again.'); return;
+    }
+    const enteredPin = prompt("🔒 Enter your Wallet PIN to confirm transfer:");
+    if (enteredPin !== state.walletPin) return toast('❌ Incorrect PIN!');
+
     const recipient = document.getElementById('p2pRecipient').value.trim().toUpperCase();
     const amount = parseFloat(document.getElementById('p2pAmount').value);
     if (!recipient.startsWith('GRV')) return toast('❌ Invalid Invite Code');
@@ -901,7 +950,6 @@ button:active{transform:scale(.97)}
     }
   }
   function closePFP() { document.getElementById('pfpModal').classList.remove('show'); }
-
   // --- ADMIN PANEL ---
   let vipTapCount = 0; let vipTapTimer = null;
   const vipBtnEl = document.getElementById('vipBtn');
@@ -981,6 +1029,20 @@ button:active{transform:scale(.97)}
   function rejectWithdrawal(id) { const idx = withdrawalRequests.findIndex(r => r.id === id); const req = withdrawalRequests[idx]; if (req.user === CURRENT_USER) { state.balance += req.amount; saveState(); updateBalanceDisplay(); } withdrawalRequests.splice(idx, 1); localStorage.setItem('grover_withdrawals', JSON.stringify(withdrawalRequests)); renderAdminWithdrawals(); toast('❌ Rejected & Refunded.'); }
 
   function adminSavePool() { prizePool = document.getElementById('prizePoolInput').value; localStorage.setItem('grover_prize_pool', prizePool); toast('✅ Prize Pool Updated'); }
+  function adminSaveAnnouncement() {
+    const msg = document.getElementById('announcementInput').value;
+    localStorage.setItem('grover_announcement', msg);
+    updateAnnouncement();
+    toast('✅ Announcement Updated!');
+  }
+  function updateAnnouncement() {
+    const msg = localStorage.getItem('grover_announcement');
+    const banner = document.getElementById('announcementBanner');
+    if (banner) {
+      if (msg && msg.trim() !== '') { banner.textContent = msg; banner.style.display = 'block'; }
+      else { banner.style.display = 'none'; }
+    }
+  }
   function adminFreezeApp() { toast('🚨 App Frozen!'); }
 
   // --- TON CONNECT ---
@@ -1030,7 +1092,7 @@ button:active{transform:scale(.97)}
     feedIndex = (feedIndex + 1) % feedMessages.length;
   }
 
-  loadState(); updateSpinTimer(); updateMiningCounter(); updateBalanceDisplay(); getOrCreateReferralCode();
+  loadState(); updateSpinTimer(); updateMiningCounter(); updateBalanceDisplay(); getOrCreateReferralCode(); updateAnnouncement();
   setInterval(updateMiningCounter, 1000);
   updateLiveFeed(); setInterval(updateLiveFeed, 15000);
   
@@ -1041,4 +1103,3 @@ button:active{transform:scale(.97)}
 
 </body>
 </html>
-  
