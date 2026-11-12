@@ -29,7 +29,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .screen{display:none;flex-direction:column;flex:1;overflow-y:auto;padding:18px 16px 100px;position:relative;z-index:2}
 .screen::-webkit-scrollbar{display:none}
 .screen.active{display:flex}
-.home-top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:8px}
+.home-top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:8px}
+.live-feed-wrap{width:100%;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);border-radius:8px;padding:6px 10px;overflow:hidden;white-space:nowrap;margin-bottom:12px}
+.live-feed-text{display:inline-block;font-size:10px;color:#00ffcc;font-weight:700;animation:scrollFeed 15s linear infinite}
+@keyframes scrollFeed{0%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
+.tos-check{display:flex;align-items:center;justify-content:center;gap:8px;font-size:11px;color:#a8c5ff;margin-bottom:12px;cursor:pointer;}
+.tos-check input{width:16px;height:16px;accent-color:#00d4ff}
+.tos-text{color:#00d4ff;text-decoration:underline;cursor:pointer;}
+</style>
+</head>
+<body>
   .vip-btn{background:linear-gradient(135deg,#f5b800,#ff6b00);border:1.5px solid rgba(255,255,255,.3);color:#0a1428;font-weight:900;font-size:11px;padding:8px 12px;border-radius:18px;cursor:pointer;font-family:inherit}
 .profile-btn{background:linear-gradient(135deg,#00d4ff,#0088ff);border:1.5px solid rgba(255,255,255,.3);color:#fff;font-weight:900;font-size:11px;padding:8px 12px;border-radius:18px;cursor:pointer;font-family:inherit}
 .logo-hero{text-align:center;padding:8px 0 6px}
@@ -45,8 +54,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .claim-btn:active{transform:scale(.97)}
 .mystery-btn{width:100%;padding:13px;background:linear-gradient(135deg,#ec4899,#8b5cf6);color:#fff;border:none;border-radius:14px;font-size:13px;font-weight:900;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:inherit;margin-bottom:8px}
 .checkin-btn{width:100%;padding:12px;background:linear-gradient(135deg,#00d4ff,#0088ff);color:#fff;border:none;border-radius:14px;font-size:13px;font-weight:900;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:inherit}
-.notif-dot{position:absolute;top:-2px;right:-2px;width:14px;height:14px;background:#ef4444;border-radius:50%;border:2px solid #0a2a5a;animation:pulseNotif 1.5s infinite}
-@keyframes pulseNotif{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
 .logo-wrap{position:relative;margin:8px auto 12px;width:fit-content}
 .logo{width:150px;height:150px;object-fit:contain;filter:drop-shadow(0 0 40px rgba(0,212,255,.9))}
 .title{font-size:24px;font-weight:900;letter-spacing:4px;text-align:center;background:linear-gradient(135deg,#f5b800,#ffdd00);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}
@@ -75,11 +82,6 @@ button:active{transform:scale(.97)}
 #payBtn.show{display:block}
 .wallet-info{font-size:10px;color:#00ffcc;margin:6px 0;padding:6px;background:rgba(0,255,204,.1);border:1px solid rgba(0,255,204,.3);border-radius:8px;word-break:break-all;display:none;text-align:center}
 .wallet-info.show{display:block}
-.status{font-size:11px;margin-top:8px;padding:8px;border-radius:8px;display:none;text-align:center}
-.status.show{display:block}
-.status.error{background:rgba(255,50,50,.15);color:#ff6b6b;border:1px solid rgba(255,50,50,.4)}
-.status.success{background:rgba(0,255,204,.15);color:#00ffcc;border:1px solid rgba(0,255,204,.4)}
-.status.loading{background:rgba(0,212,255,.15);color:#00d4ff;border:1px solid rgba(0,212,255,.4)}
 .profile-header{text-align:center;padding:20px 0;margin-bottom:14px}
 .profile-avatar{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#f5b800,#ff6b00);display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:900;color:#0a1428;margin:0 auto 12px;border:3px solid rgba(245,184,0,.5)}
 .profile-name{font-size:18px;font-weight:900;margin-bottom:4px}
@@ -87,10 +89,6 @@ button:active{transform:scale(.97)}
   .profile-item{background:linear-gradient(135deg,rgba(0,212,255,.12),rgba(0,136,255,.08));border:1px solid rgba(0,212,255,.25);border-radius:12px;padding:12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
 .profile-item-label{font-size:13px;color:#a8c5ff;font-weight:600}
 .profile-item-value{font-size:13px;color:#f5b800;font-weight:800}
-.placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;text-align:center;padding:40px 20px}
-.placeholder-icon{font-size:60px;margin-bottom:16px;opacity:.6}
-.placeholder-title{font-size:18px;font-weight:900;color:#00d4ff;margin-bottom:8px}
-.placeholder-text{font-size:12px;color:#6ba3ff;line-height:1.6}
 .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-100px);background:linear-gradient(135deg,#f5b800,#ff6b00);color:#0a1428;padding:12px 22px;border-radius:26px;font-size:13px;font-weight:800;z-index:10000;transition:transform .4s;pointer-events:none;max-width:90%;text-align:center}
 .toast.show{transform:translateX(-50%) translateY(0)}
 .vip-modal{position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;padding:20px}
@@ -130,9 +128,6 @@ button:active{transform:scale(.97)}
 .admin-stat{background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);border-radius:10px;padding:10px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center}
 .admin-stat-label{font-size:11px;color:#6ba3ff;font-weight:600}
 .admin-stat-value{font-size:14px;color:#f5b800;font-weight:900}
-.lang-selector{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
-.lang-option{background:rgba(0,212,255,.1);border:1.5px solid rgba(0,212,255,.3);border-radius:10px;padding:12px;text-align:center;cursor:pointer;font-size:12px;font-weight:700;color:#a8c5ff}
-.lang-option.active{background:linear-gradient(135deg,#00d4ff,#0088ff);border-color:#00d4ff;color:#fff}
 .task-item{background:linear-gradient(135deg,rgba(0,212,255,.12),rgba(0,136,255,.08));border:1px solid rgba(0,212,255,.25);border-radius:12px;padding:12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
 .task-left{display:flex;align-items:center;gap:10px;flex:1}
 .task-icon{font-size:24px}
@@ -143,9 +138,6 @@ button:active{transform:scale(.97)}
 .refer-hero{background:radial-gradient(circle at center,rgba(0,212,255,.2),transparent 70%);padding:20px;border-radius:18px;text-align:center;margin-bottom:14px}
 .refer-count{font-size:48px;font-weight:900;background:linear-gradient(135deg,#f5b800,#ffdd00);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .refer-label{font-size:11px;color:#6ba3ff;letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-top:4px}
-.target-bar-refer{width:100%;height:10px;background:rgba(0,212,255,.15);border-radius:5px;overflow:hidden;border:1px solid rgba(0,212,255,.3);margin:12px 0 6px}
-.target-fill-refer{height:100%;width:1%;background:linear-gradient(90deg,#00d4ff,#0088ff);border-radius:5px;transition:width 1.5s ease}
-.target-text{font-size:11px;color:#00d4ff;font-weight:800;text-align:center}
 .spin-result{position:fixed;inset:0;z-index:9997;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center;padding:20px}
 .spin-result.show{display:flex}
 .spin-result-content{background:linear-gradient(160deg,#0a2a5a,#061a3a);border:3px solid #f5b800;border-radius:22px;padding:30px 24px;text-align:center;max-width:320px;width:100%}
@@ -172,7 +164,6 @@ button:active{transform:scale(.97)}
 .welcome-banner-title{font-size:14px;font-weight:900;color:#fff;margin-bottom:2px}
 .welcome-banner-text{font-size:11px;color:rgba(255,255,255,.9)}
 </style>
-</head>
 <body>
 <div class="ocean-bg"><div class="wave"></div><div class="wave"></div><div class="wave"></div></div>
 <div class="splash" id="splash">
@@ -204,16 +195,24 @@ button:active{transform:scale(.97)}
       <div class="fee-value">0.1<span>TON</span></div>
     </div>
     <div class="notice">🔒 Wallet must be <strong>7+ days old</strong> to unlock mining.</div>
+    
+    <div class="tos-check">
+      <input type="checkbox" id="tosCheckbox">
+      <label for="tosCheckbox">I agree to <span class="tos-text" onclick="openTOS()">Terms of Service</span></label>
+    </div>
+
     <button id="connectBtn" onclick="handleConnect()">🔗 Connect Wallet</button>
     <button id="payBtn" onclick="handlePay()">💎 Pay 0.1 TON</button>
     <div id="walletInfo" class="wallet-info"></div>
-    <div id="status" class="status"></div>
   </div>
 
   <div class="screen" id="homeScreen">
     <div class="home-top-bar">
       <button class="vip-btn" id="vipBtn">👑 VIP</button>
       <button class="profile-btn" onclick="switchTab('profile')">👤 Profile</button>
+    </div>
+    <div class="live-feed-wrap">
+      <div class="live-feed-text" id="liveFeedText">Loading recent activity...</div>
     </div>
     <div class="logo-hero"><img src="file_000000004a1481f4ad0c20442e76e9f7.png" alt="Grover" class="hero-logo" id="homeLogo"></div>
     <div class="earned-counter">
@@ -227,7 +226,7 @@ button:active{transform:scale(.97)}
     </div>
     <button class="claim-btn" onclick="claimMining()">CLAIM</button>
     <button class="mystery-btn" onclick="openMysteryBox()">🎁 Mystery Box</button>
-    <button class="checkin-btn" onclick="switchTab('tasks')">🎯 Daily Check-in</button>
+    <button class="checkin-btn" onclick="openCheckin()">🎯 Daily Check-in</button>
   </div>
 
   <div class="screen" id="spinScreen">
@@ -265,7 +264,6 @@ button:active{transform:scale(.97)}
       </svg>
     </div>
     <button class="collect-btn" id="spinBtn" onclick="spinWheel(false)">🎡 SPIN NOW</button>
-    <button id="watchAdSpinBtn" onclick="watchAdForSpin()" style="background:linear-gradient(135deg,#00d4ff,#0088ff);color:#fff;margin-top:8px;">🎬 WATCH AD FOR EXTRA SPIN</button>
     <div class="notice" style="margin-top:10px;">🎰 Jackpot: 200 GROV!</div>
     <div id="spinTimer" style="text-align:center;font-size:11px;color:#00d4ff;margin-top:8px;font-weight:700;"></div>
   </div>
@@ -327,13 +325,17 @@ button:active{transform:scale(.97)}
       <div class="profile-name" id="profileName">Grover User</div>
       <div class="profile-handle" id="profileHandle">@user</div>
     </div>
+    <div class="profile-item" onclick="openRoadmap()">
+      <div class="profile-item-label">🗺️ Roadmap</div>
+      <div class="profile-item-value">›</div>
+    </div>
+    <div class="profile-item" onclick="openSupport()">
+      <div class="profile-item-label">❓ Help & Support</div>
+      <div class="profile-item-value">›</div>
+    </div>
     <div class="profile-item" onclick="openLanguage()">
       <div class="profile-item-label">🌐 Language</div>
       <div class="profile-item-value" id="currentLang">English</div>
-    </div>
-    <div class="profile-item" onclick="toast('Support coming soon!')">
-      <div class="profile-item-label">❓ Help & Support</div>
-      <div class="profile-item-value">›</div>
     </div>
   </div>
 
@@ -355,7 +357,6 @@ button:active{transform:scale(.97)}
     </div>
 
     <button style="background:linear-gradient(135deg,#f5b800,#ff6b00); color:#0a1428; margin-bottom:10px;" onclick="withdrawTON()">💸 WITHDRAW TO TON</button>
-
     <button style="background:rgba(0,212,255,.15);color:#00d4ff;border:1px solid rgba(0,212,255,.3);" onclick="switchTab('profile')">← Back to Profile</button>
   </div>
 
@@ -363,18 +364,17 @@ button:active{transform:scale(.97)}
     <div style="text-align:center;margin-bottom:14px;">
       <div style="font-size:22px;font-weight:900;color:#f5b800;">🌐 LANGUAGE</div>
     </div>
-    <div class="lang-selector" id="langSelector"></div>
+    <div class="lang-selector" id="langSelector" style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;"></div>
     <button style="background:rgba(0,212,255,.15);color:#00d4ff;border:1px solid rgba(0,212,255,.3);" onclick="switchTab('profile')">← Back to Profile</button>
   </div>
 
   <div class="bottom-nav" id="bottomNav" style="display:none;">
-    <div class="nav-item" onclick="switchTab('spin')" data-tab="spin"><span class="nav-icon">🎡</span><span class="nav-label">Spin</span></div>
-    <div class="nav-item" onclick="switchTab('tasks')" data-tab="tasks"><span class="nav-icon">📋</span><span class="nav-label">Tasks</span></div>
-    <div class="nav-item nav-mine" onclick="switchTab('mine')" data-tab="mine"><span class="nav-icon">⛏️</span><span class="nav-label">Mine</span></div>
-    <div class="nav-item" onclick="switchTab('refer')" data-tab="refer"><span class="nav-icon">👥</span><span class="nav-label">Refer</span></div>
-    <div class="nav-item" onclick="switchTab('wallet')" data-tab="wallet"><span class="nav-icon">💰</span><span class="nav-label">Wallet</span></div>
+    <div class="nav-item" onclick="switchTab('spin')" data-tab="spin"><span class="nav-icon">🎡</span><span class="nav-label" data-lang="spin">Spin</span></div>
+    <div class="nav-item" onclick="switchTab('tasks')" data-tab="tasks"><span class="nav-icon">📋</span><span class="nav-label" data-lang="tasks">Tasks</span></div>
+    <div class="nav-item nav-mine" onclick="switchTab('mine')" data-tab="mine"><span class="nav-icon">⛏️</span><span class="nav-label" data-lang="mine">Mine</span></div>
+    <div class="nav-item" onclick="switchTab('refer')" data-tab="refer"><span class="nav-icon">👥</span><span class="nav-label" data-lang="refer">Refer</span></div>
+    <div class="nav-item" onclick="switchTab('wallet')" data-tab="wallet"><span class="nav-icon">💰</span><span class="nav-label" data-lang="wallet">Wallet</span></div>
   </div>
-
 </div>
 <div class="vip-modal" id="vipModal">
   <div class="vip-content">
@@ -384,15 +384,61 @@ button:active{transform:scale(.97)}
     <div class="vip-tier"><div class="vip-tier-top"><div class="vip-tier-name">Level 4</div><div class="vip-tier-price">9 TON</div></div><div class="vip-tier-benefits">⚡ 50 GROV/day<br>💸 8% fee</div><button class="vip-buy-btn" onclick="buyVip(4)">UPGRADE</button></div>
     <div class="vip-tier"><div class="vip-tier-top"><div class="vip-tier-name">Level 5</div><div class="vip-tier-price">12 TON</div></div><div class="vip-tier-benefits">⚡ 75 GROV/day<br>💸 6% fee</div><button class="vip-buy-btn" onclick="buyVip(5)">UPGRADE</button></div>
     <div class="vip-tier" style="border-color:#f5b800; background:rgba(245,184,0,0.1);"><div class="vip-tier-top"><div class="vip-tier-name" style="color:#f5b800;">Level 6 (MAX)</div><div class="vip-tier-price">15 TON</div></div><div class="vip-tier-benefits">⚡ 100 GROV/day<br>💸 5% fee</div><button class="vip-buy-btn" onclick="buyVip(6)">UPGRADE</button></div>
+    
+    <div class="vip-tier" style="border-color:#00d4ff; background:rgba(0,212,255,0.05); margin-top:20px;">
+      <div class="vip-tier-top"><div class="vip-tier-name" style="color:#00d4ff;">💎 Diamond</div></div>
+      <div class="vip-tier-benefits">The ultimate flex. Unlocks future VIP zones.</div>
+      <button class="vip-buy-btn" style="background:linear-gradient(135deg,#00d4ff,#0088ff); color:#fff;" onclick="buyDiamondTON()">BUY - 1 TON</button>
+      <button class="vip-buy-btn" style="background:rgba(0,212,255,0.2); color:#00d4ff; margin-top:5px;" onclick="buyDiamondGROV()">BUY - 100,000 GROV</button>
+    </div>
+  </div>
+</div>
+
+<div class="spin-result" id="tosModal">
+  <div class="spin-result-content" style="border-color:#00d4ff; max-height:80vh; overflow-y:auto; text-align:left; padding:20px;">
+    <div style="font-size:16px; font-weight:900; color:#00d4ff; text-align:center; margin-bottom:10px;">TERMS OF SERVICE</div>
+    <div style="font-size:10px; color:#a8c5ff; line-height:1.5; margin-bottom:15px;">
+      <b>1. Introduction:</b> By using Grover Miner, you agree to these terms.<br><br>
+      <b>2. Genesis Phase:</b> GROV is an off-chain utility point during this phase. It will migrate to an on-chain Jetton later.<br><br>
+      <b>3. Fees:</b> The 0.1 TON entry fee is non-refundable and covers infrastructure.<br><br>
+      <b>4. Custody:</b> We do not hold your private keys. Your funds are your responsibility.<br><br>
+      <b>5. Withdrawals:</b> Enabled in Phase 3. We do not guarantee fiat value for GROV.<br><br>
+      <b>6. Anti-Fraud:</b> Bots and exploits will result in an immediate ban.<br><br>
+      <b>7. Liability:</b> The app is provided "as-is" without warranties.
+    </div>
+    <button class="spin-result-btn" onclick="closeTOS()">I UNDERSTAND</button>
+  </div>
+</div>
+
+<div class="spin-result" id="roadmapModal">
+  <div class="spin-result-content" style="border-color:#f5b800; max-height:80vh; overflow-y:auto;">
+    <div class="spin-result-label" style="color:#f5b800; font-size:16px; margin-bottom:15px;">🗺️ ROADMAP</div>
+    <div style="text-align:left; font-size:11px; color:#a8c5ff; line-height:1.8;">
+      <b style="color:#fff;">Phase 1: Launch & Mining</b><br>✅ Wallet Connect & 0.1 TON Entry<br>✅ 24h Mining & Spin Wheel<br><br>
+      <b style="color:#fff;">Phase 2: The Diamond Rush</b><br>✅ P2P Transfers & Mystery Boxes<br>🔄 Diamond Utility Unlocks<br><br>
+      <b style="color:#fff;">Phase 3: GROV Token Launch</b><br>⏳ Launch on TON Blockchain<br>⏳ Liquidity Pool Creation<br><br>
+      <b style="color:#fff;">Phase 4: Withdrawals Enabled</b><br>⏳ Real TON Payouts<br>⏳ Top 10 Season Prizes
+    </div>
+    <button class="spin-result-btn" style="margin-top:15px;" onclick="closeRoadmap()">GOT IT</button>
+  </div>
+</div>
+
+<div class="spin-result" id="checkinModal">
+  <div class="spin-result-content" style="border-color:#f5b800; width:90%; max-width:350px;">
+    <div class="spin-result-label" style="color:#f5b800; font-size:16px; margin-bottom:15px;">🎯 DAILY CHECK-IN</div>
+    <div id="checkinGrid" style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:15px;"></div>
+    <button class="spin-result-btn" style="margin-top:10px;" onclick="claimCheckin()">CLAIM TODAY'S REWARD</button>
+    <button class="spin-result-btn" style="background:rgba(255,255,255,0.1); color:#fff; margin-top:8px; font-size:12px; padding:10px;" onclick="closeCheckin()">CLOSE</button>
   </div>
 </div>
 
 <div class="spin-result" id="mysteryModal">
-  <div class="spin-result-content">
-    <div class="spin-result-label">You Won!</div>
-    <div class="spin-result-prize" id="mysteryPrize">+5</div>
-    <div class="spin-result-label">GROV</div>
-    <button class="spin-result-btn" onclick="closeMysteryBox()">CLAIM</button>
+  <div class="spin-result-content" style="border-color:#8b5cf6;">
+    <div class="spin-result-label" style="color:#00d4ff; font-size:14px;">Mystery Box</div>
+    <div style="font-size:70px; margin: 15px 0; filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.8));">🎁</div>
+    <div style="font-size:11px; color:#a8c5ff; margin-bottom:15px; line-height:1.4;">Win GROV or a rare <b>Diamond 💎</b>!<br><span style="color:#f5b800;">Diamond Drop Rate: 0.00001%</span></div>
+    <button id="mysteryPayBtn" class="spin-result-btn" style="background:linear-gradient(135deg,#8b5cf6,#6b46c1); color:#fff;" onclick="payMysteryBox()">💎 OPEN FOR 1,000 GROV</button>
+    <button class="spin-result-btn" style="background:rgba(255,255,255,0.1); color:#fff; margin-top:8px; font-size:12px; padding:10px;" onclick="closeMysteryBox()">Cancel</button>
   </div>
 </div>
 
@@ -408,26 +454,23 @@ button:active{transform:scale(.97)}
 <div class="admin-modal" id="adminModal">
   <div class="admin-content">
     <div class="admin-header"><h3>🔐 ADMIN PANEL</h3><button class="admin-close" onclick="closeAdmin()">✕</button></div>
-    
     <div id="adminPinView">
       <input type="password" class="admin-input" id="adminPin" placeholder="Enter PIN" maxlength="8">
       <button class="admin-btn" onclick="checkAdminPin()">UNLOCK</button>
     </div>
-
     <div class="admin-panels" id="adminPanels" style="display:none;">
       <div class="admin-tabs">
         <button class="admin-tab active" onclick="adminTab('stats')" data-tab="stats">📈</button>
         <button class="admin-tab" onclick="adminTab('leaderboard')" data-tab="leaderboard">🏆</button>
         <button class="admin-tab" onclick="adminTab('economy')" data-tab="economy">💰</button>
+        <button class="admin-tab" onclick="adminTab('tasks')" data-tab="tasks">📋</button>
         <button class="admin-tab" onclick="adminTab('system')" data-tab="system">⚙️</button>
       </div>
-
       <div class="admin-panel active" id="panel-stats">
         <div class="admin-stat"><div class="admin-stat-label">Total Supply</div><div class="admin-stat-value">10,000,000,000</div></div>
         <div class="admin-stat"><div class="admin-stat-label">Total Users</div><div class="admin-stat-value" id="statTotalUsers">1,000</div></div>
         <div class="admin-stat"><div class="admin-stat-label">Total GROV Distributed</div><div class="admin-stat-value" id="grovDistributed">0</div></div>
       </div>
-
       <div class="admin-panel" id="panel-leaderboard">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
           <button class="admin-btn admin-btn-gold" onclick="adminFakeMode()">FAKE USERS ON</button>
@@ -436,7 +479,6 @@ button:active{transform:scale(.97)}
         <div id="adminLeaderboardList"></div>
         <button class="admin-btn" onclick="adminAddFake()" style="margin-top:10px;">+ ADD FAKE USER</button>
       </div>
-
       <div class="admin-panel" id="panel-economy">
         <input type="text" class="admin-input" id="prizePoolInput" placeholder="Season TON Prize Pool (e.g. 50)">
         <button class="admin-btn admin-btn-green" onclick="adminSavePool()">SAVE PRIZE POOL</button>
@@ -445,17 +487,18 @@ button:active{transform:scale(.97)}
         <input type="number" class="admin-input" id="promoLimitInput" placeholder="Max Users (e.g. 100)">
         <button class="admin-btn admin-btn-gold" onclick="adminSavePromo()">ACTIVATE PROMO</button>
       </div>
-
+      <div class="admin-panel" id="panel-tasks">
+        <div id="adminTaskList"></div>
+        <button class="admin-btn" onclick="adminAddTask()" style="margin-top:10px;">+ ADD TASK</button>
+      </div>
       <div class="admin-panel" id="panel-system">
         <button class="admin-btn admin-btn-red" onclick="adminFreezeApp()">🚨 FREEZE ALL TRANSACTIONS</button>
-        <button class="admin-btn admin-btn-gold" onclick="adminRigJackpot()">🎰 RIG MYSTERY BOX JACKPOT</button>
       </div>
     </div>
   </div>
 </div>
 
 <div class="toast" id="toast">Message</div>
-
 <script>
   const tg = window.Telegram?.WebApp;
   if (tg) { tg.ready(); tg.expand(); tg.setHeaderColor('#030a1a'); tg.setBackgroundColor('#030a1a'); }
@@ -482,12 +525,14 @@ button:active{transform:scale(.97)}
     { name:'Ibrahim Musa', refs:512 }, { name:'Chioma Nnaji', refs:423 }
   ];
 
+  let isFakeMode = localStorage.getItem('grover_fake_mode') !== 'false';
+  let hasDiamond = localStorage.getItem('grover_diamond_' + CURRENT_USER) === 'true';
+
   let state = {
     balance: 0, lastClaimTime: Date.now(), lastSpin: null, extraSpinsUsed: 0,
-    vipLevel: 1, hasPaid: false, referralCount: 0, referralCode: null, welcomeClaimed: false
+    vipLevel: 1, hasPaid: false, referralCount: 0, referralCode: null, welcomeClaimed: false,
+    checkinDay: 1, lastCheckin: null
   };
-  
-  let globalUsers = 1000;
 
   function saveState() { try { localStorage.setItem('grover_state_' + CURRENT_USER, JSON.stringify(state)); } catch(e){} }
   function loadState() { try { const saved = localStorage.getItem('grover_state_' + CURRENT_USER); if (saved) state = Object.assign(state, JSON.parse(saved)); } catch(e){} }
@@ -510,11 +555,11 @@ button:active{transform:scale(.97)}
     const el = document.getElementById('toast'); 
     if(!el) return;
     el.textContent = msg; el.classList.add('show'); 
+    if(tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
     setTimeout(() => el.classList.remove('show'), 2500); 
   }
-  // ============================================
-  // LOGIC FUNCTIONS
-  // ============================================
+
+  // --- MINING ---
   function getMiningRate() { return MINING_RATES[state.vipLevel] || 5; }
   function calculatePending() { const rate = getMiningRate(); const elapsed = Date.now() - state.lastClaimTime; return Math.min(rate, (elapsed / DAY_MS) * rate); }
 
@@ -525,40 +570,27 @@ button:active{transform:scale(.97)}
 
     const rate = getMiningRate();
     const timerEl = document.getElementById('nextClaimTimer');
-    
     if (timerEl) {
       if (pending >= rate) {
-        timerEl.textContent = '🛑 Mining Stopped! Claim Now';
-        timerEl.style.color = '#ef4444';
+        timerEl.textContent = '🛑 Mining Stopped! Claim Now'; timerEl.style.color = '#ef4444';
       } else {
         const sLeft = Math.max(0, Math.floor((DAY_MS - (Date.now() - state.lastClaimTime)) / 1000));
-        const h = Math.floor(sLeft / 3600);
-        const m = Math.floor((sLeft % 3600) / 60);
-        timerEl.textContent = '⛏️ Full in ' + h + 'h ' + m + 'm';
-        timerEl.style.color = '#00d4ff';
+        timerEl.textContent = '⛏️ Full in ' + Math.floor(sLeft/3600) + 'h ' + Math.floor((sLeft%3600)/60) + 'm'; timerEl.style.color = '#00d4ff';
       }
     }
 
-    const mRate = document.getElementById('mineRate');
-    const mLevel = document.getElementById('mineLevel');
-    const mRateText = document.getElementById('mineRateText');
-    const mLevelText = document.getElementById('mineLevelText');
-    const mProgFill = document.getElementById('mineProgressFill');
-    const mProgText = document.getElementById('mineProgressText');
-    
-    if (mRate) mRate.textContent = rate + '/day';
-    if (mLevel) mLevel.textContent = state.vipLevel;
-    if (mRateText) mRateText.textContent = rate + ' GROV/day';
-    if (mLevelText) mLevelText.textContent = 'Level ' + state.vipLevel;
+    const mRate = document.getElementById('mineRate'); const mLevel = document.getElementById('mineLevel');
+    const mRateText = document.getElementById('mineRateText'); const mLevelText = document.getElementById('mineLevelText');
+    const mProgFill = document.getElementById('mineProgressFill'); const mProgText = document.getElementById('mineProgressText');
+    if (mRate) mRate.textContent = rate + '/day'; if (mLevel) mLevel.textContent = state.vipLevel;
+    if (mRateText) mRateText.textContent = rate + ' GROV/day'; if (mLevelText) mLevelText.textContent = 'Level ' + state.vipLevel;
     if (mProgFill) mProgFill.style.width = Math.min(100, (pending / rate) * 100) + '%';
     if (mProgText) mProgText.textContent = pending >= rate ? '✅ Ready to claim' : 'Mining... ' + pending.toFixed(6) + ' GROV';
   }
 
   function updateBalanceDisplay() {
-    const bal = document.getElementById('balanceDisplay');
-    if (bal) bal.innerHTML = state.balance.toFixed(2) + '<span>GROV</span>';
-    const wBal = document.getElementById('walletBalanceDisplay');
-    if (wBal) wBal.innerHTML = state.balance.toFixed(2) + '<span>GROV</span>';
+    const bal = document.getElementById('balanceDisplay'); if (bal) bal.innerHTML = state.balance.toFixed(2) + '<span>GROV</span>';
+    const wBal = document.getElementById('walletBalanceDisplay'); if (wBal) wBal.innerHTML = state.balance.toFixed(2) + '<span>GROV</span>';
   }
 
   function claimMining() {
@@ -568,6 +600,7 @@ button:active{transform:scale(.97)}
     updateBalanceDisplay(); saveState(); updateMiningCounter(); toast('💰 Claimed!');
   }
 
+  // --- SPIN ---
   function spinWheel(isRespin) {
     const today = new Date().toDateString();
     if (!isRespin) {
@@ -576,56 +609,78 @@ button:active{transform:scale(.97)}
         return watchAdForSpin();
       }
     }
-
     const wheelGroup = document.getElementById('wheelGroup');
     if(wheelGroup) {
       wheelGroup.style.transition = 'transform 4s cubic-bezier(.17,.67,.83,.67)';
       wheelGroup.style.transformOrigin = '150px 150px';
       wheelGroup.style.transform = 'rotate(' + (1440 + Math.floor(Math.random() * 360)) + 'deg)';
     }
-    
-    const btn = document.getElementById('spinBtn'); 
-    if(btn) { btn.disabled = true; btn.textContent = '⏳ SPINNING...'; }
-
+    const btn = document.getElementById('spinBtn'); if(btn) { btn.disabled = true; btn.textContent = '⏳ SPINNING...'; }
     setTimeout(() => {
-      const prize = Math.floor(Math.random() * 6) + 1;
-      state.balance += prize; updateBalanceDisplay(); 
+      const prize = Math.floor(Math.random() * 6) + 1; state.balance += prize; updateBalanceDisplay(); 
       if (!isRespin) { state.lastSpin = today; } else { state.extraSpinsUsed++; }
       saveState();
-      
       if(wheelGroup) { wheelGroup.style.transition = 'none'; wheelGroup.style.transform = 'rotate(0deg)'; }
-      const prizeEl = document.getElementById('spinResultPrize');
-      if (prizeEl) prizeEl.textContent = '+' + prize;
-      const modal = document.getElementById('spinResultModal');
-      if (modal) modal.classList.add('show');
+      const prizeEl = document.getElementById('spinResultPrize'); if (prizeEl) prizeEl.textContent = '+' + prize;
+      const modal = document.getElementById('spinResultModal'); if (modal) modal.classList.add('show');
       updateSpinTimer();
     }, 4000);
   }
 
   function updateSpinTimer() {
     const today = new Date().toDateString();
-    const btn = document.getElementById('spinBtn');
-    if (!btn) return;
+    const btn = document.getElementById('spinBtn'); if (!btn) return;
     if (state.lastSpin === today) {
-      if (state.extraSpinsUsed >= 10) {
-        btn.disabled = true; btn.textContent = '✅ ALL SPINS USED TODAY'; btn.style.background = '#4a7aaa';
-      } else {
-        btn.disabled = false; btn.textContent = '🎬 WATCH AD (' + (10 - state.extraSpinsUsed) + ' left)'; btn.style.background = 'linear-gradient(135deg,#00d4ff,#0088ff)';
-      }
-    } else {
-      btn.disabled = false; btn.textContent = '🎡 SPIN NOW (FREE)'; btn.style.background = 'linear-gradient(135deg,#f5b800,#ff6b00)';
+      if (state.extraSpinsUsed >= 10) { btn.disabled = true; btn.textContent = '✅ ALL SPINS USED TODAY'; btn.style.background = '#4a7aaa'; }
+      else { btn.disabled = false; btn.textContent = '🎬 WATCH AD (' + (10 - state.extraSpinsUsed) + ' left)'; btn.style.background = 'linear-gradient(135deg,#00d4ff,#0088ff)'; }
+    } else { btn.disabled = false; btn.textContent = '🎡 SPIN NOW (FREE)'; btn.style.background = 'linear-gradient(135deg,#f5b800,#ff6b00)'; }
+  }
+
+  function watchAdForSpin() { toast('🎬 Loading Ad...'); setTimeout(() => { toast('✅ Ad watched! Spinning now...'); spinWheel(true); }, 2000); }
+  function closeSpinResult() { const el = document.getElementById('spinResultModal'); if(el) el.classList.remove('show'); }
+
+  // --- CHECK-IN CALENDAR ---
+  function openCheckin() {
+    document.getElementById('checkinModal').classList.add('show');
+    renderCheckinGrid();
+  }
+  function closeCheckin() { document.getElementById('checkinModal').classList.remove('show'); }
+  
+  function renderCheckinGrid() {
+    const grid = document.getElementById('checkinGrid'); if (!grid) return;
+    grid.innerHTML = '';
+    const rewards = [10, 20, 30, 40, 50, 60, 200];
+    const today = new Date().toDateString();
+    
+    for (let i = 1; i <= 7; i++) {
+      const isClaimed = state.checkinDay > i;
+      const isToday = state.checkinDay === i && state.lastCheckin !== today;
+      
+      const box = document.createElement('div');
+      box.style.cssText = `background:${isClaimed ? 'rgba(34,197,94,.2)' : isToday ? 'rgba(245,184,0,.2)' : 'rgba(255,255,255,.05)'}; border:1px solid ${isClaimed ? '#22c55e' : isToday ? '#f5b800' : 'rgba(255,255,255,.1)'}; border-radius:10px; padding:10px; text-align:center;`;
+      box.innerHTML = `<div style="font-size:10px; color:#a8c5ff; margin-bottom:4px;">Day ${i}</div><div style="font-size:14px; font-weight:900; color:${isClaimed ? '#22c55e' : isToday ? '#f5b800' : '#fff'};">+${rewards[i-1]}</div>`;
+      grid.appendChild(box);
     }
   }
 
-  function watchAdForSpin() {
-    toast('🎬 Loading Ad...');
-    setTimeout(() => { toast('✅ Ad watched! Spinning now...'); spinWheel(true); }, 2000);
+  function claimCheckin() {
+    const today = new Date().toDateString();
+    if (state.lastCheckin === today) return toast('❌ Already claimed today!');
+    if (state.checkinDay > 7) return toast('🎉 You finished the streak! Resetting...');
+    
+    const rewards = [10, 20, 30, 40, 50, 60, 200];
+    const reward = rewards[state.checkinDay - 1];
+    
+    state.balance += reward;
+    state.lastCheckin = today;
+    state.checkinDay++;
+    if (state.checkinDay > 7) state.checkinDay = 1; // Reset for next cycle
+    
+    saveState(); updateBalanceDisplay(); renderCheckinGrid();
+    toast('🎁 +' + reward + ' GROV Checked In!');
   }
 
-  function closeSpinResult() { const el = document.getElementById('spinResultModal'); if(el) el.classList.remove('show'); }
-  function openMysteryBox() { toast('Mystery Box coming soon!'); }
-  function closeMysteryBox() { const el = document.getElementById('mysteryModal'); if(el) el.classList.remove('show'); }
-
+  // --- UI & TABS ---
   function switchTab(tab) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -634,13 +689,14 @@ button:active{transform:scale(.97)}
     document.querySelectorAll('.nav-item').forEach(n => { if (n.dataset.tab === tab) n.classList.add('active'); });
     if (tab === 'wallet') updateBalanceDisplay();
     if (tab === 'refer') renderLeaderboard();
+    if (tab === 'tasks') renderUserTasks();
   }
 
   function openVip() { const el = document.getElementById('vipModal'); if(el) el.classList.add('show'); }
   function closeVip() { const el = document.getElementById('vipModal'); if(el) el.classList.remove('show'); }
+  
   async function buyVip(level) {
-    const prices = { 2: 3, 3: 6, 4: 9, 5: 12, 6: 15 };
-    const price = prices[level];
+    const prices = { 2: 3, 3: 6, 4: 9, 5: 12, 6: 15 }; const price = prices[level];
     if (!connectedWallet) return toast('❌ Connect your TON wallet first!');
     try {
       toast('💎 Confirm ' + price + ' TON payment...');
@@ -649,29 +705,77 @@ button:active{transform:scale(.97)}
     } catch (e) { toast('❌ Payment cancelled.'); }
   }
 
-  function referFriend() {
-    const code = getOrCreateReferralCode();
-    const link = 'https://t.me/YourBotUsername/app?startapp=ref_' + code;
-    if (tg && tg.openTelegramLink) {
-      tg.openTelegramLink('https://t.me/share/url?url=' + encodeURIComponent(link) + '&text=' + encodeURIComponent('Join Grover Miner!'));
-    } else {
-      if (navigator.clipboard) navigator.clipboard.writeText(link);
-      toast('📋 Link copied!');
-    }
+  // --- DIAMOND SHOP ---
+  async function buyDiamondTON() {
+    if (hasDiamond) return toast('💎 You already own a Diamond!');
+    if (!connectedWallet) return toast('❌ Connect wallet first!');
+    try {
+      toast('💎 Confirm 1 TON payment...');
+      await tonConnectUI.sendTransaction({ validUntil: Math.floor(Date.now() / 1000) + 360, messages: [{ address: PROJECT_WALLET, amount: '1000000000' }] });
+      hasDiamond = true; localStorage.setItem('grover_diamond_' + CURRENT_USER, 'true'); toast('💎 Diamond Purchased!'); closeVip();
+    } catch (e) { toast('❌ Payment cancelled.'); }
   }
-  function showMyLink() { referFriend(); }
+  function buyDiamondGROV() {
+    if (hasDiamond) return toast('💎 You already own a Diamond!');
+    if (state.balance < 100000) return toast('❌ Need 100,000 GROV!');
+    state.balance -= 100000; hasDiamond = true; localStorage.setItem('grover_diamond_' + CURRENT_USER, 'true'); saveState(); updateBalanceDisplay(); toast('💎 Diamond Purchased with GROV!'); closeVip();
+  }
 
+  // --- MYSTERY BOX ---
+  function openMysteryBox() { document.getElementById('mysteryModal').classList.add('show'); }
+  function closeMysteryBox() { 
+    document.getElementById('mysteryModal').classList.remove('show'); 
+    setTimeout(() => {
+      const content = document.querySelector('#mysteryModal .spin-result-content');
+      content.innerHTML = `<div class="spin-result-label" style="color:#00d4ff; font-size:14px;">Mystery Box</div><div style="font-size:70px; margin: 15px 0; filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.8));">🎁</div><div style="font-size:11px; color:#a8c5ff; margin-bottom:15px; line-height:1.4;">Win GROV or a rare <b>Diamond 💎</b>!<br><span style="color:#f5b800;">Diamond Drop Rate: 0.00001%</span></div><button id="mysteryPayBtn" class="spin-result-btn" style="background:linear-gradient(135deg,#8b5cf6,#6b46c1); color:#fff;" onclick="payMysteryBox()">💎 OPEN FOR 1,000 GROV</button><button class="spin-result-btn" style="background:rgba(255,255,255,0.1); color:#fff; margin-top:8px; font-size:12px; padding:10px;" onclick="closeMysteryBox()">Cancel</button>`;
+    }, 300);
+  }
+
+  function payMysteryBox() {
+    if (state.balance < 1000) return toast('❌ Need 1,000 GROV to open!');
+    state.balance -= 1000; saveState(); updateBalanceDisplay();
+    const btn = document.getElementById('mysteryPayBtn'); btn.textContent = '⏳ Opening...'; btn.disabled = true;
+    setTimeout(() => { revealMysteryBox(); }, 1500);
+  }
+
+  function revealMysteryBox() {
+    const roll = Math.random() * 100; let prizeText = ''; let isDiamond = false;
+    if (roll < 0.00001) { prizeText = 'DIAMOND'; isDiamond = true; } 
+    else { const grov = Math.floor(Math.random() * 2000) + 500; state.balance += grov; prizeText = '+' + grov; }
+    saveState(); updateBalanceDisplay();
+    const content = document.querySelector('#mysteryModal .spin-result-content');
+    if (isDiamond) {
+      content.innerHTML = `<div class="spin-result-label" style="color:#00d4ff;">🎉 JACKPOT! 🎉</div><div style="font-size:70px; margin: 10px 0; filter: drop-shadow(0 0 30px rgba(0, 212, 255, 1));">💎</div><div class="spin-result-prize" style="color:#00d4ff; font-size:30px;">${prizeText}</div><div class="spin-result-label" style="font-size:10px;">Contact Support to claim</div><button class="spin-result-btn" style="background:linear-gradient(135deg,#00d4ff,#0088ff); color:#fff;" onclick="closeMysteryBox()">CLAIM</button>`;
+    } else {
+      content.innerHTML = `<div class="spin-result-label" style="color:#00d4ff;">You Won!</div><div class="spin-result-prize">${prizeText}</div><div class="spin-result-label">GROV</div><button class="spin-result-btn" onclick="closeMysteryBox()">CLAIM</button>`;
+    }
+    toast('🎁 Box Opened!');
+  }
+
+  // --- TASKS ---
+  let userTasks = JSON.parse(localStorage.getItem('grover_tasks')) || [
+    { id: 't1', name: 'Follow on X', reward: 50, link: 'https://x.com/grovmining' },
+    { id: 't2', name: 'Join Telegram', reward: 50, link: 'https://t.me/GrovOfficial' }
+  ];
+  function renderUserTasks() {
+    const list = document.getElementById('tasksList'); if (!list) return;
+    list.innerHTML = '';
+    userTasks.forEach((t, i) => {
+      const div = document.createElement('div'); div.className = 'task-item';
+      div.innerHTML = `<div class="task-left"><div class="task-icon">📌</div><div class="task-info"><div class="task-name">${t.name}</div><div class="task-reward">+${t.reward} GROV</div></div></div><button class="task-btn" onclick="doTask('${t.link}')">GO</button>`;
+      list.appendChild(div);
+    });
+  }
+  function doTask(link) { if (link) window.open(link, '_blank'); toast('Task opened! Reward will be claimed...'); }
+
+  // --- REFERRAL LEADERBOARD ---
   function renderLeaderboard() {
-    const list = document.getElementById('leaderboardList');
-    if (!list) return;
-    let allUsers = [...fakeUsers];
+    const list = document.getElementById('leaderboardList'); if (!list) return;
+    let allUsers = isFakeMode ? [...fakeUsers] : [];
     allUsers.push({ name: 'You', refs: state.referralCount, isMe: true });
     allUsers.sort((a, b) => b.refs - a.refs);
-
     const myIndex = allUsers.findIndex(u => u.isMe);
-    const rankEl = document.getElementById('userRankDisplay');
-    if (rankEl) rankEl.textContent = '#' + (myIndex + 1);
-
+    const rankEl = document.getElementById('userRankDisplay'); if (rankEl) rankEl.textContent = '#' + (myIndex + 1);
     list.innerHTML = '';
     allUsers.slice(0, 10).forEach((u, i) => {
       let medal = i === 0 ? '🥇 ' : i === 1 ? '🥈 ' : i === 2 ? '🥉 ' : '';
@@ -683,24 +787,38 @@ button:active{transform:scale(.97)}
     });
   }
 
+  function referFriend() {
+    const code = getOrCreateReferralCode();
+    const link = 'https://t.me/YourBotUsername/app?startapp=ref_' + code;
+    if (tg && tg.openTelegramLink) { tg.openTelegramLink('https://t.me/share/url?url=' + encodeURIComponent(link) + '&text=' + encodeURIComponent('Join Grover Miner!')); }
+    else { if (navigator.clipboard) navigator.clipboard.writeText(link); toast('📋 Link copied!'); }
+  }
+  function showMyLink() { referFriend(); }
+
+  // --- P2P & WITHDRAWAL ---
   function executeP2P() {
     const recipient = document.getElementById('p2pRecipient').value.trim().toUpperCase();
     const amount = parseFloat(document.getElementById('p2pAmount').value);
     if (!recipient.startsWith('GRV')) return toast('❌ Invalid Invite Code');
     if (!amount || amount <= 0) return toast('❌ Enter a valid amount');
-    if (amount > 10000) return toast('❌ Max 10,000 GROV per transfer');
+    if (amount > 10000) return toast('❌ Max 10,000 GROV');
     if (amount > state.balance) return toast('❌ Insufficient balance');
-    const fee = amount * 0.05;
-    const totalDeducted = amount + fee;
+    const fee = amount * 0.05; const totalDeducted = amount + fee;
     if (totalDeducted > state.balance) return toast('❌ Not enough balance for 5% fee');
     state.balance -= totalDeducted; saveState(); updateBalanceDisplay();
-    document.getElementById('p2pRecipient').value = '';
-    document.getElementById('p2pAmount').value = '';
-    toast('✅ Sent ' + amount + ' GROV to ' + recipient + ' (Fee: ' + fee + ')');
+    document.getElementById('p2pRecipient').value = ''; document.getElementById('p2pAmount').value = '';
+    toast('✅ Sent ' + amount + ' GROV to ' + recipient);
   }
-
   function withdrawTON() { toast('🚧 Withdrawals Coming Soon! Token Launch in Progress.'); }
 
+  // --- SUPPORT, ROADMAP & TOS ---
+  function openRoadmap() { document.getElementById('roadmapModal').classList.add('show'); }
+  function closeRoadmap() { document.getElementById('roadmapModal').classList.remove('show'); }
+  function openTOS() { document.getElementById('tosModal').classList.add('show'); }
+  function closeTOS() { document.getElementById('tosModal').classList.remove('show'); }
+  function openSupport() { if(tg) tg.openTelegramLink('https://t.me/YourAdminUsername'); else toast('Support: @YourAdminUsername'); }
+
+  // --- ADMIN PANEL ---
   let vipTapCount = 0; let vipTapTimer = null;
   const vipBtnEl = document.getElementById('vipBtn');
   if (vipBtnEl) {
@@ -713,80 +831,82 @@ button:active{transform:scale(.97)}
 
   function closeAdmin() { const el = document.getElementById('adminModal'); if(el) el.classList.remove('show'); }
   function checkAdminPin() {
-    const pinEl = document.getElementById('adminPin');
-    if(!pinEl) return;
-    const pin = pinEl.value;
-    if (pin === '1905') { 
-      document.getElementById('adminPinView').style.display = 'none'; document.getElementById('adminPanels').style.display = 'block'; 
-      loadAdminData(); toast('🔓 Admin access granted!'); 
-    } else { toast('❌ Wrong PIN'); }
+    const pinEl = document.getElementById('adminPin'); if(!pinEl) return; const pin = pinEl.value;
+    if (pin === '1905') { document.getElementById('adminPinView').style.display = 'none'; document.getElementById('adminPanels').style.display = 'block'; loadAdminData(); toast('🔓 Admin granted!'); } else { toast('❌ Wrong PIN'); }
   }
 
   function adminTab(tab) {
     document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
-    const tabBtn = document.querySelector('[data-tab="' + tab + '"]');
-    if (tabBtn) tabBtn.classList.add('active');
-    const panel = document.getElementById('panel-' + tab);
-    if (panel) panel.classList.add('active');
+    const tabBtn = document.querySelector('[data-tab="' + tab + '"]'); if (tabBtn) tabBtn.classList.add('active');
+    const panel = document.getElementById('panel-' + tab); if (panel) panel.classList.add('active');
   }
 
   function loadAdminData() {
     const list = document.getElementById('adminLeaderboardList');
     if (list) {
-      list.innerHTML = '';
-      fakeUsers.sort((a,b) => b.refs - a.refs);
+      list.innerHTML = ''; fakeUsers.sort((a,b) => b.refs - a.refs);
       fakeUsers.forEach((u, i) => {
-        const row = document.createElement('div');
-        row.className = 'admin-row';
-        row.innerHTML = '<div class="admin-row-info"><div class="admin-row-name">#' + (i+1) + ' ' + u.name + '</div><div class="admin-row-detail">' + u.refs + ' referrals</div></div><button class="admin-small-btn red" onclick="adminRemoveFake(' + i + ')">Del</button>';
+        const row = document.createElement('div'); row.className = 'admin-row';
+        row.innerHTML = `<div class="admin-row-info"><div class="admin-row-name">#${i+1} ${u.name}</div><div class="admin-row-detail">${u.refs} referrals</div></div><button class="admin-small-btn red" onclick="adminRemoveFake(${i})">Del</button>`;
         list.appendChild(row);
       });
     }
+    renderAdminTasks();
   }
 
-  function adminRemoveFake(idx) {
-    if (!confirm('Remove?')) return;
-    fakeUsers.splice(idx, 1); localStorage.setItem('grover_fake_users', JSON.stringify(fakeUsers)); loadAdminData();
-  }
+  function adminFakeMode() { isFakeMode = true; localStorage.setItem('grover_fake_mode', 'true'); toast('🎭 Fake Users ON'); renderLeaderboard(); }
+  function adminRealMode() { isFakeMode = false; localStorage.setItem('grover_fake_mode', 'false'); toast('👥 Fake Users OFF'); renderLeaderboard(); }
+  
+  function adminRemoveFake(idx) { if (!confirm('Remove?')) return; fakeUsers.splice(idx, 1); localStorage.setItem('grover_fake_users', JSON.stringify(fakeUsers)); loadAdminData(); }
   function adminAddFake() {
-    const name = prompt('Name:'); if (!name) return;
-    const refs = parseInt(prompt('Referrals:') || '0');
+    const name = prompt('Name:'); if (!name) return; const refs = parseInt(prompt('Referrals:') || '0');
     fakeUsers.push({ name, refs }); localStorage.setItem('grover_fake_users', JSON.stringify(fakeUsers)); loadAdminData();
   }
-  function adminFakeMode() { toast('🎭 Fake Users ON'); }
-  function adminRealMode() { toast('👥 Fake Users OFF'); }
-  function adminSavePool() { toast('✅ Prize Pool Saved'); }
-  function adminSavePromo() { toast('✅ Promo Code Activated'); }
-  function adminFreezeApp() { toast('🚨 App Frozen!'); }
-  function adminRigJackpot() { toast('🎰 Next box will be Jackpot!'); }
 
+  function adminAddTask() {
+    const name = prompt("Task Name:"); if (!name) return;
+    const reward = parseInt(prompt("Reward (GROV):", "100")); if (!reward) return;
+    const link = prompt("Link:"); 
+    userTasks.push({ id: 't' + Date.now(), name, reward, link });
+    localStorage.setItem('grover_tasks', JSON.stringify(userTasks)); renderAdminTasks(); renderUserTasks(); toast('✅ Task Added!');
+  }
+  function adminRemoveTask(idx) { if (!confirm('Delete?')) return; userTasks.splice(idx, 1); localStorage.setItem('grover_tasks', JSON.stringify(userTasks)); renderAdminTasks(); renderUserTasks(); }
+  
+  function renderAdminTasks() {
+    const list = document.getElementById('adminTaskList'); if (!list) return; list.innerHTML = '';
+    userTasks.forEach((t, i) => {
+      const row = document.createElement('div'); row.className = 'admin-row';
+      row.innerHTML = `<div class="admin-row-info"><div class="admin-row-name">${t.name}</div><div class="admin-row-detail">+${t.reward} GROV</div></div><button class="admin-small-btn red" onclick="adminRemoveTask(${i})">Del</button>`;
+      list.appendChild(row);
+    });
+  }
+
+  function adminSavePool() { toast('✅ Prize Pool Saved'); }
+  function adminSavePromo() { toast('✅ Promo Activated'); }
+  function adminFreezeApp() { toast('🚨 App Frozen!'); }
+
+  // --- TON CONNECT ---
   let connectedWallet = null; let tonConnectUI = null;
   const PROJECT_WALLET = 'UQBiiE8EcQ-tRSIi4HjKnCYjGJ0Wjh5SA84xyzbc-qdq5ws2';
-
   try {
-    tonConnectUI = new TON_CONNECT_UI.TonConnectUI({
-      manifestUrl: 'https://buywithus225-wq.github.io/Grover-miner-app/tonconnect-manifest.json',
-      buttonRootId: null
-    });
+    tonConnectUI = new TON_CONNECT_UI.TonConnectUI({ manifestUrl: 'https://buywithus225-wq.github.io/Grover-miner-app/tonconnect-manifest.json', buttonRootId: null });
     tonConnectUI.onStatusChange(wallet => {
       const wi = document.getElementById('walletInfo'); const cb = document.getElementById('connectBtn'); const pb = document.getElementById('payBtn');
       if (wallet) {
         connectedWallet = wallet; const addr = wallet.account.address;
         if (wi) { wi.textContent = '✅ ' + addr.slice(0, 6) + '...' + addr.slice(-4); wi.classList.add('show'); }
         if (cb) cb.style.display = 'none'; if (pb) pb.classList.add('show');
-      } else {
-        connectedWallet = null; if (wi) wi.classList.remove('show'); if (cb) cb.style.display = 'block'; if (pb) pb.classList.remove('show');
-      }
+      } else { connectedWallet = null; if (wi) wi.classList.remove('show'); if (cb) cb.style.display = 'block'; if (pb) pb.classList.remove('show'); }
     });
   } catch (e) { console.log('TON error:', e); }
 
-  async function handleConnect() {
-    if (!tonConnectUI) { toast('TON not loaded.'); return; }
-    try { toast('Opening wallet...'); await tonConnectUI.openModal(); } catch (e) { toast('Cancelled.'); }
-  }
+  async function handleConnect() { if (!tonConnectUI) { toast('TON not loaded.'); return; } try { toast('Opening wallet...'); await tonConnectUI.openModal(); } catch (e) { toast('Cancelled.'); } }
 
   async function handlePay() {
+    const tos = document.getElementById('tosCheckbox');
+    if (tos && !tos.checked) return toast('❌ Please agree to Terms of Service first!');
+    
     if (!connectedWallet) return toast('Connect wallet first!');
     try {
       toast('Confirm payment...');
@@ -798,24 +918,28 @@ button:active{transform:scale(.97)}
   function unlockApp() {
     state.hasPaid = true; 
     if (!state.welcomeClaimed) { state.balance += WELCOME_BONUS; state.welcomeClaimed = true; setTimeout(() => toast('🎉 +100 GROV Welcome Bonus!'), 1000); }
-    saveState(); 
-    document.getElementById('gateScreen').classList.remove('active'); document.getElementById('homeScreen').classList.add('active');
-    document.getElementById('bottomNav').style.display = 'flex'; 
-    updateBalanceDisplay(); updateMiningCounter(); toast('Welcome to Grover!');
+    saveState(); document.getElementById('gateScreen').classList.remove('active'); document.getElementById('homeScreen').classList.add('active');
+    document.getElementById('bottomNav').style.display = 'flex'; updateBalanceDisplay(); updateMiningCounter(); toast('Welcome to Grover!');
   }
 
   let secretTapCount = 0; let secretTapTimer = null;
   const gateLogoEl = document.querySelector('#gateScreen .logo');
-  if (gateLogoEl) {
-    gateLogoEl.addEventListener('click', () => {
-      secretTapCount++; clearTimeout(secretTapTimer);
-      if (secretTapCount >= 5) { secretTapCount = 0; unlockApp(); }
-      secretTapTimer = setTimeout(() => secretTapCount = 0, 2000);
-    });
+  if (gateLogoEl) { gateLogoEl.addEventListener('click', () => { secretTapCount++; clearTimeout(secretTapTimer); if (secretTapCount >= 5) { secretTapCount = 0; unlockApp(); } secretTapTimer = setTimeout(() => secretTapCount = 0, 2000); }); }
+
+  // --- LIVE FEED ---
+  const feedMessages = ["💸 @Chidi just withdrew 50,000 GROV!", "👑 @Aisha just upgraded to VIP Level 4!", "🎰 @Emeka just hit the 200 GROV Spin Jackpot!", "💎 @Fatima just bought a Diamond!", "🎁 @Tunde just opened a Mystery Box!", "💸 @John just withdrew 10,000 GROV!"];
+  let feedIndex = 0;
+  function updateLiveFeed() {
+    const feedEl = document.getElementById('liveFeedText'); if (!feedEl) return;
+    feedEl.textContent = feedMessages[feedIndex];
+    feedEl.style.animation = 'none'; feedEl.offsetHeight; feedEl.style.animation = 'scrollFeed 15s linear infinite';
+    feedIndex = (feedIndex + 1) % feedMessages.length;
   }
 
+  // --- INIT ---
   loadState(); updateSpinTimer(); updateMiningCounter(); updateBalanceDisplay(); getOrCreateReferralCode();
   setInterval(updateMiningCounter, 1000);
+  updateLiveFeed(); setInterval(updateLiveFeed, 15000);
   
   if (state.hasPaid === true) {
     document.getElementById('gateScreen').classList.remove('active'); document.getElementById('homeScreen').classList.add('active'); document.getElementById('bottomNav').style.display = 'flex';
