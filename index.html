@@ -51,7 +51,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .claim-btn:active{transform:scale(.97)}
 .mystery-btn{width:100%;padding:13px;background:linear-gradient(135deg,#ec4899,#8b5cf6);color:#fff;border:none;border-radius:14px;font-size:13px;font-weight:900;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:inherit;margin-bottom:8px}
 .checkin-btn{width:100%;padding:12px;background:linear-gradient(135deg,#00d4ff,#0088ff);color:#fff;border:none;border-radius:14px;font-size:13px;font-weight:900;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:inherit}
-  .logo-wrap{position:relative;margin:8px auto 12px;width:fit-content}
+.logo-wrap{position:relative;margin:8px auto 12px;width:fit-content}
 .logo{width:150px;height:150px;object-fit:contain;filter:drop-shadow(0 0 40px rgba(0,212,255,.9))}
 .title{font-size:24px;font-weight:900;letter-spacing:4px;text-align:center;background:linear-gradient(135deg,#f5b800,#ffdd00);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}
 .subtitle{font-size:10px;color:#00d4ff;letter-spacing:5px;text-transform:uppercase;font-weight:700;text-align:center;margin-bottom:14px}
@@ -66,7 +66,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .stat{background:linear-gradient(135deg,rgba(0,212,255,.12),rgba(0,136,255,.08));border:1px solid rgba(0,212,255,.3);border-radius:12px;padding:10px 6px;text-align:center}
 .stat-label{font-size:9px;color:#6ba3ff;text-transform:uppercase;font-weight:700;margin-bottom:3px}
 .stat-value{font-size:16px;font-weight:900;background:linear-gradient(135deg,#f5b800,#ffdd00);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.fee-box{width:100%;background:linear-gradient(135deg,rgba(245,184,0,.2),rgba(255,107,0,.1));border:1.5px solid rgba(245,184,0,.6);border-radius:14px;padding:10px;text-align:center;margin-bottom:10px}
+  .fee-box{width:100%;background:linear-gradient(135deg,rgba(245,184,0,.2),rgba(255,107,0,.1));border:1.5px solid rgba(245,184,0,.6);border-radius:14px;padding:10px;text-align:center;margin-bottom:10px}
 .fee-label{font-size:9px;color:#ffdd00;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;font-weight:700}
 .fee-value{font-size:22px;font-weight:900;color:#fff}
 .fee-value span{font-size:12px;color:#ffdd00;margin-left:3px;font-weight:700}
@@ -122,6 +122,7 @@ button:active{transform:scale(.97)}
 .admin-row-detail{font-size:10px;color:#6ba3ff}
 .admin-small-btn{background:rgba(139,92,246,.3);border:1px solid rgba(139,92,246,.5);color:#fff;padding:6px 10px;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit}
 .admin-small-btn.red{background:rgba(239,68,68,.3);border-color:rgba(239,68,68,.5)}
+.admin-small-btn.green{background:rgba(34,197,94,.3);border-color:rgba(34,197,94,.5)}
 .admin-stat{background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);border-radius:10px;padding:10px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center}
 .admin-stat-label{font-size:11px;color:#6ba3ff;font-weight:600}
 .admin-stat-value{font-size:14px;color:#f5b800;font-weight:900}
@@ -163,8 +164,7 @@ button:active{transform:scale(.97)}
 </style>
 </head>
 <body>
-  <div class="ocean-bg"><div class="wave"></div><div class="wave"></div><div class="wave"></div></div>
-
+<div class="ocean-bg"><div class="wave"></div><div class="wave"></div><div class="wave"></div></div>
 <div class="splash" id="splash">
   <img src="file_000000004a1481f4ad0c20442e76e9f7.png" alt="Grover" class="splash-logo">
   <div class="splash-title">GROVER</div>
@@ -275,6 +275,8 @@ button:active{transform:scale(.97)}
     <div class="progress-bar"><div class="progress-fill" id="mineProgressFill"></div></div>
     <div style="text-align:center;font-size:10px;color:#00d4ff;margin-bottom:10px;" id="mineProgressText">Collect on Home</div>
     <button class="collect-btn" onclick="switchTab('home')">💰 GO TO CLAIM</button>
+    <button style="background:linear-gradient(135deg,#8b5cf6,#6b46c1);color:#fff;margin-top:8px;border:none;" onclick="buyMiningBoost()">⚡ ACTIVATE 2X BOOST (WATCH 4 ADS)</button>
+    <div id="boostTimerText" style="text-align:center;font-size:11px;color:#00ffcc;margin-top:5px;font-weight:700;"></div>
     <button style="background:linear-gradient(135deg,#00d4ff,#0088ff);color:#fff;margin-top:8px;" onclick="openVip()">👑 UPGRADE TO VIP</button>
     <div class="stats2" style="margin-top:12px;">
       <div class="stat"><div class="stat-label">⚡ Level</div><div class="stat-value" id="mineLevel">1</div></div>
@@ -287,12 +289,25 @@ button:active{transform:scale(.97)}
       <div style="font-size:22px;font-weight:900;color:#f5b800;">📋 TASKS</div>
       <div style="font-size:11px;color:#00d4ff;margin-top:2px;">Complete to earn GROV</div>
     </div>
+    <div style="background:rgba(245,184,0,0.1); border:1px solid #f5b800; border-radius:12px; padding:12px; margin-bottom:15px;">
+      <div style="font-size:12px; font-weight:900; color:#f5b800; margin-bottom:8px;">🎯 DAILY QUESTS (+200 GROV)</div>
+      <div style="font-size:11px; color:#a8c5ff; display:flex; flex-direction:column; gap:5px;">
+        <label><input type="checkbox" id="qClaim" disabled> Claim Mining</label>
+        <label><input type="checkbox" id="qSpin" disabled> Spin the Wheel</label>
+        <label><input type="checkbox" id="qP2P" disabled> Send 1 P2P Transfer</label>
+      </div>
+      <button class="collect-btn" style="padding:8px; font-size:11px; margin-top:10px;" onclick="claimQuestReward()">CLAIM 200 GROV</button>
+    </div>
     <div id="tasksList"></div>
   </div>
 
   <div class="screen" id="referScreen">
     <div style="text-align:center;margin-bottom:12px;">
       <div style="font-size:22px;font-weight:900;color:#f5b800;">👥 REFER FRIENDS</div>
+    </div>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+      <div style="font-size:10px; color:#a8c5ff;">Monthly Pool:</div>
+      <div style="font-size:12px; font-weight:900; color:#f5b800;">🏆 <span id="prizePoolDisplay">50</span> TON</div>
     </div>
     <div class="refer-hero">
       <div class="refer-count" id="referCount">0</div>
@@ -303,18 +318,15 @@ button:active{transform:scale(.97)}
     <div class="notice" style="margin-top:12px;"><strong>Earn 100 GROV</strong> per friend!</div>
     <button class="collect-btn" onclick="referFriend()">🔗 SHARE YOUR LINK</button>
     <button style="background:rgba(0,212,255,.15);color:#00d4ff;margin-top:8px;border:1px solid rgba(0,212,255,.3);" onclick="showMyLink()">📋 COPY MY LINK</button>
-    
     <div style="margin-top:20px; text-align:left;">
       <div style="font-size:12px; font-weight:900; color:#f5b800; margin-bottom:8px;">🏆 TOP 10 REFERRALS</div>
       <div id="leaderboardList" style="display:flex; flex-direction:column; gap:6px;"></div>
-      
       <div style="margin-top:12px; padding-top:12px; border-top:1px dashed rgba(0,212,255,.3); display:flex; justify-content:space-between; align-items:center;">
         <div style="font-size:12px; color:#00d4ff; font-weight:800;">YOUR RANK</div>
         <div id="userRankDisplay" style="font-size:16px; font-weight:900; color:#fff;">#999</div>
       </div>
     </div>
   </div>
-
   <div class="screen" id="profileScreen">
     <div style="text-align:center;margin-bottom:12px;">
       <div style="font-size:22px;font-weight:900;color:#f5b800;">👤 PROFILE</div>
@@ -324,34 +336,26 @@ button:active{transform:scale(.97)}
       <div class="profile-name" id="profileName">Grover User</div>
       <div class="profile-handle" id="profileHandle">@user</div>
     </div>
-    <div class="profile-item" onclick="openRoadmap()">
-      <div class="profile-item-label">🗺️ Roadmap</div>
-      <div class="profile-item-value">›</div>
-    </div>
-    <div class="profile-item" onclick="openSupport()">
-      <div class="profile-item-label">❓ Help & Support</div>
-      <div class="profile-item-value">›</div>
-    </div>
+    <div class="profile-item" onclick="openPFP()"><div class="profile-item-label">🖼️ Create PFP</div><div class="profile-item-value">›</div></div>
+    <div class="profile-item" onclick="openRoadmap()"><div class="profile-item-label">🗺️ Roadmap</div><div class="profile-item-value">›</div></div>
+    <div class="profile-item" onclick="openSupport()"><div class="profile-item-label">❓ Help & Support</div><div class="profile-item-value">›</div></div>
   </div>
 
   <div class="screen" id="walletScreen">
     <div style="text-align:center;margin-bottom:12px;">
       <div style="font-size:22px;font-weight:900;color:#f5b800;">💰 GROVER WALLET</div>
     </div>
-    
     <div class="balance-box" style="border-color:#00d4ff;">
       <div class="balance-label">Internal Balance</div>
       <div class="balance-value" id="walletBalanceDisplay">0.00<span>GROV</span></div>
     </div>
-
     <div style="background:rgba(0,212,255,.05); border:1px solid rgba(0,212,255,.2); border-radius:12px; padding:14px; margin-bottom:14px;">
       <div style="font-size:12px; font-weight:900; color:#00d4ff; margin-bottom:8px;">📤 SEND P2P (5% Fee)</div>
       <input type="text" id="p2pRecipient" class="admin-input" placeholder="Recipient Code (e.g. GRV123456)" style="background:rgba(0,0,0,0.2); border-color:rgba(0,212,255,0.3); color:#fff;">
       <input type="number" id="p2pAmount" class="admin-input" placeholder="Amount (Max 10,000)" style="background:rgba(0,0,0,0.2); border-color:rgba(0,212,255,0.3); color:#fff;">
       <button class="collect-btn" onclick="executeP2P()" style="padding:10px; font-size:12px;">SEND GROV</button>
     </div>
-
-    <button style="background:linear-gradient(135deg,#f5b800,#ff6b00); color:#0a1428; margin-bottom:10px;" onclick="withdrawTON()">💸 WITHDRAW TO TON</button>
+    <button style="background:linear-gradient(135deg,#f5b800,#ff6b00); color:#0a1428; margin-bottom:10px;" onclick="requestWithdrawal()">💸 REQUEST WITHDRAWAL</button>
     <button style="background:rgba(0,212,255,.15);color:#00d4ff;border:1px solid rgba(0,212,255,.3);" onclick="switchTab('profile')">← Back to Profile</button>
   </div>
 
@@ -363,6 +367,7 @@ button:active{transform:scale(.97)}
     <div class="nav-item" onclick="switchTab('wallet')" data-tab="wallet"><span class="nav-icon">💰</span><span class="nav-label">Wallet</span></div>
   </div>
 </div>
+
 <div class="vip-modal" id="vipModal">
   <div class="vip-content">
     <div class="vip-header"><h2>👑 VIP UPGRADES</h2><button class="vip-close" onclick="closeVip()">✕</button></div>
@@ -371,12 +376,11 @@ button:active{transform:scale(.97)}
     <div class="vip-tier"><div class="vip-tier-top"><div class="vip-tier-name">Level 4</div><div class="vip-tier-price">9 TON</div></div><div class="vip-tier-benefits">⚡ 50 GROV/day<br>💸 8% fee</div><button class="vip-buy-btn" onclick="buyVip(4)">UPGRADE</button></div>
     <div class="vip-tier"><div class="vip-tier-top"><div class="vip-tier-name">Level 5</div><div class="vip-tier-price">12 TON</div></div><div class="vip-tier-benefits">⚡ 75 GROV/day<br>💸 6% fee</div><button class="vip-buy-btn" onclick="buyVip(5)">UPGRADE</button></div>
     <div class="vip-tier" style="border-color:#f5b800; background:rgba(245,184,0,0.1);"><div class="vip-tier-top"><div class="vip-tier-name" style="color:#f5b800;">Level 6 (MAX)</div><div class="vip-tier-price">15 TON</div></div><div class="vip-tier-benefits">⚡ 100 GROV/day<br>💸 5% fee</div><button class="vip-buy-btn" onclick="buyVip(6)">UPGRADE</button></div>
-    
     <div class="vip-tier" style="border-color:#00d4ff; background:rgba(0,212,255,0.05); margin-top:20px;">
       <div class="vip-tier-top"><div class="vip-tier-name" style="color:#00d4ff;">💎 Diamond</div></div>
       <div class="vip-tier-benefits">The ultimate flex. Unlocks future VIP zones.</div>
       <button class="vip-buy-btn" style="background:linear-gradient(135deg,#00d4ff,#0088ff); color:#fff;" onclick="buyDiamondTON()">BUY - 1 TON</button>
-      <button class="vip-buy-btn" style="background:rgba(0,212,255,0.2); color:#00d4ff; margin-top:5px;" onclick="buyDiamondGROV()">BUY - 100,000 GROV</button>
+      <button class="vip-buy-btn" style="background:rgba(0,212,255,0.2); color:#00d4ff; margin-top:5px;" onclick="buyDiamondGROV()">BUY - 10,000,000 GROV</button>
     </div>
   </div>
 </div>
@@ -423,7 +427,7 @@ button:active{transform:scale(.97)}
   <div class="spin-result-content" style="border-color:#8b5cf6;">
     <div class="spin-result-label" style="color:#00d4ff; font-size:14px;">Mystery Box</div>
     <div style="font-size:70px; margin: 15px 0; filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.8));">🎁</div>
-    <div style="font-size:11px; color:#a8c5ff; margin-bottom:15px; line-height:1.4;">Win GROV or a rare <b>Diamond 💎</b>!<br><span style="color:#f5b800;">Diamond Drop Rate: 0.00001%</span></div>
+    <div style="font-size:11px; color:#a8c5ff; margin-bottom:15px; line-height:1.4;">Win GROV (starts at 500!) or a rare <b>Diamond 💎</b>!<br><span style="color:#f5b800;">Diamond Drop Rate: 0.00001%</span></div>
     <button id="mysteryPayBtn" class="spin-result-btn" style="background:linear-gradient(135deg,#8b5cf6,#6b46c1); color:#fff;" onclick="payMysteryBox()">💎 OPEN FOR 1,000 GROV</button>
     <button class="spin-result-btn" style="background:rgba(255,255,255,0.1); color:#fff; margin-top:8px; font-size:12px; padding:10px;" onclick="closeMysteryBox()">Cancel</button>
   </div>
@@ -438,7 +442,17 @@ button:active{transform:scale(.97)}
   </div>
 </div>
 
-<div class="toast" id="toast">Message</div>
+<div class="spin-result" id="pfpModal">
+  <div class="spin-result-content" style="border-color:#f5b800;">
+    <div class="spin-result-label" style="color:#f5b800; font-size:16px; margin-bottom:15px;">🖼️ YOUR PFP</div>
+    <div style="width:150px; height:150px; border-radius:50%; background:linear-gradient(135deg,#f5b800,#ff6b00); margin:0 auto 15px; display:flex; align-items:center; justify-content:center; border:5px solid #00d4ff; box-shadow: 0 0 20px rgba(0,212,255,0.5);">
+      <div id="pfpInitial" style="font-size:60px; font-weight:900; color:#0a1428;">G</div>
+    </div>
+    <div style="font-size:11px; color:#a8c5ff; margin-bottom:15px;">Screenshot this and make it your Telegram PFP!</div>
+    <button class="spin-result-btn" onclick="closePFP()">CLOSE</button>
+  </div>
+</div>
+
 <div class="admin-modal" id="adminModal">
   <div class="admin-content">
     <div class="admin-header"><h3>🔐 ADMIN PANEL</h3><button class="admin-close" onclick="closeAdmin()">✕</button></div>
@@ -452,6 +466,7 @@ button:active{transform:scale(.97)}
         <button class="admin-tab" onclick="adminTab('leaderboard')" data-tab="leaderboard">🏆</button>
         <button class="admin-tab" onclick="adminTab('economy')" data-tab="economy">💰</button>
         <button class="admin-tab" onclick="adminTab('tasks')" data-tab="tasks">📋</button>
+        <button class="admin-tab" onclick="adminTab('withdrawals')" data-tab="withdrawals">💸</button>
         <button class="admin-tab" onclick="adminTab('system')" data-tab="system">⚙️</button>
       </div>
       <div class="admin-panel active" id="panel-stats">
@@ -470,14 +485,13 @@ button:active{transform:scale(.97)}
       <div class="admin-panel" id="panel-economy">
         <input type="text" class="admin-input" id="prizePoolInput" placeholder="Season TON Prize Pool (e.g. 50)">
         <button class="admin-btn admin-btn-green" onclick="adminSavePool()">SAVE PRIZE POOL</button>
-        <hr style="border-color:rgba(255,255,255,0.1); margin:15px 0;">
-        <input type="text" class="admin-input" id="promoCodeInput" placeholder="Promo Code (e.g. GROV50)">
-        <input type="number" class="admin-input" id="promoLimitInput" placeholder="Max Users (e.g. 100)">
-        <button class="admin-btn admin-btn-gold" onclick="adminSavePromo()">ACTIVATE PROMO</button>
       </div>
       <div class="admin-panel" id="panel-tasks">
         <div id="adminTaskList"></div>
         <button class="admin-btn" onclick="adminAddTask()" style="margin-top:10px;">+ ADD TASK</button>
+      </div>
+      <div class="admin-panel" id="panel-withdrawals">
+        <div id="adminWithdrawalList"></div>
       </div>
       <div class="admin-panel" id="panel-system">
         <button class="admin-btn admin-btn-red" onclick="adminFreezeApp()">🚨 FREEZE ALL TRANSACTIONS</button>
@@ -485,6 +499,8 @@ button:active{transform:scale(.97)}
     </div>
   </div>
 </div>
+
+<div class="toast" id="toast">Message</div>
 <script>
   const tg = window.Telegram?.WebApp;
   if (tg) { tg.ready(); tg.expand(); tg.setHeaderColor('#030a1a'); tg.setBackgroundColor('#030a1a'); }
@@ -517,8 +533,10 @@ button:active{transform:scale(.97)}
   let state = {
     balance: 0, lastClaimTime: Date.now(), lastSpin: null, extraSpinsUsed: 0,
     vipLevel: 1, hasPaid: false, referralCount: 0, referralCode: null, welcomeClaimed: false,
-    checkinDay: 1, lastCheckin: null
+    checkinDay: 1, lastCheckin: null, boostUntil: null
   };
+
+  let prizePool = localStorage.getItem('grover_prize_pool') || '50';
 
   function saveState() { try { localStorage.setItem('grover_state_' + CURRENT_USER, JSON.stringify(state)); } catch(e){} }
   function loadState() { try { const saved = localStorage.getItem('grover_state_' + CURRENT_USER); if (saved) state = Object.assign(state, JSON.parse(saved)); } catch(e){} }
@@ -546,7 +564,12 @@ button:active{transform:scale(.97)}
   }
 
   // --- MINING ---
-  function getMiningRate() { return MINING_RATES[state.vipLevel] || 5; }
+  function getMiningRate() { 
+    let rate = MINING_RATES[state.vipLevel] || 5;
+    if (state.boostUntil && Date.now() < state.boostUntil) { rate *= 2; }
+    return rate; 
+  }
+  
   function calculatePending() { const rate = getMiningRate(); const elapsed = Date.now() - state.lastClaimTime; return Math.min(rate, (elapsed / DAY_MS) * rate); }
 
   function updateMiningCounter() {
@@ -562,6 +585,16 @@ button:active{transform:scale(.97)}
       } else {
         const sLeft = Math.max(0, Math.floor((DAY_MS - (Date.now() - state.lastClaimTime)) / 1000));
         timerEl.textContent = '⛏️ Full in ' + Math.floor(sLeft/3600) + 'h ' + Math.floor((sLeft%3600)/60) + 'm'; timerEl.style.color = '#00d4ff';
+      }
+    }
+    
+    const boostEl = document.getElementById('boostTimerText');
+    if (boostEl) {
+      if (state.boostUntil && Date.now() < state.boostUntil) {
+        const hLeft = Math.ceil((state.boostUntil - Date.now()) / (60 * 60 * 1000));
+        boostEl.textContent = '🔥 2X Boost Active (' + hLeft + 'h left)';
+      } else {
+        boostEl.textContent = '';
       }
     }
 
@@ -583,7 +616,30 @@ button:active{transform:scale(.97)}
     const elapsed = Date.now() - state.lastClaimTime;
     if (DAY_MS - elapsed > 0) { return toast('⏳ Mining is still in progress!'); }
     state.balance += getMiningRate(); state.lastClaimTime = Date.now();
+    document.getElementById('qClaim').checked = true;
     updateBalanceDisplay(); saveState(); updateMiningCounter(); toast('💰 Claimed!');
+  }
+
+  function buyMiningBoost() {
+    if (state.boostUntil && Date.now() < state.boostUntil) return toast('❌ Boost is already active!');
+    toast('🎬 Watch 4 Ads to activate!');
+    let adsWatched = 0;
+    
+    function watchOneAd() {
+      if (adsWatched >= 4) {
+        state.boostUntil = Date.now() + DAY_MS;
+        saveState(); updateMiningCounter();
+        toast('⚡ 2X Boost Activated!');
+        return;
+      }
+      // Simulate ad viewing for 2s
+      setTimeout(() => {
+        adsWatched++;
+        toast('Ad ' + adsWatched + '/4 watched');
+        watchOneAd();
+      }, 1500);
+    }
+    watchOneAd();
   }
 
   // --- SPIN ---
@@ -604,7 +660,7 @@ button:active{transform:scale(.97)}
     const btn = document.getElementById('spinBtn'); if(btn) { btn.disabled = true; btn.textContent = '⏳ SPINNING...'; }
     setTimeout(() => {
       const prize = Math.floor(Math.random() * 6) + 1; state.balance += prize; updateBalanceDisplay(); 
-      if (!isRespin) { state.lastSpin = today; } else { state.extraSpinsUsed++; }
+      if (!isRespin) { state.lastSpin = today; document.getElementById('qSpin').checked = true; } else { state.extraSpinsUsed++; }
       saveState();
       if(wheelGroup) { wheelGroup.style.transition = 'none'; wheelGroup.style.transform = 'rotate(0deg)'; }
       const prizeEl = document.getElementById('spinResultPrize'); if (prizeEl) prizeEl.textContent = '+' + prize;
@@ -624,7 +680,6 @@ button:active{transform:scale(.97)}
 
   function watchAdForSpin() { toast('🎬 Loading Ad...'); setTimeout(() => { toast('✅ Ad watched! Spinning now...'); spinWheel(true); }, 2000); }
   function closeSpinResult() { const el = document.getElementById('spinResultModal'); if(el) el.classList.remove('show'); }
-
   // --- CHECK-IN CALENDAR ---
   function openCheckin() {
     document.getElementById('checkinModal').classList.add('show');
@@ -666,6 +721,20 @@ button:active{transform:scale(.97)}
     toast('🎁 +' + reward + ' GROV Checked In!');
   }
 
+  function claimQuestReward() {
+    const q1 = document.getElementById('qClaim').checked;
+    const q2 = document.getElementById('qSpin').checked;
+    const q3 = document.getElementById('qP2P').checked;
+    if (!q1 || !q2 || !q3) return toast('❌ Complete all 3 quests first!');
+    
+    state.balance += 200;
+    saveState(); updateBalanceDisplay();
+    toast('✅ +200 GROV Quest Reward Claimed!');
+    document.getElementById('qClaim').checked = false;
+    document.getElementById('qSpin').checked = false;
+    document.getElementById('qP2P').checked = false;
+  }
+
   // --- UI & TABS ---
   function switchTab(tab) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -674,13 +743,12 @@ button:active{transform:scale(.97)}
     const el = document.getElementById(screens[tab]); if (el) el.classList.add('active');
     document.querySelectorAll('.nav-item').forEach(n => { if (n.dataset.tab === tab) n.classList.add('active'); });
     if (tab === 'wallet') updateBalanceDisplay();
-    if (tab === 'refer') renderLeaderboard();
+    if (tab === 'refer') { renderLeaderboard(); document.getElementById('prizePoolDisplay').textContent = prizePool; }
     if (tab === 'tasks') renderUserTasks();
   }
 
   function openVip() { const el = document.getElementById('vipModal'); if(el) el.classList.add('show'); }
   function closeVip() { const el = document.getElementById('vipModal'); if(el) el.classList.remove('show'); }
-  
   async function buyVip(level) {
     const prices = { 2: 3, 3: 6, 4: 9, 5: 12, 6: 15 }; const price = prices[level];
     if (!connectedWallet) return toast('❌ Connect your TON wallet first!');
@@ -691,7 +759,6 @@ button:active{transform:scale(.97)}
     } catch (e) { toast('❌ Payment cancelled.'); }
   }
 
-  // --- DIAMOND SHOP ---
   async function buyDiamondTON() {
     if (hasDiamond) return toast('💎 You already own a Diamond!');
     if (!connectedWallet) return toast('❌ Connect wallet first!');
@@ -703,8 +770,8 @@ button:active{transform:scale(.97)}
   }
   function buyDiamondGROV() {
     if (hasDiamond) return toast('💎 You already own a Diamond!');
-    if (state.balance < 100000) return toast('❌ Need 100,000 GROV!');
-    state.balance -= 100000; hasDiamond = true; localStorage.setItem('grover_diamond_' + CURRENT_USER, 'true'); saveState(); updateBalanceDisplay(); toast('💎 Diamond Purchased with GROV!'); closeVip();
+    if (state.balance < 10000000) return toast('❌ Need 10,000,000 GROV!');
+    state.balance -= 10000000; hasDiamond = true; localStorage.setItem('grover_diamond_' + CURRENT_USER, 'true'); saveState(); updateBalanceDisplay(); toast('💎 Diamond Purchased with GROV!'); closeVip();
   }
 
   // --- MYSTERY BOX ---
@@ -713,7 +780,7 @@ button:active{transform:scale(.97)}
     document.getElementById('mysteryModal').classList.remove('show'); 
     setTimeout(() => {
       const content = document.querySelector('#mysteryModal .spin-result-content');
-      content.innerHTML = `<div class="spin-result-label" style="color:#00d4ff; font-size:14px;">Mystery Box</div><div style="font-size:70px; margin: 15px 0; filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.8));">🎁</div><div style="font-size:11px; color:#a8c5ff; margin-bottom:15px; line-height:1.4;">Win GROV or a rare <b>Diamond 💎</b>!<br><span style="color:#f5b800;">Diamond Drop Rate: 0.00001%</span></div><button id="mysteryPayBtn" class="spin-result-btn" style="background:linear-gradient(135deg,#8b5cf6,#6b46c1); color:#fff;" onclick="payMysteryBox()">💎 OPEN FOR 1,000 GROV</button><button class="spin-result-btn" style="background:rgba(255,255,255,0.1); color:#fff; margin-top:8px; font-size:12px; padding:10px;" onclick="closeMysteryBox()">Cancel</button>`;
+      content.innerHTML = `<div class="spin-result-label" style="color:#00d4ff; font-size:14px;">Mystery Box</div><div style="font-size:70px; margin: 15px 0; filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.8));">🎁</div><div style="font-size:11px; color:#a8c5ff; margin-bottom:15px; line-height:1.4;">Win GROV (starts at 500!) or a rare <b>Diamond 💎</b>!<br><span style="color:#f5b800;">Diamond Drop Rate: 0.00001%</span></div><button id="mysteryPayBtn" class="spin-result-btn" style="background:linear-gradient(135deg,#8b5cf6,#6b46c1); color:#fff;" onclick="payMysteryBox()">💎 OPEN FOR 1,000 GROV</button><button class="spin-result-btn" style="background:rgba(255,255,255,0.1); color:#fff; margin-top:8px; font-size:12px; padding:10px;" onclick="closeMysteryBox()">Cancel</button>`;
     }, 300);
   }
 
@@ -727,7 +794,7 @@ button:active{transform:scale(.97)}
   function revealMysteryBox() {
     const roll = Math.random() * 100; let prizeText = ''; let isDiamond = false;
     if (roll < 0.00001) { prizeText = 'DIAMOND'; isDiamond = true; } 
-    else { const grov = Math.floor(Math.random() * 2000) + 500; state.balance += grov; prizeText = '+' + grov; }
+    else { const grov = Math.floor(Math.random() * 2001) + 500; state.balance += grov; prizeText = '+' + grov; }
     saveState(); updateBalanceDisplay();
     const content = document.querySelector('#mysteryModal .spin-result-content');
     if (isDiamond) {
@@ -735,11 +802,11 @@ button:active{transform:scale(.97)}
     } else {
       content.innerHTML = `<div class="spin-result-label" style="color:#00d4ff;">You Won!</div><div class="spin-result-prize">${prizeText}</div><div class="spin-result-label">GROV</div><button class="spin-result-btn" onclick="closeMysteryBox()">CLAIM</button>`;
     }
-    toast('🎁 Box Opened!');
   }
 
   // --- TASKS ---
   let userTasks = JSON.parse(localStorage.getItem('grover_tasks')) || [
+    { id: 't_share', name: 'Share on Telegram/X', reward: 100, link: 'SHARE_APP' },
     { id: 't1', name: 'Follow on X', reward: 50, link: 'https://x.com/grovmining' },
     { id: 't2', name: 'Join Telegram', reward: 50, link: 'https://t.me/GrovOfficial' }
   ];
@@ -752,7 +819,17 @@ button:active{transform:scale(.97)}
       list.appendChild(div);
     });
   }
-  function doTask(link) { if (link) window.open(link, '_blank'); toast('Task opened! Reward will be claimed...'); }
+  function doTask(link) {
+    if (link === 'SHARE_APP') {
+      const today = new Date().toDateString();
+      if (state.lastShare === today) return toast('❌ Already shared today!');
+      state.balance += 100; state.lastShare = today; saveState(); updateBalanceDisplay();
+      const shareUrl = 'https://t.me/share/url?url=' + encodeURIComponent('https://t.me/YourBotUsername/app') + '&text=' + encodeURIComponent('Join Grover Miner and earn GROV!');
+      if (tg) tg.openTelegramLink(shareUrl);
+      toast('✅ Shared! +100 GROV'); return;
+    }
+    if (link) window.open(link, '_blank'); toast('Task opened!');
+  }
 
   // --- REFERRAL LEADERBOARD ---
   function renderLeaderboard() {
@@ -782,6 +859,20 @@ button:active{transform:scale(.97)}
   function showMyLink() { referFriend(); }
 
   // --- P2P & WITHDRAWAL ---
+  let withdrawalRequests = JSON.parse(localStorage.getItem('grover_withdrawals')) || [];
+  function requestWithdrawal() {
+    if (state.balance < 1000) return toast('❌ Minimum withdrawal is 1,000 GROV');
+    const walletAddr = prompt("Enter your TON Wallet Address (e.g. UQ...):");
+    if (!walletAddr) return;
+    const amount = parseFloat(prompt("Enter amount to withdraw (Min 1,000):"));
+    if (!amount || amount < 1000) return toast('❌ Invalid amount');
+    if (amount > state.balance) return toast('❌ Insufficient balance');
+    state.balance -= amount; saveState(); updateBalanceDisplay();
+    withdrawalRequests.push({ id: 'req_' + Date.now(), user: CURRENT_USER, amount: amount, wallet: walletAddr, status: 'Pending' });
+    localStorage.setItem('grover_withdrawals', JSON.stringify(withdrawalRequests));
+    toast('✅ Request Sent to Admin!');
+  }
+
   function executeP2P() {
     const recipient = document.getElementById('p2pRecipient').value.trim().toUpperCase();
     const amount = parseFloat(document.getElementById('p2pAmount').value);
@@ -790,19 +881,26 @@ button:active{transform:scale(.97)}
     if (amount > 10000) return toast('❌ Max 10,000 GROV');
     if (amount > state.balance) return toast('❌ Insufficient balance');
     const fee = amount * 0.05; const totalDeducted = amount + fee;
-    if (totalDeducted > state.balance) return toast('❌ Not enough balance for 5% fee');
+    if (totalDeducted > state.balance) return toast('❌ Not enough for 5% fee');
     state.balance -= totalDeducted; saveState(); updateBalanceDisplay();
+    document.getElementById('qP2P').checked = true;
     document.getElementById('p2pRecipient').value = ''; document.getElementById('p2pAmount').value = '';
     toast('✅ Sent ' + amount + ' GROV to ' + recipient);
   }
-  function withdrawTON() { toast('🚧 Withdrawals Coming Soon! Token Launch in Progress.'); }
 
-  // --- SUPPORT, ROADMAP & TOS ---
+  // --- SUPPORT, ROADMAP, TOS, PFP ---
   function openRoadmap() { document.getElementById('roadmapModal').classList.add('show'); }
   function closeRoadmap() { document.getElementById('roadmapModal').classList.remove('show'); }
   function openTOS() { document.getElementById('tosModal').classList.add('show'); }
   function closeTOS() { document.getElementById('tosModal').classList.remove('show'); }
   function openSupport() { if(tg) tg.openTelegramLink('https://t.me/YourAdminUsername'); else toast('Support: @YourAdminUsername'); }
+  function openPFP() {
+    document.getElementById('pfpModal').classList.add('show');
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      document.getElementById('pfpInitial').textContent = (tg.initDataUnsafe.user.first_name || 'G').charAt(0).toUpperCase();
+    }
+  }
+  function closePFP() { document.getElementById('pfpModal').classList.remove('show'); }
 
   // --- ADMIN PANEL ---
   let vipTapCount = 0; let vipTapTimer = null;
@@ -810,15 +908,18 @@ button:active{transform:scale(.97)}
   if (vipBtnEl) {
     vipBtnEl.addEventListener('click', () => {
       vipTapCount++; clearTimeout(vipTapTimer);
-      if (vipTapCount >= 7) { vipTapCount = 0; const el = document.getElementById('adminModal'); if(el) el.classList.add('show'); return; }
+      if (vipTapCount >= 7) { vipTapCount = 0; document.getElementById('adminModal').classList.add('show'); return; }
       vipTapTimer = setTimeout(() => { if (vipTapCount === 1) openVip(); vipTapCount = 0; }, 400);
     });
   }
 
-  function closeAdmin() { const el = document.getElementById('adminModal'); if(el) el.classList.remove('show'); }
+  function closeAdmin() { document.getElementById('adminModal').classList.remove('show'); }
   function checkAdminPin() {
-    const pinEl = document.getElementById('adminPin'); if(!pinEl) return; const pin = pinEl.value;
-    if (pin === '1905') { document.getElementById('adminPinView').style.display = 'none'; document.getElementById('adminPanels').style.display = 'block'; loadAdminData(); toast('🔓 Admin granted!'); } else { toast('❌ Wrong PIN'); }
+    const pin = document.getElementById('adminPin').value;
+    if (pin === '1905') { 
+      document.getElementById('adminPinView').style.display = 'none'; document.getElementById('adminPanels').style.display = 'block'; 
+      loadAdminData(); toast('🔓 Admin granted!'); 
+    } else { toast('❌ Wrong PIN'); }
   }
 
   function adminTab(tab) {
@@ -826,6 +927,7 @@ button:active{transform:scale(.97)}
     document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
     const tabBtn = document.querySelector('[data-tab="' + tab + '"]'); if (tabBtn) tabBtn.classList.add('active');
     const panel = document.getElementById('panel-' + tab); if (panel) panel.classList.add('active');
+    if (tab === 'withdrawals') renderAdminWithdrawals();
   }
 
   function loadAdminData() {
@@ -839,16 +941,14 @@ button:active{transform:scale(.97)}
       });
     }
     renderAdminTasks();
+    document.getElementById('prizePoolInput').value = prizePool;
+    renderAdminWithdrawals();
   }
 
   function adminFakeMode() { isFakeMode = true; localStorage.setItem('grover_fake_mode', 'true'); toast('🎭 Fake Users ON'); renderLeaderboard(); }
   function adminRealMode() { isFakeMode = false; localStorage.setItem('grover_fake_mode', 'false'); toast('👥 Fake Users OFF'); renderLeaderboard(); }
-  
   function adminRemoveFake(idx) { if (!confirm('Remove?')) return; fakeUsers.splice(idx, 1); localStorage.setItem('grover_fake_users', JSON.stringify(fakeUsers)); loadAdminData(); }
-  function adminAddFake() {
-    const name = prompt('Name:'); if (!name) return; const refs = parseInt(prompt('Referrals:') || '0');
-    fakeUsers.push({ name, refs }); localStorage.setItem('grover_fake_users', JSON.stringify(fakeUsers)); loadAdminData();
-  }
+  function adminAddFake() { const name = prompt('Name:'); if (!name) return; const refs = parseInt(prompt('Referrals:') || '0'); fakeUsers.push({ name, refs }); localStorage.setItem('grover_fake_users', JSON.stringify(fakeUsers)); loadAdminData(); }
 
   function adminAddTask() {
     const name = prompt("Task Name:"); if (!name) return;
@@ -858,7 +958,6 @@ button:active{transform:scale(.97)}
     localStorage.setItem('grover_tasks', JSON.stringify(userTasks)); renderAdminTasks(); renderUserTasks(); toast('✅ Task Added!');
   }
   function adminRemoveTask(idx) { if (!confirm('Delete?')) return; userTasks.splice(idx, 1); localStorage.setItem('grover_tasks', JSON.stringify(userTasks)); renderAdminTasks(); renderUserTasks(); }
-  
   function renderAdminTasks() {
     const list = document.getElementById('adminTaskList'); if (!list) return; list.innerHTML = '';
     userTasks.forEach((t, i) => {
@@ -868,8 +967,20 @@ button:active{transform:scale(.97)}
     });
   }
 
-  function adminSavePool() { toast('✅ Prize Pool Saved'); }
-  function adminSavePromo() { toast('✅ Promo Activated'); }
+  function renderAdminWithdrawals() {
+    const list = document.getElementById('adminWithdrawalList'); if (!list) return;
+    list.innerHTML = '';
+    if (withdrawalRequests.length === 0) { list.innerHTML = '<div style="text-align:center;color:#6ba3ff;font-size:11px;padding:20px;">No pending requests</div>'; return; }
+    withdrawalRequests.forEach((req, i) => {
+      const row = document.createElement('div'); row.className = 'admin-row';
+      row.innerHTML = `<div class="admin-row-info"><div class="admin-row-name">User: ${req.user}</div><div class="admin-row-detail">Amt: ${req.amount} GROV<br>Wallet: ${req.wallet.slice(0,6)}...</div></div><button class="admin-small-btn green" onclick="approveWithdrawal('${req.id}')">Approve</button><button class="admin-small-btn red" onclick="rejectWithdrawal('${req.id}')">Reject</button>`;
+      list.appendChild(row);
+    });
+  }
+  function approveWithdrawal(id) { if (!confirm(`Confirm payment sent?`)) return; const idx = withdrawalRequests.findIndex(r => r.id === id); withdrawalRequests.splice(idx, 1); localStorage.setItem('grover_withdrawals', JSON.stringify(withdrawalRequests)); renderAdminWithdrawals(); toast('✅ Approved!'); }
+  function rejectWithdrawal(id) { const idx = withdrawalRequests.findIndex(r => r.id === id); const req = withdrawalRequests[idx]; if (req.user === CURRENT_USER) { state.balance += req.amount; saveState(); updateBalanceDisplay(); } withdrawalRequests.splice(idx, 1); localStorage.setItem('grover_withdrawals', JSON.stringify(withdrawalRequests)); renderAdminWithdrawals(); toast('❌ Rejected & Refunded.'); }
+
+  function adminSavePool() { prizePool = document.getElementById('prizePoolInput').value; localStorage.setItem('grover_prize_pool', prizePool); toast('✅ Prize Pool Updated'); }
   function adminFreezeApp() { toast('🚨 App Frozen!'); }
 
   // --- TON CONNECT ---
@@ -888,11 +999,9 @@ button:active{transform:scale(.97)}
   } catch (e) { console.log('TON error:', e); }
 
   async function handleConnect() { if (!tonConnectUI) { toast('TON not loaded.'); return; } try { toast('Opening wallet...'); await tonConnectUI.openModal(); } catch (e) { toast('Cancelled.'); } }
-
   async function handlePay() {
     const tos = document.getElementById('tosCheckbox');
     if (tos && !tos.checked) return toast('❌ Please agree to Terms of Service first!');
-    
     if (!connectedWallet) return toast('Connect wallet first!');
     try {
       toast('Confirm payment...');
@@ -912,7 +1021,6 @@ button:active{transform:scale(.97)}
   const gateLogoEl = document.querySelector('#gateScreen .logo');
   if (gateLogoEl) { gateLogoEl.addEventListener('click', () => { secretTapCount++; clearTimeout(secretTapTimer); if (secretTapCount >= 5) { secretTapCount = 0; unlockApp(); } secretTapTimer = setTimeout(() => secretTapCount = 0, 2000); }); }
 
-  // --- LIVE FEED ---
   const feedMessages = ["💸 @Chidi just withdrew 50,000 GROV!", "👑 @Aisha just upgraded to VIP Level 4!", "🎰 @Emeka just hit the 200 GROV Spin Jackpot!", "💎 @Fatima just bought a Diamond!", "🎁 @Tunde just opened a Mystery Box!", "💸 @John just withdrew 10,000 GROV!"];
   let feedIndex = 0;
   function updateLiveFeed() {
@@ -922,7 +1030,6 @@ button:active{transform:scale(.97)}
     feedIndex = (feedIndex + 1) % feedMessages.length;
   }
 
-  // --- INIT ---
   loadState(); updateSpinTimer(); updateMiningCounter(); updateBalanceDisplay(); getOrCreateReferralCode();
   setInterval(updateMiningCounter, 1000);
   updateLiveFeed(); setInterval(updateLiveFeed, 15000);
@@ -934,3 +1041,4 @@ button:active{transform:scale(.97)}
 
 </body>
 </html>
+  
