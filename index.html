@@ -444,7 +444,6 @@ button:active{transform:scale(.97)}
     <button class="spin-result-btn" style="background:rgba(255,255,255,0.1); color:#fff; margin-top:8px; font-size:12px; padding:10px;" onclick="closeCheckin()">CLOSE</button>
   </div>
 </div>
-
 <div class="spin-result" id="mysteryModal">
   <div class="spin-result-content" style="border-color:#8b5cf6;">
     <div class="spin-result-label" style="color:#00d4ff; font-size:14px;">Mystery Box</div>
@@ -670,10 +669,10 @@ button:active{transform:scale(.97)}
       toast('🎬 Loading Ad ' + (adsWatched + 1) + '/4...');
       
       if (typeof window.show_11979593 === 'function') {
-        window.show_11979593({
-          type: 'reward',
-          onReward: () => { adsWatched++; showNextAd(); },
-          onError: () => { toast('❌ Ad failed to load.'); }
+        window.show_11979593().then(() => {
+          adsWatched++; showNextAd();
+        }).catch(() => {
+          toast('❌ Ad failed to load.');
         });
       } else {
         toast('⚠️ Ad SDK not loaded.');
@@ -720,12 +719,14 @@ button:active{transform:scale(.97)}
 
   function watchAdForSpin() { 
     if (typeof window.show_11979593 === 'function') {
-      window.show_11979593({
-        type: 'reward',
-        onReward: () => { toast('✅ Ad watched! Spinning now...'); spinWheel(true); }
+      window.show_11979593().then(() => {
+        toast('✅ Ad watched! Spinning now...'); 
+        spinWheel(true); 
+      }).catch((err) => {
+        toast('❌ Ad failed to load or was closed.');
       });
     } else {
-      toast('⚠️ Ads not available.');
+      toast('⚠️ Ad SDK not loaded.');
     }
   }
   function closeSpinResult() { const el = document.getElementById('spinResultModal'); if(el) el.classList.remove('show'); }
@@ -736,7 +737,7 @@ button:active{transform:scale(.97)}
   function renderCheckinGrid() {
     const grid = document.getElementById('checkinGrid'); if (!grid) return;
     grid.innerHTML = '';
-    const rewards = [1, 2, 3, 6, 8, 10, 200];
+    const rewards = [10, 20, 30, 40, 50, 60, 200];
     const today = new Date().toDateString();
     for (let i = 1; i <= 7; i++) {
       const isClaimed = state.checkinDay > i;
@@ -810,9 +811,7 @@ button:active{transform:scale(.97)}
   }
 
   // --- SCRATCH CARD ---
-  function buyScratchCard() { 
-    document.getElementById('scratchModal').classList.add('show'); 
-  }
+  function buyScratchCard() { document.getElementById('scratchModal').classList.add('show'); }
   function closeScratchCard() { 
     document.getElementById('scratchModal').classList.remove('show'); 
     setTimeout(() => {
@@ -828,8 +827,7 @@ button:active{transform:scale(.97)}
     
     setTimeout(() => {
       const roll = Math.random() * 100;
-      let prizeText = '';
-      let isDiamond = false;
+      let prizeText = ''; let isDiamond = false;
       
       if (roll < 0.000001) {
         prizeText = 'DIAMOND'; isDiamond = true;
@@ -939,7 +937,24 @@ button:active{transform:scale(.97)}
     if (tg && tg.openTelegramLink) { tg.openTelegramLink('https://t.me/share/url?url=' + encodeURIComponent(link) + '&text=' + encodeURIComponent('Join Grover Miner!')); }
     else { if (navigator.clipboard) navigator.clipboard.writeText(link); toast('📋 Link copied!'); }
   }
-  function showMyLink() { referFriend(); }
+  
+  function showMyLink() {
+    const code = getOrCreateReferralCode();
+    const link = 'https://t.me/YourBotUsername/app?startapp=ref_' + code;
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(link).then(() => { toast('📋 Link Copied!'); }).catch(() => { fallbackCopy(link); });
+    } else { fallbackCopy(link); }
+  }
+
+  function fallbackCopy(text) {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.style.position = "fixed";
+    document.body.appendChild(textArea);
+    textArea.focus(); textArea.select();
+    try { document.execCommand('copy'); toast('📋 Link Copied!'); } catch (err) { toast('❌ Failed to copy.'); }
+    document.body.removeChild(textArea);
+  }
 
   // --- P2P & WITHDRAWAL ---
   let withdrawalRequests = JSON.parse(localStorage.getItem('grover_withdrawals')) || [];
@@ -1000,6 +1015,7 @@ button:active{transform:scale(.97)}
     }
   }
   function closePFP() { document.getElementById('pfpModal').classList.remove('show'); }
+
   // --- ADMIN PANEL ---
   let vipTapCount = 0; let vipTapTimer = null;
   const vipBtnEl = document.getElementById('vipBtn');
@@ -1082,8 +1098,7 @@ button:active{transform:scale(.97)}
   function adminSaveAnnouncement() {
     const msg = document.getElementById('announcementInput').value;
     localStorage.setItem('grover_announcement', msg);
-    updateAnnouncement();
-    toast('✅ Announcement Updated!');
+    updateAnnouncement(); toast('✅ Announcement Updated!');
   }
   function updateAnnouncement() {
     const msg = localStorage.getItem('grover_announcement');
@@ -1142,7 +1157,24 @@ button:active{transform:scale(.97)}
     feedIndex = (feedIndex + 1) % feedMessages.length;
   }
 
+  // Check incoming referral
+  function checkIncomingReferral() {
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.start_param) {
+      const startParam = tg.initDataUnsafe.start_param;
+      if (startParam.startsWith('ref_')) {
+        const inviterCode = startParam.replace('ref_', '');
+        if (!localStorage.getItem('joined_via_' + CURRENT_USER)) {
+          localStorage.setItem('joined_via_' + CURRENT_USER, inviterCode);
+          state.balance += 50;
+          saveState(); updateBalanceDisplay();
+          setTimeout(() => { toast('🎉 +50 GROV Welcome via Invite!'); }, 2000);
+        }
+      }
+    }
+  }
+
   loadState(); updateSpinTimer(); updateMiningCounter(); updateBalanceDisplay(); getOrCreateReferralCode(); updateAnnouncement();
+  checkIncomingReferral();
   setInterval(updateMiningCounter, 1000);
   updateLiveFeed(); setInterval(updateLiveFeed, 15000);
   
