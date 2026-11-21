@@ -139,5 +139,67 @@ button:active{transform:scale(.97)}
 </head>
 <body>
 <div class="ocean-bg"><div class="wave"></div><div class="wave"></div><div class="wave"></div></div>
+  <div class="splash" id="splash">
+  <img src="file_000000004a1481f4ad0c20442e76e9f7.png" alt="Grover" class="splash-logo">
+  <div class="splash-title">GROVER</div>
+  <div class="splash-subtitle">Miner</div>
+  <div class="loading-bar"><div class="loading-fill"></div></div>
+</div>
+
+<div class="frame" id="frame">
+  <div class="screen active" id="gateScreen">
+    <div class="logo-wrap"><img src="file_000000004a1481f4ad0c20442e76e9f7.png" alt="Grover" class="logo" id="gateLogo"></div>
+    <div class="title">GROVER</div>
+    <div class="subtitle">Miner</div>
+    <div class="welcome-banner">
+      <div class="welcome-banner-title">🎉 +100 GROV Welcome Bonus!</div>
+      <div class="welcome-banner-text">Claim after entry</div>
+    </div>
+    <div class="mining-locked">
+      <span class="lock-icon">🔒</span>
+      <div class="mining-label">⛏️ Mining Locked</div>
+      <div class="mining-value">0.00<span class="unit">GROV</span></div>
+      <div class="mining-rate">⚡ Level 1 · 5 GROV / 24hrs</div>
+      <div class="mining-lock-text">Unlock by paying 0.1 TON</div>
+    </div>
+    <div class="fee-box">
+      <div class="fee-label">⚡ One-Time Entry Fee ⚡</div>
+      <div class="fee-value">0.1<span>TON</span></div>
+    </div>
+    <div class="notice">🔒 Wallet must be <strong>7+ days old</strong> to unlock mining.</div>
+    <div class="tos-check">
+      <input type="checkbox" id="tosCheckbox">
+      <label for="tosCheckbox">I agree to <span class="tos-text" onclick="openTOS()">Terms of Service</span></label>
+    </div>
+    <button id="connectBtn" onclick="handleConnect()">🔗 Connect Wallet</button>
+    <button id="payBtn" onclick="handlePay()">💎 Pay 0.1 TON</button>
+    <div id="walletInfo" class="wallet-info"></div>
+  </div>
+
+  <div class="screen" id="homeScreen">
+    <div class="home-top-bar">
+      <button class="vip-btn" id="vipBtn">👑 VIP</button>
+      <button class="profile-btn" onclick="switchTab('profile')">👤 Profile</button>
+    </div>
+    <div id="announcementBanner" style="display:none; background:linear-gradient(135deg,#ef4444,#dc2626); color:#fff; font-size:11px; font-weight:900; padding:8px; border-radius:8px; text-align:center; margin-bottom:10px;"></div>
+    <div class="live-feed-wrap">
+      <div class="live-feed-text" id="liveFeedText">Loading recent activity...</div>
+    </div>
+    <div class="logo-hero"><img src="file_000000004a1481f4ad0c20442e76e9f7.png" alt="Grover" class="hero-logo" id="homeLogo"></div>
+    <div class="earned-counter">
+      <div class="earned-value" id="earnedValue">+0.00000000</div>
+      <div class="earned-label">⛏️ Mining Live</div>
+      <div style="font-size:10px;color:#00d4ff;margin-top:4px;font-weight:700;" id="nextClaimTimer">Loading...</div>
+    </div>
+    <div class="balance-box">
+      <div class="balance-label">💰 Balance</div>
+      <div class="balance-value" id="balanceDisplay">0.00<span>GROV</span></div>
+    </div>
+    <button class="claim-btn" onclick="claimMining()">CLAIM</button>
+    <button class="mystery-btn" onclick="openMysteryBox()">🎁 Mystery Box</button>
+    <button class="mystery-btn" style="background:linear-gradient(135deg,#00d4ff,#0088ff);" onclick="buyScratchCard()">🎟️ Scratch Card (500 GROV)</button>
+    <button class="checkin-btn" onclick="openCheckin()">🎯 Daily Check-in</button>
+  </div>
+  
   
   
