@@ -455,6 +455,177 @@ button:active{transform:scale(.97)}
 </div>
 
 <div class="toast" id="toast">Message</div>
+ <script>
+  const tg = window.Telegram?.WebApp;
+  if (tg) { tg.ready(); tg.expand(); tg.setHeaderColor('#030a1a'); tg.setBackgroundColor('#030a1a'); }
+
+  // --- ONE-TIME GLOBAL RESET ---
+  const CURRENT_RESET_VERSION = 'v1_launch'; 
+  const userResetVersion = localStorage.getItem('grover_reset_version');
+  if (userResetVersion !== CURRENT_RESET_VERSION) {
+    Object.keys(localStorage).forEach(k => {
+      if (k.startsWith('grover_state_') || k.startsWith('joined_via_')) {
+        localStorage.removeItem(k);
+      }
+    });
+    localStorage.setItem('grover_reset_version', CURRENT_RESET_VERSION);
+  }
+
+  function getCurrentUserId() {
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) return String(tg.initDataUnsafe.user.id);
+    return 'guest_' + (localStorage.getItem('grover_device_id') || (() => {
+      const id = Date.now() + '_' + Math.random().toString(36).slice(2);
+      localStorage.setItem('grover_device_id', id);
+      return id;
+    })());
+  }
+  
+  const CURRENT_USER = getCurrentUserId();
+  const BACKEND_URL = 'https://grover-backup.onrender.com';
+  const MINING_RATES = { 1: 5, 2: 15, 3: 30, 4: 50, 5: 75, 6: 100 };
+  const DAY_MS = 24 * 60 * 60 * 1000;
+  const WELCOME_BONUS = 100;
+
+  let fakeUsers = JSON.parse(localStorage.getItem('grover_fake_users')) || [];
+  let hasDiamond = localStorage.getItem('grover_diamond_' + CURRENT_USER) === 'true';
+  let prizePool = localStorage.getItem('grover_prize_pool') || '50';
+
+  let state = {
+    balance: 0, lastClaimTime: Date.now(), lastSpin: null, extraSpinsUsed: 0,
+    vipLevel: 1, hasPaid: false, referralCount: 0, referralCode: null, welcomeClaimed: false,
+    checkinDay: 1, lastCheckin: null, boostUntil: null, walletPin: null, lastShare: null,
+    ms5: false, ms10: false, ms50: false
+  };
+
+  function saveState() { try { localStorage.setItem('grover_state_' + CURRENT_USER, JSON.stringify(state)); } catch(e){} }
+  function loadState() { try { const saved = localStorage.getItem('grover_state_' + CURRENT_USER); if (saved) state = Object.assign(state, JSON.parse(saved)); } catch(e){} }
+  
+  function getOrCreateReferralCode() {
+    if (state.referralCode) return state.referralCode;
+    state.referralCode = 'GRV' + CURRENT_USER.slice(-6).toUpperCase();
+    saveState();
+    return state.referralCode;
+  }
+
+  setTimeout(() => { 
+    const splash = document.getElementById('splash');
+    const frame = document.getElementById('frame');
+    if (splash) splash.classList.add('hide'); 
+    if (frame) frame.classList.add('show'); 
+  }, 2000);
+
+  function toast(msg) { 
+    const el = document.getElementById('toast'); 
+    if(!el) return;
+    el.textContent = msg; el.classList.add('show'); 
+    if(tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+    setTimeout(() => el.classList.remove('show'), 2500); 
+  }
+
+  async function syncUserWithCloud() {
+    if (!tg || !tg.initData) return;
+    try {
+      const res = await fetch(BACKEND_URL + '/api/sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ initData: tg.initData })
+      });
+      const data = await res.json();
+      if (data.user) {
+        state.balance = data.user.balance;
+        state.vipLevel = data.user.vipLevel;
+        state.hasPaid = data.user.hasPaid;
+        state.referralCount = data.user.referralCount;
+        if (state.hasPaid) {
+          document.getElementById('gateScreen').classList.remove('active');
+          document.getElementById('homeScreen').classList.add('active');
+          document.getElementById('bottomNav').style.display = 'flex';
+        }
+        saveState(); updateBalanceDisplay();
+      }
+    } catch (e) { console.log('Cloud sync failed', e); }
+  }
+
+  // --- MINING ---
+  function getMiningRate() { 
+    let rate = MINING_RATES[state.vipLevel] || 5;
+    if (state.boostUntil && Date.now() < state.boostUntil) { rate *= 2; }
+    return rate; 
+  }
+  
+  function calculatePending() { const rate = getMiningRate(); const elapsed = Date.now() - state.lastClaimTime; return Math.min(rate, (elapsed / DAY_MS) * rate); }
+
+  function updateMiningCounter() {
+    const pending = calculatePending();
+    const earnedEl = document.getElementById('earnedValue');
+    if (earnedEl) earnedEl.textContent = '+' + pending.toFixed(8);
+
+    const rate = getMiningRate();
+    const timerEl = document.getElementById('nextClaimTimer');
+    if (timerEl) {
+      if (pending >= rate) {
+        timerEl.textContent = '🛑 Mining Stopped! Claim Now'; timerEl.style.color = '#ef4444';
+      } else {
+        const sLeft = Math.max(0, Math.floor((DAY_MS - (Date.now() - state.lastClaimTime)) / 1000));
+        timerEl.textContent = '⛏️ Full in ' + Math.floor(sLeft/3600) + 'h ' + Math.floor((sLeft%3600)/60) + 'm'; timerEl.style.color = '#00d4ff';
+      }
+    }
+    
+    const boostEl = document.getElementById('boostTimerText');
+    if (boostEl) {
+      if (state.boostUntil && Date.now() < state.boostUntil) {
+        const hLeft = Math.ceil((state.boostUntil - Date.now()) / (60 * 60 * 1000));
+        boostEl.textContent = '🔥 2X Boost Active (' + hLeft + 'h left)';
+      } else { boostEl.textContent = ''; }
+    }
+
+    const mRate = document.getElementById('mineRate'); const mLevel = document.getElementById('mineLevel');
+    const mRateText = document.getElementById('mineRateText'); const mLevelText = document.getElementById('mineLevelText');
+    const mProgFill = document.getElementById('mineProgressFill'); const mProgText = document.getElementById('mineProgressText');
+    if (mRate) mRate.textContent = rate + '/day'; if (mLevel) mLevel.textContent = state.vipLevel;
+    if (mRateText) mRateText.textContent = rate + ' GROV/day'; if (mLevelText) mLevelText.textContent = 'Level ' + state.vipLevel;
+    if (mProgFill) mProgFill.style.width = Math.min(100, (pending / rate) * 100) + '%';
+    if (mProgText) mProgText.textContent = pending >= rate ? '✅ Ready to claim' : 'Mining... ' + pending.toFixed(6) + ' GROV';
+  }
+
+  function updateBalanceDisplay() {
+    const bal = document.getElementById('balanceDisplay'); if (bal) bal.innerHTML = state.balance.toFixed(2) + '<span>GROV</span>';
+    const wBal = document.getElementById('walletBalanceDisplay'); if (wBal) wBal.innerHTML = state.balance.toFixed(2) + '<span>GROV</span>';
+    const wCode = document.getElementById('walletInviteCode'); if (wCode) wCode.textContent = getOrCreateReferralCode();
+  }
+
+  async function claimMining() {
+    const elapsed = Date.now() - state.lastClaimTime;
+    if (DAY_MS - elapsed > 0) { return toast('⏳ Mining is still in progress!'); }
+    try {
+      const res = await fetch(BACKEND_URL + '/api/claim', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ initData: tg.initData })
+      });
+      const data = await res.json();
+      if (data.success) {
+        state.balance = data.newBalance; state.lastClaimTime = Date.now();
+        document.getElementById('qClaim').checked = true;
+        saveState(); updateBalanceDisplay(); updateMiningCounter(); toast('💰 Claimed from Cloud!');
+      } else { toast('❌ ' + data.error); }
+    } catch (e) { toast('❌ Server error. Try again.'); }
+  }
+
+  function buyMiningBoost() {
+    if (state.boostUntil && Date.now() < state.boostUntil) return toast('❌ Boost is already active!');
+    let adsWatched = 0;
+    function showNextAd() {
+      if (adsWatched >= 4) {
+        state.boostUntil = Date.now() + DAY_MS; saveState(); updateMiningCounter(); toast('⚡ 2X Boost Activated!'); return;
+      }
+      toast('🎬 Loading Ad ' + (adsWatched + 1) + '/4...');
+      if (typeof window.show_11979593 === 'function') {
+        window.show_11979593().then(() => { adsWatched++; showNextAd(); }).catch(() => { toast('❌ Ad failed to load.'); });
+      } else { toast('⚠️ Ad SDK not loaded.'); }
+    }
+    showNextAd();
+  }
+   
   
   
   
