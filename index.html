@@ -200,6 +200,166 @@ button:active{transform:scale(.97)}
     <button class="mystery-btn" style="background:linear-gradient(135deg,#00d4ff,#0088ff);" onclick="buyScratchCard()">🎟️ Scratch Card (500 GROV)</button>
     <button class="checkin-btn" onclick="openCheckin()">🎯 Daily Check-in</button>
   </div>
+    <div class="screen" id="spinScreen">
+    <div style="text-align:center;margin-bottom:8px;">
+      <div style="font-size:22px;font-weight:900;color:#f5b800;">🎡 SPIN WHEEL</div>
+      <div style="font-size:11px;color:#00d4ff;margin-top:2px;">1 free spin per day</div>
+    </div>
+    <div class="wheel-container">
+      <svg viewBox="0 0 300 300" style="width:260px;height:260px;margin:0 auto;display:block;">
+        <circle cx="150" cy="150" r="140" fill="#030a1a" stroke="#00d4ff" stroke-width="4"/>
+        <g id="wheelGroup">
+          <path d="M150,150 L150,10 A140,140 0 0,1 244,38 Z" fill="#f5b800"/>
+          <path d="M150,150 L244,38 A140,140 0 0,1 290,124 Z" fill="#ff6b00"/>
+          <path d="M150,150 L290,124 A140,140 0 0,1 268,239 Z" fill="#0066ff"/>
+          <path d="M150,150 L268,239 A140,140 0 0,1 176,289 Z" fill="#8b5cf6"/>
+          <path d="M150,150 L176,289 A140,140 0 0,1 62,262 Z" fill="#ec4899"/>
+          <path d="M150,150 L62,262 A140,140 0 0,1 11,157 Z" fill="#ef4444"/>
+          <path d="M150,150 L11,157 A140,140 0 0,1 38,62 Z" fill="#22c55e"/>
+          <path d="M150,150 L38,62 A140,140 0 0,1 124,11 Z" fill="#00d4ff"/>
+          <path d="M150,150 L124,11 A140,140 0 0,1 150,10 Z" fill="#ffdd00"/>
+          <text x="195" y="60" fill="#0a1428" font-size="18" font-weight="900" text-anchor="middle">1</text>
+          <text x="245" y="115" fill="#0a1428" font-size="18" font-weight="900" text-anchor="middle">2</text>
+          <text x="255" y="195" fill="#fff" font-size="18" font-weight="900" text-anchor="middle">3</text>
+          <text x="205" y="255" fill="#fff" font-size="18" font-weight="900" text-anchor="middle">5</text>
+          <text x="118" y="270" fill="#fff" font-size="18" font-weight="900" text-anchor="middle">7</text>
+          <text x="55" y="215" fill="#fff" font-size="18" font-weight="900" text-anchor="middle">10</text>
+          <text x="55" y="110" fill="#fff" font-size="18" font-weight="900" text-anchor="middle">50</text>
+          <text x="115" y="60" fill="#0a1428" font-size="13" font-weight="900" text-anchor="middle">200</text>
+          <text x="140" y="32" fill="#0a1428" font-size="8" font-weight="900" text-anchor="middle">RE</text>
+        </g>
+        <circle cx="150" cy="150" r="46" fill="#030a1a" stroke="#f5b800" stroke-width="3"/>
+        <text x="150" y="142" fill="#f5b800" font-size="10" font-weight="900" text-anchor="middle">JACKPOT</text>
+        <text x="150" y="160" fill="#f5b800" font-size="13" font-weight="900" text-anchor="middle">200 GROV</text>
+        <polygon points="150,5 135,30 165,30" fill="#f5b800" stroke="#030a1a" stroke-width="2"/>
+      </svg>
+    </div>
+    <button class="collect-btn" id="spinBtn" onclick="spinWheel(false)">🎡 SPIN NOW</button>
+    <div class="notice" style="margin-top:10px;">🎰 Jackpot: 200 GROV!</div>
+    <div id="spinTimer" style="text-align:center;font-size:11px;color:#00d4ff;margin-top:8px;font-weight:700;"></div>
+  </div>
+
+  <div class="screen" id="mineScreen">
+    <div class="mine-hero">
+      <div class="pickaxe-spin">⛏️</div>
+      <div class="mine-rate">Mining at <strong id="mineRateText">5 GROV/day</strong></div>
+      <div class="mine-rate" style="font-size:10px;margin-top:4px;color:#4a7aaa;" id="mineLevelText">Level 1</div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="mineProgressFill"></div></div>
+    <div style="text-align:center;font-size:10px;color:#00d4ff;margin-bottom:10px;" id="mineProgressText">Collect on Home</div>
+    <button class="collect-btn" onclick="switchTab('home')">💰 GO TO CLAIM</button>
+    <button style="background:linear-gradient(135deg,#8b5cf6,#6b46c1);color:#fff;margin-top:8px;border:none;" onclick="buyMiningBoost()">⚡ ACTIVATE 2X BOOST (WATCH 4 ADS)</button>
+    <div id="boostTimerText" style="text-align:center;font-size:11px;color:#00ffcc;margin-top:5px;font-weight:700;"></div>
+    <button style="background:linear-gradient(135deg,#00d4ff,#0088ff);color:#fff;margin-top:8px;" onclick="openVip()">👑 UPGRADE TO VIP</button>
+    <div class="stats2" style="margin-top:12px;">
+      <div class="stat"><div class="stat-label">⚡ Level</div><div class="stat-value" id="mineLevel">1</div></div>
+      <div class="stat"><div class="stat-label">📊 Rate</div><div class="stat-value" id="mineRate">5/day</div></div>
+    </div>
+  </div>
+
+  <div class="screen" id="tasksScreen">
+    <div style="text-align:center;margin-bottom:12px;">
+      <div style="font-size:22px;font-weight:900;color:#f5b800;">📋 TASKS</div>
+      <div style="font-size:11px;color:#00d4ff;margin-top:2px;">Complete to earn GROV</div>
+    </div>
+    <div style="background:rgba(245,184,0,0.1); border:1px solid #f5b800; border-radius:12px; padding:12px; margin-bottom:15px;">
+      <div style="font-size:12px; font-weight:900; color:#f5b800; margin-bottom:8px;">🎯 DAILY QUESTS (+200 GROV)</div>
+      <div style="font-size:11px; color:#a8c5ff; display:flex; flex-direction:column; gap:5px;">
+        <label><input type="checkbox" id="qClaim" disabled> Claim Mining</label>
+        <label><input type="checkbox" id="qSpin" disabled> Spin the Wheel</label>
+        <label><input type="checkbox" id="qP2P" disabled> Send 1 P2P Transfer</label>
+      </div>
+      <button class="collect-btn" style="padding:8px; font-size:11px; margin-top:10px;" onclick="claimQuestReward()">CLAIM 200 GROV</button>
+    </div>
+    <div id="tasksList"></div>
+  </div>
+
+  <div class="screen" id="referScreen">
+    <div style="text-align:center;margin-bottom:12px;">
+      <div style="font-size:22px;font-weight:900;color:#f5b800;">👥 REFER FRIENDS</div>
+    </div>
+    <div class="refer-hero">
+      <div class="refer-count" id="referCount">0</div>
+      <div class="refer-label">Friends Invited</div>
+    </div>
+    <div class="target-bar-refer"><div class="target-fill-refer" id="targetFillRefer"></div></div>
+    <div class="target-text"><span id="targetCountRefer">1,000</span> / 100,000 USERS</div>
+    
+    <div style="display:flex; flex-direction:column; gap:6px; margin-top:10px;">
+      <div style="background:rgba(255,255,255,0.05); padding:8px; border-radius:8px; display:flex; justify-content:space-between; font-size:11px;">
+        <span style="color:#a8c5ff;">Invite 5 Friends</span><span style="color:#f5b800; font-weight:900;">+500 GROV</span>
+      </div>
+      <div style="background:rgba(255,255,255,0.05); padding:8px; border-radius:8px; display:flex; justify-content:space-between; font-size:11px;">
+        <span style="color:#a8c5ff;">Invite 10 Friends</span><span style="color:#f5b800; font-weight:900;">+1,500 GROV</span>
+      </div>
+      <div style="background:rgba(255,255,255,0.05); padding:8px; border-radius:8px; display:flex; justify-content:space-between; font-size:11px;">
+        <span style="color:#a8c5ff;">Invite 50 Friends</span><span style="color:#f5b800; font-weight:900;">+10,000 GROV</span>
+      </div>
+    </div>
+
+    <div class="notice" style="margin-top:12px;"><strong>Earn 100 GROV</strong> per friend!</div>
+    <button class="collect-btn" onclick="referFriend()">🔗 SHARE YOUR LINK</button>
+    <button style="background:rgba(0,212,255,.15);color:#00d4ff;margin-top:8px;border:1px solid rgba(0,212,255,.3);" onclick="showMyLink()">📋 COPY MY LINK</button>
+    <div style="margin-top:20px; text-align:left;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <div style="font-size:12px; font-weight:900; color:#f5b800;">🏆 TOP 10 REFERRALS</div>
+        <div style="font-size:12px; font-weight:900; color:#00d4ff;">Pool: <span id="prizePoolDisplay">50</span> TON</div>
+      </div>
+      <div id="leaderboardList" style="display:flex; flex-direction:column; gap:6px;"></div>
+      <div style="margin-top:12px; padding-top:12px; border-top:1px dashed rgba(0,212,255,.3); display:flex; justify-content:space-between; align-items:center;">
+        <div style="font-size:12px; color:#00d4ff; font-weight:800;">YOUR RANK</div>
+        <div id="userRankDisplay" style="font-size:16px; font-weight:900; color:#fff;">#999</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="screen" id="profileScreen">
+    <div style="text-align:center;margin-bottom:12px;">
+      <div style="font-size:22px;font-weight:900;color:#f5b800;">👤 PROFILE</div>
+    </div>
+    <div class="profile-header">
+      <div class="profile-avatar" id="profileAvatar">G</div>
+      <div class="profile-name" id="profileName">Grover User</div>
+      <div class="profile-handle" id="profileHandle">@user</div>
+    </div>
+    <div class="profile-item" onclick="openPFP()"><div class="profile-item-label">🖼️ Create PFP</div><div class="profile-item-value">›</div></div>
+    <div class="profile-item" onclick="openRoadmap()"><div class="profile-item-label">🗺️ Roadmap</div><div class="profile-item-value">›</div></div>
+    <div class="profile-item" onclick="openSupport()"><div class="profile-item-label">❓ Help & Support</div><div class="profile-item-value">›</div></div>
+  </div>
+
+  <div class="screen" id="walletScreen">
+    <div style="text-align:center;margin-bottom:12px;">
+      <div style="font-size:22px;font-weight:900;color:#f5b800;">💰 GROVER WALLET</div>
+    </div>
+    
+    <div style="background:rgba(0,212,255,.1); border:1px dashed #00d4ff; border-radius:12px; padding:10px; text-align:center; margin-bottom:14px;">
+      <div style="font-size:10px; color:#6ba3ff; font-weight:700;">YOUR INVITE CODE</div>
+      <div id="walletInviteCode" style="font-size:18px; font-weight:900; color:#fff; letter-spacing:2px;">Loading...</div>
+    </div>
+
+    <div class="balance-box" style="border-color:#00d4ff;">
+      <div class="balance-label">Internal Balance</div>
+      <div class="balance-value" id="walletBalanceDisplay">0.00<span>GROV</span></div>
+    </div>
+    <div style="background:rgba(0,212,255,.05); border:1px solid rgba(0,212,255,.2); border-radius:12px; padding:14px; margin-bottom:14px;">
+      <div style="font-size:12px; font-weight:900; color:#00d4ff; margin-bottom:8px;">📤 SEND P2P (5% Fee)</div>
+      <input type="text" id="p2pRecipient" class="admin-input" placeholder="Recipient Code (e.g. GRV123456)" style="background:rgba(0,0,0,0.2); border-color:rgba(0,212,255,0.3); color:#fff;">
+      <input type="number" id="p2pAmount" class="admin-input" placeholder="Amount (Max 10,000)" style="background:rgba(0,0,0,0.2); border-color:rgba(0,212,255,0.3); color:#fff;">
+      <button class="collect-btn" onclick="executeP2P()" style="padding:10px; font-size:12px;">SEND GROV</button>
+    </div>
+    <button style="background:linear-gradient(135deg,#f5b800,#ff6b00); color:#0a1428; margin-bottom:10px;" onclick="requestWithdrawal()">💸 REQUEST WITHDRAWAL</button>
+    <button style="background:rgba(0,212,255,.15);color:#00d4ff;border:1px solid rgba(0,212,255,.3);" onclick="switchTab('profile')">← Back to Profile</button>
+  </div>
+
+  <div class="bottom-nav" id="bottomNav" style="display:none;">
+    <div class="nav-item" onclick="switchTab('spin')" data-tab="spin"><span class="nav-icon">🎡</span><span class="nav-label">Spin</span></div>
+    <div class="nav-item" onclick="switchTab('tasks')" data-tab="tasks"><span class="nav-icon">📋</span><span class="nav-label">Tasks</span></div>
+    <div class="nav-item nav-mine" onclick="switchTab('mine')" data-tab="mine"><span class="nav-icon">⛏️</span><span class="nav-label">Mine</span></div>
+    <div class="nav-item" onclick="switchTab('refer')" data-tab="refer"><span class="nav-icon">👥</span><span class="nav-label">Refer</span></div>
+    <div class="nav-item" onclick="switchTab('wallet')" data-tab="wallet"><span class="nav-icon">💰</span><span class="nav-label">Wallet</span></div>
+  </div>
+</div>
+  
   
   
   
