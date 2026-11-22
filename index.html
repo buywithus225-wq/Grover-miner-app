@@ -595,21 +595,29 @@ button:active{transform:scale(.97)}
   }
 
   async function claimMining() {
-    const elapsed = Date.now() - state.lastClaimTime;
-    if (DAY_MS - elapsed > 0) { return toast('⏳ Mining is still in progress!'); }
-    try {
-      const res = await fetch(BACKEND_URL + '/api/claim', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ initData: tg.initData })
-      });
-      const data = await res.json();
-      if (data.success) {
-        state.balance = data.newBalance; state.lastClaimTime = Date.now();
-        document.getElementById('qClaim').checked = true;
-        saveState(); updateBalanceDisplay(); updateMiningCounter(); toast('💰 Claimed from Cloud!');
-      } else { toast('❌ ' + data.error); }
-    } catch (e) { toast('❌ Server error. Try again.'); }
+  const elapsed = Date.now() - state.lastClaimTime;
+  if (DAY_MS - elapsed > 0) { return toast('⏳ Mining is still in progress!'); }
+  
+  try {
+    const res = await fetch(BACKEND_URL + '/api/claim', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ initData: tg.initData })
+    });
+    const data = await res.json();
+    
+    if (data.success) {
+      state.balance = data.newBalance; 
+      state.lastClaimTime = Date.now();
+      document.getElementById('qClaim').checked = true;
+      saveState(); updateBalanceDisplay(); updateMiningCounter(); 
+      toast('💰 Claimed from Cloud!');
+    } else { 
+      toast('❌ ' + (data.error || 'Server error')); 
+    }
+  } catch (e) { 
+    toast('❌ Network error. Try again.'); 
   }
+}
 
   function buyMiningBoost() {
     if (state.boostUntil && Date.now() < state.boostUntil) return toast('❌ Boost is already active!');
