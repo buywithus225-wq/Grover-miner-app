@@ -937,7 +937,7 @@ function closeMysteryBox() {
   let connectedWallet = null; let tonConnectUI = null;
   const PROJECT_WALLET = 'UQBiiE8EcQ-tRSIi4HjKnCYjGJ0Wjh5SA84xyzbc-qdq5ws2';
   try {
-    tonConnectUI = new TON_CONNECT_UI.TonConnectUI({ manifestUrl: 'https://buywithus225-wq.github.io/Grover-miner-app/tonconnect-manifest.json', buttonRootId: null });
+    tonConnectUI = new TON_CONNECT_UI.TonConnectUI({ manifestUrl: 'manifestUrl: 'https://grover-miner-app.onrender.com/tonconnect-manifest.json', buttonRootId: null });
     tonConnectUI.onStatusChange(wallet => {
       const wi = document.getElementById('walletInfo'); const cb = document.getElementById('connectBtn'); const pb = document.getElementById('payBtn');
       if (wallet) {
