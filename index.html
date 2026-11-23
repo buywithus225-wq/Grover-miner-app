@@ -507,12 +507,15 @@ button:active{transform:scale(.97)}
     return state.referralCode;
   }
 
-  setTimeout(() => { 
+  // FORCE SPLASH TO HIDE (Even if JS has an error elsewhere)
+window.addEventListener('load', () => {
+  setTimeout(() => {
     const splash = document.getElementById('splash');
     const frame = document.getElementById('frame');
     if (splash) splash.classList.add('hide'); 
     if (frame) frame.classList.add('show'); 
-  }, 2000);
+  }, 1500); 
+});
 
   function toast(msg) { 
     const el = document.getElementById('toast'); 
