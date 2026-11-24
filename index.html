@@ -51,4 +51,208 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .claim-btn:active{transform:scale(.97)}
 .mystery-btn{width:100%;padding:13px;background:linear-gradient(135deg,#ec4899,#8b5cf6);color:#fff;border:none;border-radius:14px;font-size:13px;font-weight:900;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:inherit;margin-bottom:8px}
 .checkin-btn{width:100%;padding:12px;background:linear-gradient(135deg,#00d4ff,#0088ff);color:#fff;border:none;border-radius:14px;font-size:13px;font-weight:900;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:inherit}
+  .logo-wrap{position:relative;margin:8px auto 12px;width:fit-content}
+.logo{width:150px;height:150px;object-fit:contain;filter:drop-shadow(0 0 40px rgba(0,212,255,.9))}
+.title{font-size:24px;font-weight:900;letter-spacing:4px;text-align:center;background:linear-gradient(135deg,#f5b800,#ffdd00);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}
+.subtitle{font-size:10px;color:#00d4ff;letter-spacing:5px;text-transform:uppercase;font-weight:700;text-align:center;margin-bottom:14px}
+.mining-locked{width:100%;background:linear-gradient(135deg,rgba(0,50,100,.4),rgba(0,30,70,.3));border:1.5px solid rgba(0,212,255,.3);border-radius:14px;padding:12px;text-align:center;margin-bottom:10px}
+.lock-icon{font-size:24px;margin-bottom:4px;display:block}
+.mining-label{font-size:9px;color:#6ba3ff;letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-bottom:4px}
+.mining-value{font-size:26px;font-weight:900;color:#4a7aaa;letter-spacing:1px}
+.mining-value .unit{font-size:11px;margin-left:4px}
+.mining-rate{font-size:10px;color:#4a7aaa;margin-top:4px}
+.mining-lock-text{font-size:10px;color:#f5b800;font-weight:800;margin-top:6px;text-transform:uppercase}
+.stats2{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;margin-bottom:10px}
+.stat{background:linear-gradient(135deg,rgba(0,212,255,.12),rgba(0,136,255,.08));border:1px solid rgba(0,212,255,.3);border-radius:12px;padding:10px 6px;text-align:center}
+.stat-label{font-size:9px;color:#6ba3ff;text-transform:uppercase;font-weight:700;margin-bottom:3px}
+.stat-value{font-size:16px;font-weight:900;background:linear-gradient(135deg,#f5b800,#ffdd00);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.fee-box{width:100%;background:linear-gradient(135deg,rgba(245,184,0,.2),rgba(255,107,0,.1));border:1.5px solid rgba(245,184,0,.6);border-radius:14px;padding:10px;text-align:center;margin-bottom:10px}
+.fee-label{font-size:9px;color:#ffdd00;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;font-weight:700}
+.fee-value{font-size:22px;font-weight:900;color:#fff}
+.fee-value span{font-size:12px;color:#ffdd00;margin-left:3px;font-weight:700}
+.notice{font-size:10px;color:#8bb5e8;text-align:center;line-height:1.4;margin-bottom:10px;padding:8px 10px;background:rgba(0,212,255,.08);border-left:3px solid #00d4ff;border-radius:8px}
+.notice strong{color:#f5b800}
+button{width:100%;padding:13px;border:none;border-radius:12px;font-size:13px;font-weight:900;letter-spacing:1.5px;cursor:pointer;font-family:inherit;text-transform:uppercase}
+button:active{transform:scale(.97)}
+#connectBtn{background:linear-gradient(135deg,#00d4ff,#0088ff);color:#fff;margin-bottom:8px}
+#payBtn{background:linear-gradient(135deg,#f5b800,#ff6b00);color:#0a1428;display:none;margin-bottom:8px}
+#payBtn.show{display:block}
+.wallet-info{font-size:10px;color:#00ffcc;margin:6px 0;padding:6px;background:rgba(0,255,204,.1);border:1px solid rgba(0,255,204,.3);border-radius:8px;word-break:break-all;display:none;text-align:center}
+.wallet-info.show{display:block}
+.profile-header{text-align:center;padding:20px 0;margin-bottom:14px}
+.profile-avatar{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#f5b800,#ff6b00);display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:900;color:#0a1428;margin:0 auto 12px;border:3px solid rgba(245,184,0,.5)}
+.profile-name{font-size:18px;font-weight:900;margin-bottom:4px}
+.profile-handle{font-size:11px;color:#6ba3ff}
+.profile-item{background:linear-gradient(135deg,rgba(0,212,255,.12),rgba(0,136,255,.08));border:1px solid rgba(0,212,255,.25);border-radius:12px;padding:12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.profile-item-label{font-size:13px;color:#a8c5ff;font-weight:600}
+.profile-item-value{font-size:13px;color:#f5b800;font-weight:800}
+.toast{position:fixed;top:20px;left:50%;transform:translateX(-50%) translateY(-100px);background:linear-gradient(135deg,#f5b800,#ff6b00);color:#0a1428;padding:12px 22px;border-radius:26px;font-size:13px;font-weight:800;z-index:10000;transition:transform .4s;pointer-events:none;max-width:90%;text-align:center}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.vip-modal{position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;padding:20px}
+.vip-modal.show{display:flex}
+.vip-content{width:100%;max-width:380px;max-height:80vh;overflow-y:auto;background:linear-gradient(160deg,#0a2a5a,#061a3a);border:2px solid #f5b800;border-radius:22px;padding:20px}
+.vip-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.vip-header h2{font-size:18px;font-weight:900;color:#f5b800}
+.vip-close{background:none;border:none;color:#fff;font-size:24px;cursor:pointer;width:auto;padding:0}
+.vip-tier{background:rgba(0,212,255,.1);border:1.5px solid rgba(0,212,255,.3);border-radius:14px;padding:14px;margin-bottom:10px}
+.vip-tier-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.vip-tier-name{font-size:14px;font-weight:900;color:#00d4ff}
+.vip-tier-price{font-size:13px;font-weight:900;color:#f5b800}
+.vip-tier-benefits{font-size:11px;color:#a8c5ff;line-height:1.6;margin-bottom:10px}
+.vip-buy-btn{width:100%;padding:10px;font-size:12px;background:linear-gradient(135deg,#f5b800,#ff6b00);color:#0a1428;border:none;border-radius:10px;font-weight:900;cursor:pointer;font-family:inherit;text-transform:uppercase}
+.task-item{background:linear-gradient(135deg,rgba(0,212,255,.12),rgba(0,136,255,.08));border:1px solid rgba(0,212,255,.25);border-radius:12px;padding:12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.task-left{display:flex;align-items:center;gap:10px;flex:1}
+.task-icon{font-size:24px}
+.task-info{flex:1}
+.task-name{font-size:13px;font-weight:700;color:#fff;margin-bottom:2px}
+.task-reward{font-size:11px;color:#f5b800;font-weight:800}
+.task-btn{background:linear-gradient(135deg,#f5b800,#ff6b00);color:#0a1428;padding:8px 14px;border-radius:8px;font-size:10px;font-weight:900;border:none;cursor:pointer;font-family:inherit;text-transform:uppercase}
+.refer-hero{background:radial-gradient(circle at center,rgba(0,212,255,.2),transparent 70%);padding:20px;border-radius:18px;text-align:center;margin-bottom:14px}
+.refer-count{font-size:48px;font-weight:900;background:linear-gradient(135deg,#f5b800,#ffdd00);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.refer-label{font-size:11px;color:#6ba3ff;letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-top:4px}
+.spin-result{position:fixed;inset:0;z-index:9997;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center;padding:20px}
+.spin-result.show{display:flex}
+.spin-result-content{background:linear-gradient(160deg,#0a2a5a,#061a3a);border:3px solid #f5b800;border-radius:22px;padding:30px 24px;text-align:center;max-width:320px;width:100%}
+.spin-result-prize{font-size:56px;font-weight:900;background:linear-gradient(135deg,#f5b800,#ffdd00);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin:12px 0}
+.spin-result-label{font-size:12px;color:#6ba3ff;text-transform:uppercase;letter-spacing:2px;font-weight:700}
+.spin-result-btn{width:100%;padding:14px;background:linear-gradient(135deg,#f5b800,#ff6b00);color:#0a1428;border:none;border-radius:12px;font-size:14px;font-weight:900;cursor:pointer;font-family:inherit;margin-top:16px;text-transform:uppercase}
+.bottom-nav{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(180deg,rgba(10,30,60,.95),rgba(3,10,26,.98));border-top:1px solid rgba(0,212,255,.3);display:flex;justify-content:space-around;align-items:center;padding:8px 4px 14px;z-index:50}
+.nav-item{flex:1;text-align:center;cursor:pointer;padding:6px 2px;position:relative}
+.nav-icon{font-size:20px;display:block;margin-bottom:2px}
+.nav-label{font-size:8px;color:#4a7aaa;font-weight:700;text-transform:uppercase}
+.nav-item.active .nav-label{color:#00d4ff}
+.nav-mine{background:linear-gradient(135deg,#f5b800,#ff6b00);width:52px;height:52px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;margin-top:-20px;border:3px solid #030a1a}
+.nav-mine .nav-icon{font-size:24px;margin-bottom:0}
+.nav-mine .nav-label{color:#0a1428;font-size:7px;font-weight:900}
+.mine-hero{text-align:center;padding:20px 0;background:radial-gradient(circle at center,rgba(0,212,255,.2),transparent 70%);border-radius:20px;margin-bottom:12px}
+.pickaxe-spin{font-size:60px;display:inline-block}
+.mine-rate{font-size:12px;color:#6ba3ff;margin-top:10px;font-weight:700}
+.mine-rate strong{color:#f5b800;font-size:16px}
+.progress-bar{width:100%;height:10px;background:rgba(0,212,255,.1);border-radius:5px;overflow:hidden;margin:14px 0 8px}
+.progress-fill{height:100%;background:linear-gradient(90deg,#00d4ff,#0088ff);border-radius:5px;width:0;transition:width 1s ease}
+.collect-btn{background:linear-gradient(135deg,#f5b800,#ff6b00);color:#0a1428;margin-top:8px}
+.wheel-container{text-align:center;padding:8px 0}
+.welcome-banner{background:linear-gradient(135deg,#22c55e,#16a34a);border-radius:12px;padding:12px;text-align:center;margin-bottom:12px;box-shadow:0 0 20px rgba(34,197,94,.4)}
+.welcome-banner-title{font-size:14px;font-weight:900;color:#fff;margin-bottom:2px}
+.welcome-banner-text{font-size:11px;color:rgba(255,255,255,.9)}
+</style>
+</head>
+<body>
+<div class="ocean-bg"><div class="wave"></div><div class="wave"></div><div class="wave"></div></div>
+  <div class="splash" id="splash">
+  <img src="file_000000004a1481f4ad0c20442e76e9f7.png" alt="Grover" class="splash-logo">
+  <div class="splash-title">GROVER</div>
+  <div class="splash-subtitle">Miner</div>
+  <div class="loading-bar"><div class="loading-fill"></div></div>
+</div>
+
+<div class="frame" id="frame">
+  <div class="screen active" id="gateScreen">
+    <div class="logo-wrap"><img src="file_000000004a1481f4ad0c20442e76e9f7.png" alt="Grover" class="logo" id="gateLogo"></div>
+    <div class="title">GROVER</div>
+    <div class="subtitle">Miner</div>
+    <div class="welcome-banner">
+      <div class="welcome-banner-title">🎉 +100 GROV Welcome Bonus!</div>
+      <div class="welcome-banner-text">Claim after entry</div>
+    </div>
+    <div class="mining-locked">
+      <span class="lock-icon">🔒</span>
+      <div class="mining-label">⛏️ Mining Locked</div>
+      <div class="mining-value">0.00<span class="unit">GROV</span></div>
+      <div class="mining-rate">⚡ Level 1 · 5 GROV / 24hrs</div>
+      <div class="mining-lock-text">Unlock by paying 0.1 TON</div>
+    </div>
+    <div class="fee-box">
+      <div class="fee-label">⚡ One-Time Entry Fee ⚡</div>
+      <div class="fee-value">0.1<span>TON</span></div>
+    </div>
+    <div class="notice">🔒 Wallet must be <strong>7+ days old</strong> to unlock mining.</div>
+    <div class="tos-check">
+      <input type="checkbox" id="tosCheckbox">
+      <label for="tosCheckbox">I agree to <span class="tos-text" onclick="openTOS()">Terms of Service</span></label>
+    </div>
+    <button id="connectBtn" onclick="handleConnect()">🔗 Connect Wallet</button>
+    <button id="payBtn" onclick="handlePay()">💎 Pay 0.1 TON</button>
+    <div id="walletInfo" class="wallet-info"></div>
+  </div>
+
+  <div class="screen" id="homeScreen">
+    <div class="home-top-bar">
+      <button class="vip-btn" id="vipBtn">👑 VIP</button>
+      <button class="profile-btn" onclick="switchTab('profile')">👤 Profile</button>
+    </div>
+    <div id="announcementBanner" style="display:none; background:linear-gradient(135deg,#ef4444,#dc2626); color:#fff; font-size:11px; font-weight:900; padding:8px; border-radius:8px; text-align:center; margin-bottom:10px;"></div>
+    <div class="live-feed-wrap">
+      <div class="live-feed-text" id="liveFeedText">Loading recent activity...</div>
+    </div>
+    <div class="logo-hero"><img src="file_000000004a1481f4ad0c20442e76e9f7.png" alt="Grover" class="hero-logo" id="homeLogo"></div>
+    <div class="earned-counter">
+      <div class="earned-value" id="earnedValue">+0.00000000</div>
+      <div class="earned-label">⛏️ Mining Live</div>
+      <div style="font-size:10px;color:#00d4ff;margin-top:4px;font-weight:700;" id="nextClaimTimer">Loading...</div>
+    </div>
+    <div class="balance-box">
+      <div class="balance-label">💰 Balance</div>
+      <div class="balance-value" id="balanceDisplay">0.00<span>GROV</span></div>
+    </div>
+    <button class="claim-btn" onclick="claimMining()">CLAIM</button>
+    <button class="mystery-btn" onclick="openMysteryBox()">🎁 Mystery Box</button>
+    <button class="mystery-btn" style="background:linear-gradient(135deg,#00d4ff,#0088ff);" onclick="buyScratchCard()">🎟️ Scratch Card (500 GROV)</button>
+    <button class="checkin-btn" onclick="openCheckin()">🎯 Daily Check-in</button>
+  </div>
+
+  <div class="screen" id="spinScreen">
+    <div style="text-align:center;margin-bottom:8px;">
+      <div style="font-size:22px;font-weight:900;color:#f5b800;">🎡 SPIN WHEEL</div>
+      <div style="font-size:11px;color:#00d4ff;margin-top:2px;">1 free spin per day</div>
+    </div>
+    <div class="wheel-container">
+      <svg viewBox="0 0 300 300" style="width:260px;height:260px;margin:0 auto;display:block;">
+        <circle cx="150" cy="150" r="140" fill="#030a1a" stroke="#00d4ff" stroke-width="4"/>
+        <g id="wheelGroup">
+          <path d="M150,150 L150,10 A140,140 0 0,1 244,38 Z" fill="#f5b800"/>
+          <path d="M150,150 L244,38 A140,140 0 0,1 290,124 Z" fill="#ff6b00"/>
+          <path d="M150,150 L290,124 A140,140 0 0,1 268,239 Z" fill="#0066ff"/>
+          <path d="M150,150 L268,239 A140,140 0 0,1 176,289 Z" fill="#8b5cf6"/>
+          <path d="M150,150 L176,289 A140,140 0 0,1 62,262 Z" fill="#ec4899"/>
+          <path d="M150,150 L62,262 A140,140 0 0,1 11,157 Z" fill="#ef4444"/>
+          <path d="M150,150 L11,157 A140,140 0 0,1 38,62 Z" fill="#22c55e"/>
+          <path d="M150,150 L38,62 A140,140 0 0,1 124,11 Z" fill="#00d4ff"/>
+          <path d="M150,150 L124,11 A140,140 0 0,1 150,10 Z" fill="#ffdd00"/>
+          <text x="195" y="60" fill="#0a1428" font-size="18" font-weight="900" text-anchor="middle">1</text>
+          <text x="245" y="115" fill="#0a1428" font-size="18" font-weight="900" text-anchor="middle">2</text>
+          <text x="255" y="195" fill="#fff" font-size="18" font-weight="900" text-anchor="middle">3</text>
+          <text x="205" y="255" fill="#fff" font-size="18" font-weight="900" text-anchor="middle">5</text>
+          <text x="118" y="270" fill="#fff" font-size="18" font-weight="900" text-anchor="middle">7</text>
+          <text x="55" y="215" fill="#fff" font-size="18" font-weight="900" text-anchor="middle">10</text>
+          <text x="55" y="110" fill="#fff" font-size="18" font-weight="900" text-anchor="middle">50</text>
+          <text x="115" y="60" fill="#0a1428" font-size="13" font-weight="900" text-anchor="middle">200</text>
+        </g>
+        <circle cx="150" cy="150" r="46" fill="#030a1a" stroke="#f5b800" stroke-width="3"/>
+        <text x="150" y="142" fill="#f5b800" font-size="10" font-weight="900" text-anchor="middle">JACKPOT</text>
+        <text x="150" y="160" fill="#f5b800" font-size="13" font-weight="900" text-anchor="middle">200 GROV</text>
+        <polygon points="150,5 135,30 165,30" fill="#f5b800" stroke="#030a1a" stroke-width="2"/>
+      </svg>
+    </div>
+    <button class="collect-btn" id="spinBtn" onclick="spinWheel(false)">🎡 SPIN NOW</button>
+    <div id="spinTimer" style="text-align:center;font-size:11px;color:#00d4ff;margin-top:8px;font-weight:700;"></div>
+  </div>
+
+  <div class="screen" id="mineScreen">
+    <div class="mine-hero">
+      <div class="pickaxe-spin">⛏️</div>
+      <div class="mine-rate">Mining at <strong id="mineRateText">5 GROV/day</strong></div>
+      <div class="mine-rate" style="font-size:10px;margin-top:4px;color:#4a7aaa;" id="mineLevelText">Level 1</div>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="mineProgressFill"></div></div>
+    <div style="text-align:center;font-size:10px;color:#00d4ff;margin-bottom:10px;" id="mineProgressText">Collect on Home</div>
+    <button class="collect-btn" onclick="switchTab('home')">💰 GO TO CLAIM</button>
+    <button style="background:linear-gradient(135deg,#8b5cf6,#6b46c1);color:#fff;margin-top:8px;border:none;" onclick="buyMiningBoost()">⚡ ACTIVATE 2X BOOST (WATCH 4 ADS)</button>
+    <div id="boostTimerText" style="text-align:center;font-size:11px;color:#00ffcc;margin-top:5px;font-weight:700;"></div>
+    <button style="background:linear-gradient(135deg,#00d4ff,#0088ff);color:#fff;margin-top:8px;" onclick="openVip()">👑 UPGRADE TO VIP</button>
+    <div class="stats2" style="margin-top:12px;">
+      <div class="stat"><div class="stat-label">⚡ Level</div><div class="stat-value" id="mineLevel">1</div></div>
+      <div class="stat"><div class="stat-label">📊 Rate</div><div class="stat-value" id="mineRate">5/day</div></div>
+    </div>
+            </div>
   
