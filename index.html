@@ -710,6 +710,46 @@ button:active{transform:scale(.97)}
     if (tab === 'refer') { renderLeaderboard(); document.getElementById('prizePoolDisplay').textContent = prizePool; checkReferralMilestones(); }
     if (tab === 'tasks') renderUserTasks();
   }
+    async function loadTransactionHistory() {
+  if (!tg || !tg.initData) return;
+  const list = document.getElementById('txHistoryList');
+  if (!list) return;
+  
+  list.innerHTML = '<div style="font-size:10px; color:#6ba3ff; text-align:center;">Loading history...</div>';
+  
+  try {
+    const res = await fetch(BACKEND_URL + '/api/transactions', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ initData: tg.initData })
+    });
+    const data = await res.json();
+    
+    list.innerHTML = '';
+    if (!data.transactions || data.transactions.length === 0) {
+      list.innerHTML = '<div style="font-size:10px; color:#6ba3ff; text-align:center;">No transactions yet.</div>';
+      return;
+    }
+    
+    data.transactions.forEach(tx => {
+      const isPositive = tx.amount > 0;
+      const color = isPositive ? '#22c55e' : '#ef4444';
+      const sign = isPositive ? '+' : '';
+      
+      const div = document.createElement('div');
+      div.style.cssText = `background:rgba(255,255,255,0.05); padding:10px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; font-size:11px;`;
+      div.innerHTML = `
+        <div>
+          <div style="color:#fff; font-weight:700;">${tx.type}</div>
+          <div style="color:#6ba3ff; font-size:9px;">${new Date(tx.date).toLocaleDateString()}</div>
+        </div>
+        <div style="color:${color}; font-weight:900;">${sign}${tx.amount} GROV</div>
+      `;
+      list.appendChild(div);
+    });
+  } catch (e) {
+    list.innerHTML = '<div style="font-size:10px; color:#ef4444; text-align:center;">Failed to load history.</div>';
+  }
+}
 
   function openVip() { const el = document.getElementById('vipModal'); if(el) el.classList.add('show'); }
   function closeVip() { const el = document.getElementById('vipModal'); if(el) el.classList.remove('show'); }
