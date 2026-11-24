@@ -461,4 +461,420 @@ button:active{transform:scale(.97)}
 </div>
 
 <div class="toast" id="toast">Message</div>
+  <script>
+  const tg = window.Telegram?.WebApp;
+  if (tg) { tg.ready(); tg.expand(); tg.setHeaderColor('#030a1a'); tg.setBackgroundColor('#030a1a'); }
+
+  const CURRENT_RESET_VERSION = 'v1_launch'; 
+  const userResetVersion = localStorage.getItem('grover_reset_version');
+  if (userResetVersion !== CURRENT_RESET_VERSION) {
+    Object.keys(localStorage).forEach(k => {
+      if (k.startsWith('grover_state_') || k.startsWith('joined_via_')) { localStorage.removeItem(k); }
+    });
+    localStorage.setItem('grover_reset_version', CURRENT_RESET_VERSION);
+  }
+
+  function getCurrentUserId() {
+    if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) return String(tg.initDataUnsafe.user.id);
+    return 'guest_' + (localStorage.getItem('grover_device_id') || (() => {
+      const id = Date.now() + '_' + Math.random().toString(36).slice(2);
+      localStorage.setItem('grover_device_id', id);
+      return id;
+    })());
+  }
+  
+  const CURRENT_USER = getCurrentUserId();
+  const BACKEND_URL = 'https://grover-backup.onrender.com';
+  const MINING_RATES = { 1: 5, 2: 15, 3: 30, 4: 50, 5: 75, 6: 100 };
+  const DAY_MS = 24 * 60 * 60 * 1000;
+  const WELCOME_BONUS = 100;
+
+  let fakeUsers = [];
+  let hasDiamond = localStorage.getItem('grover_diamond_' + CURRENT_USER) === 'true';
+  let prizePool = localStorage.getItem('grover_prize_pool') || '50';
+
+  let state = {
+    balance: 0, lastClaimTime: Date.now(), lastSpin: null, extraSpinsUsed: 0,
+    vipLevel: 1, hasPaid: false, referralCount: 0, referralCode: null, welcomeClaimed: false,
+    checkinDay: 1, lastCheckin: null, boostUntil: null, walletPin: null, lastShare: null,
+    ms5: false, ms10: false, ms50: false
+  };
+
+  function saveState() { try { localStorage.setItem('grover_state_' + CURRENT_USER, JSON.stringify(state)); } catch(e){} }
+  function loadState() { try { const saved = localStorage.getItem('grover_state_' + CURRENT_USER); if (saved) state = Object.assign(state, JSON.parse(saved)); } catch(e){} }
+  
+  function getOrCreateReferralCode() {
+    if (state.referralCode) return state.referralCode;
+    state.referralCode = 'GRV' + CURRENT_USER.slice(-6).toUpperCase();
+    saveState();
+    return state.referralCode;
+  }
+
+  setTimeout(() => { 
+    const splash = document.getElementById('splash');
+    const frame = document.getElementById('frame');
+    if (splash) splash.classList.add('hide'); 
+    if (frame) frame.classList.add('show'); 
+  }, 2000);
+
+  function toast(msg) { 
+    const el = document.getElementById('toast'); 
+    if(!el) return;
+    el.textContent = msg; el.classList.add('show'); 
+    if(tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+    setTimeout(() => el.classList.remove('show'), 2500); 
+  }
+
+  async function syncUserWithCloud() {
+    if (!tg || !tg.initData) return;
+    try {
+      const res = await fetch(BACKEND_URL + '/api/sync', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ initData: tg.initData })
+      });
+      const data = await res.json();
+      if (data.user) {
+        state.balance = data.user.balance;
+        state.vipLevel = data.user.vipLevel;
+        state.hasPaid = data.user.hasPaid;
+        state.referralCount = data.user.referralCount;
+        if (data.user.referralCode) state.referralCode = data.user.referralCode;
+        if (state.hasPaid) {
+          document.getElementById('gateScreen').classList.remove('active');
+          document.getElementById('homeScreen').classList.add('active');
+          document.getElementById('bottomNav').style.display = 'flex';
+        }
+        saveState(); updateBalanceDisplay();
+      }
+    } catch (e) { console.log('Cloud sync failed', e); }
+  }
+
+  function getMiningRate() { 
+    let rate = MINING_RATES[state.vipLevel] || 5;
+    if (state.boostUntil && Date.now() < state.boostUntil) { rate *= 2; }
+    return rate; 
+  }
+  
+  function calculatePending() { const rate = getMiningRate(); const elapsed = Date.now() - state.lastClaimTime; return Math.min(rate, (elapsed / DAY_MS) * rate); }
+
+  function updateMiningCounter() {
+    const pending = calculatePending();
+    const earnedEl = document.getElementById('earnedValue');
+    if (earnedEl) earnedEl.textContent = '+' + pending.toFixed(8);
+
+    const rate = getMiningRate();
+    const timerEl = document.getElementById('nextClaimTimer');
+    if (timerEl) {
+      if (pending >= rate) { timerEl.textContent = '🛑 Mining Stopped! Claim Now'; timerEl.style.color = '#ef4444'; }
+      else { const sLeft = Math.max(0, Math.floor((DAY_MS - (Date.now() - state.lastClaimTime)) / 1000)); timerEl.textContent = '⛏️ Full in ' + Math.floor(sLeft/3600) + 'h ' + Math.floor((sLeft%3600)/60) + 'm'; timerEl.style.color = '#00d4ff'; }
+    }
+    
+    const boostEl = document.getElementById('boostTimerText');
+    if (boostEl) {
+      if (state.boostUntil && Date.now() < state.boostUntil) { const hLeft = Math.ceil((state.boostUntil - Date.now()) / (60 * 60 * 1000)); boostEl.textContent = '🔥 2X Boost Active (' + hLeft + 'h left)'; }
+      else { boostEl.textContent = ''; }
+    }
+
+    const mRate = document.getElementById('mineRate'); const mLevel = document.getElementById('mineLevel');
+    const mRateText = document.getElementById('mineRateText'); const mLevelText = document.getElementById('mineLevelText');
+    const mProgFill = document.getElementById('mineProgressFill'); const mProgText = document.getElementById('mineProgressText');
+    if (mRate) mRate.textContent = rate + '/day'; if (mLevel) mLevel.textContent = state.vipLevel;
+    if (mRateText) mRateText.textContent = rate + ' GROV/day'; if (mLevelText) mLevelText.textContent = 'Level ' + state.vipLevel;
+    if (mProgFill) mProgFill.style.width = Math.min(100, (pending / rate) * 100) + '%';
+    if (mProgText) mProgText.textContent = pending >= rate ? '✅ Ready to claim' : 'Mining... ' + pending.toFixed(6) + ' GROV';
+  }
+
+  function updateBalanceDisplay() {
+    const bal = document.getElementById('balanceDisplay'); if (bal) bal.innerHTML = state.balance.toFixed(2) + '<span>GROV</span>';
+    const wBal = document.getElementById('walletBalanceDisplay'); if (wBal) wBal.innerHTML = state.balance.toFixed(2) + '<span>GROV</span>';
+    const wCode = document.getElementById('walletInviteCode'); if (wCode) wCode.textContent = getOrCreateReferralCode();
+    // Update Diamond Display
+    const wDiamond = document.getElementById('walletDiamondDisplay'); 
+    if (wDiamond) wDiamond.innerHTML = (hasDiamond ? '1' : '0') + '<span>💎</span>';
+  }
+      async function claimMining() {
+    const elapsed = Date.now() - state.lastClaimTime;
+    if (DAY_MS - elapsed > 0) { return toast('⏳ Mining is still in progress!'); }
+    try {
+      const res = await fetch(BACKEND_URL + '/api/claim', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ initData: tg.initData })
+      });
+      const data = await res.json();
+      if (data.success) {
+        state.balance = data.newBalance; state.lastClaimTime = Date.now();
+        document.getElementById('qClaim').checked = true;
+        saveState(); updateBalanceDisplay(); updateMiningCounter(); toast('💰 Claimed from Cloud!');
+      } else { toast('❌ ' + data.error); }
+    } catch (e) { toast('❌ Network Error. Try again.'); }
+  }
+
+  function buyMiningBoost() {
+    if (state.boostUntil && Date.now() < state.boostUntil) return toast('❌ Boost is already active!');
+    let adsWatched = 0;
+    function showNextAd() {
+      if (adsWatched >= 4) { state.boostUntil = Date.now() + DAY_MS; saveState(); updateMiningCounter(); toast('⚡ 2X Boost Activated!'); return; }
+      toast('🎬 Loading Ad ' + (adsWatched + 1) + '/4...');
+      if (typeof window.show_11979593 === 'function') {
+        window.show_11979593().then(() => { adsWatched++; showNextAd(); }).catch(() => { toast('❌ Ad failed to load.'); });
+      } else { toast('⚠️ Ad SDK not loaded.'); }
+    }
+    showNextAd();
+  }
+
+  function spinWheel(isRespin) {
+    const today = new Date().toDateString();
+    if (!isRespin) {
+      if (state.lastSpin === today) { if (state.extraSpinsUsed >= 10) { return toast('❌ Daily spin limit reached!'); } return watchAdForSpin(); }
+    }
+    const wheelGroup = document.getElementById('wheelGroup');
+    if(wheelGroup) { wheelGroup.style.transition = 'transform 4s cubic-bezier(.17,.67,.83,.67)'; wheelGroup.style.transformOrigin = '150px 150px'; wheelGroup.style.transform = 'rotate(' + (1440 + Math.floor(Math.random() * 360)) + 'deg)'; }
+    const btn = document.getElementById('spinBtn'); if(btn) { btn.disabled = true; btn.textContent = '⏳ SPINNING...'; }
+    setTimeout(() => {
+      const prize = Math.floor(Math.random() * 6) + 1; state.balance += prize; updateBalanceDisplay(); 
+      if (!isRespin) { state.lastSpin = today; document.getElementById('qSpin').checked = true; } else { state.extraSpinsUsed++; }
+      saveState();
+      if(wheelGroup) { wheelGroup.style.transition = 'none'; wheelGroup.style.transform = 'rotate(0deg)'; }
+      const prizeEl = document.getElementById('spinResultPrize'); if (prizeEl) prizeEl.textContent = '+' + prize;
+      const modal = document.getElementById('spinResultModal'); if (modal) modal.classList.add('show');
+      updateSpinTimer();
+    }, 4000);
+  }
+
+  function updateSpinTimer() {
+    const today = new Date().toDateString();
+    const btn = document.getElementById('spinBtn'); if (!btn) return;
+    if (state.lastSpin === today) {
+      if (state.extraSpinsUsed >= 10) { btn.disabled = true; btn.textContent = '✅ ALL SPINS USED TODAY'; btn.style.background = '#4a7aaa'; }
+      else { btn.disabled = false; btn.textContent = '🎬 WATCH AD (' + (10 - state.extraSpinsUsed) + ' left)'; btn.style.background = 'linear-gradient(135deg,#00d4ff,#0088ff)'; }
+    } else { btn.disabled = false; btn.textContent = '🎡 SPIN NOW (FREE)'; btn.style.background = 'linear-gradient(135deg,#f5b800,#ff6b00)'; }
+  }
+
+  function watchAdForSpin() { 
+    if (typeof window.show_11979593 === 'function') {
+      window.show_11979593().then(() => { toast('✅ Ad watched! Spinning now...'); spinWheel(true); }).catch(() => { toast('❌ Ad failed to load.'); });
+    } else { toast('⚠️ Ad SDK not loaded.'); }
+  }
+  function closeSpinResult() { const el = document.getElementById('spinResultModal'); if(el) el.classList.remove('show'); }
+
+  function openCheckin() { document.getElementById('checkinModal').classList.add('show'); renderCheckinGrid(); }
+  function closeCheckin() { document.getElementById('checkinModal').classList.remove('show'); }
+  function renderCheckinGrid() {
+    const grid = document.getElementById('checkinGrid'); if (!grid) return;
+    grid.innerHTML = '';
+    const rewards = [10, 20, 30, 40, 50, 60, 200];
+    const today = new Date().toDateString();
+    for (let i = 1; i <= 7; i++) {
+      const isClaimed = state.checkinDay > i;
+      const isToday = state.checkinDay === i && state.lastCheckin !== today;
+      const box = document.createElement('div');
+      box.style.cssText = `background:${isClaimed ? 'rgba(34,197,94,.2)' : isToday ? 'rgba(245,184,0,.2)' : 'rgba(255,255,255,.05)'}; border:1px solid ${isClaimed ? '#22c55e' : isToday ? '#f5b800' : 'rgba(255,255,255,.1)'}; border-radius:10px; padding:10px; text-align:center;`;
+      box.innerHTML = `<div style="font-size:10px; color:#a8c5ff; margin-bottom:4px;">Day ${i}</div><div style="font-size:14px; font-weight:900; color:${isClaimed ? '#22c55e' : isToday ? '#f5b800' : '#fff'};">+${rewards[i-1]}</div>`;
+      grid.appendChild(box);
+    }
+  }
+
+  function claimCheckin() {
+    const today = new Date().toDateString();
+    if (state.lastCheckin === today) return toast('❌ Already claimed today!');
+    if (state.checkinDay > 7) return toast('🎉 You finished the streak! Resetting...');
+    const rewards = [10, 20, 30, 40, 50, 60, 200];
+    const reward = rewards[state.checkinDay - 1];
+    state.balance += reward; state.lastCheckin = today; state.checkinDay++;
+    if (state.checkinDay > 7) state.checkinDay = 1; 
+    saveState(); updateBalanceDisplay(); renderCheckinGrid();
+    toast('🎁 +' + reward + ' GROV Checked In!');
+  }
+
+  function claimQuestReward() {
+    const q1 = document.getElementById('qClaim').checked;
+    const q2 = document.getElementById('qSpin').checked;
+    const q3 = document.getElementById('qP2P').checked;
+    if (!q1 || !q2 || !q3) return toast('❌ Complete all 3 quests first!');
+    state.balance += 200; saveState(); updateBalanceDisplay();
+    toast('✅ +200 GROV Quest Reward Claimed!');
+    document.getElementById('qClaim').checked = false; document.getElementById('qSpin').checked = false; document.getElementById('qP2P').checked = false;
+  }
+
+  function switchTab(tab) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    const screens = { mine:'mineScreen', spin:'spinScreen', profile:'profileScreen', wallet:'walletScreen', tasks:'tasksScreen', refer:'referScreen', home:'homeScreen' };
+    const el = document.getElementById(screens[tab]); if (el) el.classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(n => { if (n.dataset.tab === tab) n.classList.add('active'); });
+    if (tab === 'wallet') updateBalanceDisplay();
+    if (tab === 'refer') { renderLeaderboard(); document.getElementById('prizePoolDisplay').textContent = prizePool; checkReferralMilestones(); }
+    if (tab === 'tasks') renderUserTasks();
+  }
+
+  function openVip() { const el = document.getElementById('vipModal'); if(el) el.classList.add('show'); }
+  function closeVip() { const el = document.getElementById('vipModal'); if(el) el.classList.remove('show'); }
+  async function buyVip(level) {
+    const prices = { 2: 3, 3: 6, 4: 9, 5: 12, 6: 15 }; const price = prices[level];
+    if (!connectedWallet) return toast('❌ Connect your TON wallet first!');
+    try {
+      toast('💎 Confirm ' + price + ' TON payment...');
+      await tonConnectUI.sendTransaction({ validUntil: Math.floor(Date.now() / 1000) + 360, messages: [{ address: PROJECT_WALLET, amount: (price * 1000000000).toString() }] });
+      state.vipLevel = level; saveState(); closeVip(); toast('✅ VIP Level ' + level + ' activated!'); updateMiningCounter();
+    } catch (e) { toast('❌ Payment cancelled.'); }
+  }
+
+  async function buyDiamondTON() {
+    if (hasDiamond) return toast('💎 You already own a Diamond!');
+    if (!connectedWallet) return toast('❌ Connect wallet first!');
+    try {
+      toast('💎 Confirm 1 TON payment...');
+      await tonConnectUI.sendTransaction({ validUntil: Math.floor(Date.now() / 1000) + 360, messages: [{ address: PROJECT_WALLET, amount: '1000000000' }] });
+      hasDiamond = true; localStorage.setItem('grover_diamond_' + CURRENT_USER, 'true'); toast('💎 Diamond Purchased!'); closeVip(); updateBalanceDisplay();
+    } catch (e) { toast('❌ Payment cancelled.'); }
+  }
+  function buyDiamondGROV() {
+    if (hasDiamond) return toast('💎 You already own a Diamond!');
+    if (state.balance < 10000000) return toast('❌ Need 10,000,000 GROV!');
+    state.balance -= 10000000; hasDiamond = true; localStorage.setItem('grover_diamond_' + CURRENT_USER, 'true'); saveState(); updateBalanceDisplay(); toast('💎 Diamond Purchased with GROV!'); closeVip();
+  }
+
+  function buyScratchCard() { document.getElementById('scratchModal').classList.add('show'); }
+  function closeScratchCard() { 
+    document.getElementById('scratchModal').classList.remove('show'); 
+    setTimeout(() => {
+      const content = document.querySelector('#scratchModal .spin-result-content');
+      content.innerHTML = `<div class="spin-result-label" style="color:#00d4ff; font-size:14px;">Scratch Card</div><div style="font-size:70px; margin: 15px 0; filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.8));">🎟️</div><div style="font-size:11px; color:#a8c5ff; margin-bottom:15px; line-height:1.4;">Buy a scratch card for 500 GROV to win up to 200 GROV or a rare <b>Diamond 💎</b>!</div><button id="scratchPayBtn" class="spin-result-btn" style="background:linear-gradient(135deg,#00d4ff,#0088ff); color:#fff;" onclick="payScratchCard()">BUY FOR 500 GROV</button><button class="spin-result-btn" style="background:rgba(255,255,255,0.1); color:#fff; margin-top:8px; font-size:12px; padding:10px;" onclick="closeScratchCard()">Cancel</button>`;
+    }, 300);
+  }
+
+  async function payScratchCard() {
+    if (state.balance < 500) return toast('❌ Need 500 GROV to buy!');
+    try {
+      const res = await fetch(BACKEND_URL + '/api/deduct-grov', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ initData: tg.initData, amount: 500, action: 'Scratch Card Bought' })
+      });
+      const data = await res.json();
+      if (!data.success) return toast('❌ ' + data.error);
+      state.balance = data.newBalance; saveState(); updateBalanceDisplay();
+      
+      const btn = document.getElementById('scratchPayBtn'); btn.textContent = '⏳ Scratching...'; btn.disabled = true;
+      setTimeout(() => {
+        const roll = Math.random() * 100; let prizeText = ''; let isDiamond = false;
+        if (roll < 0.000001) { prizeText = 'DIAMOND'; isDiamond = true; hasDiamond = true; localStorage.setItem('grover_diamond_' + CURRENT_USER, 'true'); } 
+        else { const prize = Math.floor(Math.random() * 200) + 1; state.balance += prize; prizeText = '+' + prize; }
+        saveState(); updateBalanceDisplay();
+        const content = document.querySelector('#scratchModal .spin-result-content');
+        if (isDiamond) { content.innerHTML = `<div class="spin-result-label" style="color:#00d4ff;">🎉 JACKPOT! 🎉</div><div style="font-size:70px; margin: 10px 0; filter: drop-shadow(0 0 30px rgba(0, 212, 255, 1));">💎</div><div class="spin-result-prize" style="color:#00d4ff; font-size:30px;">${prizeText}</div><div class="spin-result-label" style="font-size:10px;">Contact Support to claim</div><button class="spin-result-btn" style="background:linear-gradient(135deg,#00d4ff,#0088ff); color:#fff;" onclick="closeScratchCard()">CLAIM</button>`; } 
+        else { content.innerHTML = `<div class="spin-result-label" style="color:#00d4ff;">You Won!</div><div class="spin-result-prize">${prizeText}</div><div class="spin-result-label">GROV</div><button class="spin-result-btn" onclick="closeScratchCard()">CLAIM</button>`; }
+        toast('🎟️ Card Scratched!');
+      }, 1500);
+    } catch (e) { toast('❌ Network Error'); }
+  }
+
+  function openMysteryBox() { document.getElementById('mysteryModal').classList.add('show'); }
+  function closeMysteryBox() { 
+    document.getElementById('mysteryModal').classList.remove('show'); 
+    setTimeout(() => {
+      const content = document.querySelector('#mysteryModal .spin-result-content');
+      content.innerHTML = `<div class="spin-result-label" style="color:#00d4ff; font-size:14px;">Mystery Box</div><div style="font-size:70px; margin: 15px 0; filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.8));">🎁</div><div style="font-size:11px; color:#a8c5ff; margin-bottom:15px; line-height:1.4;">Win GROV (starts at 500!) or a rare <b>Diamond 💎</b>!</div><button id="mysteryPayBtn" class="spin-result-btn" style="background:linear-gradient(135deg,#8b5cf6,#6b46c1); color:#fff;" onclick="payMysteryBox()">💎 OPEN FOR 1,000 GROV</button><button class="spin-result-btn" style="background:rgba(255,255,255,0.1); color:#fff; margin-top:8px; font-size:12px; padding:10px;" onclick="closeMysteryBox()">Cancel</button>`;
+    }, 300);
+  }
+
+  async function payMysteryBox() {
+    if (state.balance < 1000) return toast('❌ Need 1,000 GROV to open!');
+    try {
+      const res = await fetch(BACKEND_URL + '/api/deduct-grov', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ initData: tg.initData, amount: 1000, action: 'Mystery Box Opened' })
+      });
+      const data = await res.json();
+      if (!data.success) return toast('❌ ' + data.error);
+      state.balance = data.newBalance; saveState(); updateBalanceDisplay();
+      
+      const btn = document.getElementById('mysteryPayBtn'); btn.textContent = '⏳ Opening...'; btn.disabled = true;
+      setTimeout(() => { 
+        const roll = Math.random() * 100; let prizeText = ''; let isDiamond = false;
+        if (roll < 0.00001) { prizeText = 'DIAMOND'; isDiamond = true; } 
+        else { const grov = Math.floor(Math.random() * 2001) + 500; state.balance += grov; prizeText = '+' + grov; }
+        saveState(); updateBalanceDisplay();
+        const content = document.querySelector('#mysteryModal .spin-result-content');
+        if (isDiamond) { content.innerHTML = `<div class="spin-result-label" style="color:#00d4ff;">🎉 JACKPOT! 🎉</div><div style="font-size:70px; margin: 10px 0; filter: drop-shadow(0 0 30px rgba(0, 212, 255, 1));">💎</div><div class="spin-result-prize" style="color:#00d4ff; font-size:30px;">${prizeText}</div><div class="spin-result-label" style="font-size:10px;">Contact Support to claim</div><button class="spin-result-btn" style="background:linear-gradient(135deg,#00d4ff,#0088ff); color:#fff;" onclick="closeMysteryBox()">CLAIM</button>`; } 
+        else { content.innerHTML = `<div class="spin-result-label" style="color:#00d4ff;">You Won!</div><div class="spin-result-prize">${prizeText}</div><div class="spin-result-label">GROV</div><button class="spin-result-btn" onclick="closeMysteryBox()">CLAIM</button>`; }
+      }, 1500);
+    } catch (e) { toast('❌ Network Error'); }
+  }
+
+  let userTasks = JSON.parse(localStorage.getItem('grover_tasks')) || [
+    { id: 't_share', name: 'Share on Telegram/X', reward: 100, link: 'SHARE_APP' },
+    { id: 't1', name: 'Follow on X', reward: 50, link: 'https://x.com/grovmining' },
+    { id: 't2', name: 'Join Telegram', reward: 50, link: 'https://t.me/GrovOfficial' }
+  ];
+  function renderUserTasks() {
+    const list = document.getElementById('tasksList'); if (!list) return;
+    list.innerHTML = '';
+    userTasks.forEach((t, i) => {
+      const div = document.createElement('div'); div.className = 'task-item';
+      div.innerHTML = `<div class="task-left"><div class="task-icon">📌</div><div class="task-info"><div class="task-name">${t.name}</div><div class="task-reward">+${t.reward} GROV</div></div></div><button class="task-btn" onclick="doTask('${t.link}')">GO</button>`;
+      list.appendChild(div);
+    });
+  }
+  function doTask(link) {
+    if (link === 'SHARE_APP') {
+      const today = new Date().toDateString();
+      if (state.lastShare === today) return toast('❌ Already shared today!');
+      state.balance += 100; state.lastShare = today; saveState(); updateBalanceDisplay();
+      const shareUrl = 'https://t.me/share/url?url=' + encodeURIComponent('https://t.me/GroverMiningBot/app') + '&text=' + encodeURIComponent('Join Grover Miner and earn GROV!');
+      if (tg) tg.openTelegramLink(shareUrl);
+      toast('✅ Shared! +100 GROV'); return;
+    }
+    if (link) window.open(link, '_blank'); toast('Task opened!');
+  }
+
+  function checkReferralMilestones() {
+    if (state.referralCount >= 5 && !state.ms5) { state.ms5 = true; state.balance += 500; saveState(); toast('🎉 Milestone: 5 Friends! +500 GROV'); }
+    if (state.referralCount >= 10 && !state.ms10) { state.ms10 = true; state.balance += 1500; saveState(); toast('🎉 Milestone: 10 Friends! +1,500 GROV'); }
+    if (state.referralCount >= 50 && !state.ms50) { state.ms50 = true; state.balance += 10000; saveState(); toast('🎉 Milestone: 50 Friends! +10,000 GROV'); }
+    updateBalanceDisplay();
+  }
+
+  function renderLeaderboard() {
+    const list = document.getElementById('leaderboardList'); if (!list) return;
+    let allUsers = [...fakeUsers];
+    allUsers.push({ name: 'You', refs: state.referralCount, isMe: true });
+    allUsers.sort((a, b) => b.refs - a.refs);
+    const myIndex = allUsers.findIndex(u => u.isMe);
+    const rankEl = document.getElementById('userRankDisplay'); if (rankEl) rankEl.textContent = '#' + (myIndex + 1);
+    list.innerHTML = '';
+    allUsers.slice(0, 10).forEach((u, i) => {
+      let medal = i === 0 ? '🥇 ' : i === 1 ? '🥈 ' : i === 2 ? '🥉 ' : '';
+      const isMeStyle = u.isMe ? 'border:1px solid #00d4ff; background:rgba(0,212,255,0.1);' : 'background:rgba(255,255,255,0.05);';
+      const row = document.createElement('div');
+      row.style.cssText = `display:flex; justify-content:space-between; padding:8px 10px; border-radius:8px; font-size:11px; ${isMeStyle}`;
+      row.innerHTML = `<div style="color:#fff; font-weight:${u.isMe ? '900' : '600'};">${medal}${u.name}</div><div style="color:#f5b800; font-weight:900;">${u.refs} refs</div>`;
+      list.appendChild(row);
+    });
+  }
+
+  function referFriend() {
+    const code = getOrCreateReferralCode();
+    const link = 'https://t.me/GroverMiningBot/app?startapp=ref_' + code;
+    const text = 'Join Grover Miner and earn GROV! My code: ' + code;
+    if (tg && tg.openTelegramLink) { tg.openTelegramLink('https://t.me/share/url?url=' + encodeURIComponent(link) + '&text=' + encodeURIComponent(text)); }
+    else { if (navigator.clipboard) navigator.clipboard.writeText(link); toast('📋 Link copied!'); }
+  }
+  
+  function showMyLink() {
+    const code = getOrCreateReferralCode();
+    const link = 'https://t.me/GroverMiningBot/app?startapp=ref_' + code;
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(link).then(() => { toast('📋 Link Copied!'); }).catch(() => { fallbackCopy(link); });
+    } else { fallbackCopy(link); }
+  }
+
+  function fallbackCopy(text) {
+    const textArea = document.createElement("textarea");
+    textArea.value = text; textArea.style.position = "fixed";
+    document.body.appendChild(textArea);
+    textArea.focus(); textArea.select();
+    try { document.execCommand('copy'); toast('📋 Link Copied!'); } catch (err) { toast('❌ Failed to copy.'); }
+    document.body.removeChild(textArea);
+  }
+
   
