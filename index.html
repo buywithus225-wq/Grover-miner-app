@@ -530,6 +530,7 @@ button:active{transform:scale(.97)}
   }
 
   async function syncUserWithCloud() {
+    fetchGlobalSettings();
     if (!tg || !tg.initData) return;
     try {
       const res = await fetch(BACKEND_URL + '/api/sync', {
@@ -812,38 +813,52 @@ button:active{transform:scale(.97)}
     } catch (e) { toast('❌ Network Error'); }
   }
 
-  function openMysteryBox() { document.getElementById('mysteryModal').classList.add('show'); }
-  function closeMysteryBox() { 
-    document.getElementById('mysteryModal').classList.remove('show'); 
-    setTimeout(() => {
-      const content = document.querySelector('#mysteryModal .spin-result-content');
-      content.innerHTML = `<div class="spin-result-label" style="color:#00d4ff; font-size:14px;">Mystery Box</div><div style="font-size:70px; margin: 15px 0; filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.8));">🎁</div><div style="font-size:11px; color:#a8c5ff; margin-bottom:15px; line-height:1.4;">Win GROV (starts at 500!) or a rare <b>Diamond 💎</b>!</div><button id="mysteryPayBtn" class="spin-result-btn" style="background:linear-gradient(135deg,#8b5cf6,#6b46c1); color:#fff;" onclick="payMysteryBox()">💎 OPEN FOR 1,000 GROV</button><button class="spin-result-btn" style="background:rgba(255,255,255,0.1); color:#fff; margin-top:8px; font-size:12px; padding:10px;" onclick="closeMysteryBox()">Cancel</button>`;
-    }, 300);
-  }
+  function openMysteryBox() {
+  document.getElementById('mysteryModal').classList.add('show');
+  const content = document.querySelector('#mysteryModal .spin-result-content');
+  content.innerHTML = `
+    <div class="spin-result-label" style="color:#00d4ff; font-size:14px;">Mystery Box</div>
+    <div id="chestIcon" style="font-size:80px; margin: 15px 0; cursor:pointer; transition:transform 0.1s;" onclick="tapChest(0)">📦</div>
+    <div style="font-size:11px; color:#a8c5ff; margin-bottom:15px; line-height:1.4;" id="chestText">Tap the chest twice to open!</div>
+    <button id="mysteryPayBtn" class="spin-result-btn" style="background:linear-gradient(135deg,#8b5cf6,#6b46c1); color:#fff;" onclick="payMysteryBox()">💎 OPEN FOR 1,000 GROV</button>
+    <button class="spin-result-btn" style="background:rgba(255,255,255,0.1); color:#fff; margin-top:8px; font-size:12px; padding:10px;" onclick="closeMysteryBox()">Cancel</button>
+  `;
+}
 
   async function payMysteryBox() {
-    if (state.balance < 1000) return toast('❌ Need 1,000 GROV to open!');
-    try {
-      const res = await fetch(BACKEND_URL + '/api/deduct-grov', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ initData: tg.initData, amount: 1000, action: 'Mystery Box Opened' })
-      });
-      const data = await res.json();
-      if (!data.success) return toast('❌ ' + data.error);
-      state.balance = data.newBalance; saveState(); updateBalanceDisplay();
+  if (state.balance < 1000) return toast('❌ Need 1,000 GROV to open!');
+  try {
+    const res = await fetch(BACKEND_URL + '/api/deduct-grov', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ initData: tg.initData, amount: 1000, action: 'Mystery Box Opened' })
+    });
+    const data = await res.json();
+    if (!data.success) return toast('❌ ' + data.error);
+    
+    state.balance = data.newBalance; saveState(); updateBalanceDisplay();
+    
+    document.getElementById('mysteryPayBtn').style.display = 'none';
+    document.getElementById('chestText').textContent = 'Chest unlocked! Tap it twice fast!';
+    
+    let taps = 0;
+    window.tapChest = function() {
+      const chest = document.getElementById('chestIcon');
+      chest.style.transform = 'scale(1.1)';
+      setTimeout(() => chest.style.transform = 'scale(1)', 100);
       
-      const btn = document.getElementById('mysteryPayBtn'); btn.textContent = '⏳ Opening...'; btn.disabled = true;
-      setTimeout(() => { 
-        const roll = Math.random() * 100; let prizeText = ''; let isDiamond = false;
-        if (roll < 0.00001) { prizeText = 'DIAMOND'; isDiamond = true; } 
-        else { const grov = Math.floor(Math.random() * 2001) + 500; state.balance += grov; prizeText = '+' + grov; }
-        saveState(); updateBalanceDisplay();
-        const content = document.querySelector('#mysteryModal .spin-result-content');
-        if (isDiamond) { content.innerHTML = `<div class="spin-result-label" style="color:#00d4ff;">🎉 JACKPOT! 🎉</div><div style="font-size:70px; margin: 10px 0; filter: drop-shadow(0 0 30px rgba(0, 212, 255, 1));">💎</div><div class="spin-result-prize" style="color:#00d4ff; font-size:30px;">${prizeText}</div><div class="spin-result-label" style="font-size:10px;">Contact Support to claim</div><button class="spin-result-btn" style="background:linear-gradient(135deg,#00d4ff,#0088ff); color:#fff;" onclick="closeMysteryBox()">CLAIM</button>`; } 
-        else { content.innerHTML = `<div class="spin-result-label" style="color:#00d4ff;">You Won!</div><div class="spin-result-prize">${prizeText}</div><div class="spin-result-label">GROV</div><button class="spin-result-btn" onclick="closeMysteryBox()">CLAIM</button>`; }
-      }, 1500);
-    } catch (e) { toast('❌ Network Error'); }
-  }
+      taps++;
+      if (taps >= 2) {
+        chest.textContent = '🎁';
+        setTimeout(() => { 
+          const grov = Math.floor(Math.random() * 301) + 900; // 900 to 1200
+          state.balance += grov; saveState(); updateBalanceDisplay();
+          const content = document.querySelector('#mysteryModal .spin-result-content');
+          content.innerHTML = `<div class="spin-result-label" style="color:#00d4ff;">You Won!</div><div class="spin-result-prize">+${grov}</div><div class="spin-result-label">GROV</div><button class="spin-result-btn" onclick="closeMysteryBox()">CLAIM</button>`;
+        }, 500);
+      }
+    };
+  } catch (e) { toast('❌ Network Error'); }
+}
 
   let userTasks = JSON.parse(localStorage.getItem('grover_tasks')) || [
     { id: 't_share', name: 'Share on Telegram/X', reward: 100, link: 'SHARE_APP' },
@@ -921,21 +936,8 @@ button:active{transform:scale(.97)}
     document.body.removeChild(textArea);
   }
     function requestWithdrawal() {
-    if (!state.walletPin) {
-      const newPin = prompt("🔒 Secure your wallet! Create a 4-digit PIN:");
-      if (!newPin || newPin.length < 4) return toast('❌ PIN must be 4 digits!');
-      state.walletPin = newPin; saveState(); toast('✅ PIN Created! Please try again.'); return;
-    }
-    const enteredPin = prompt("🔒 Enter your Wallet PIN to confirm:");
-    if (enteredPin !== state.walletPin) return toast('❌ Incorrect PIN!');
-
-    if (state.balance < 1000) return toast('❌ Minimum withdrawal is 1,000 GROV');
-    if (!connectedWallet) return toast('❌ Connect your TON wallet first!');
-    
-    const amount = parseFloat(prompt("Enter amount to withdraw (Min 1,000):"));
-    if (!amount || amount < 1000) return toast('❌ Invalid amount');
-    if (amount > state.balance) return toast('❌ Insufficient balance');
-    
+  toast('🚧 Withdrawals will open at Token Launch!');
+}
     // Uses the connected wallet address automatically
     const walletAddr = connectedWallet.account.address;
     
@@ -1060,6 +1062,25 @@ button:active{transform:scale(.97)}
   syncUserWithCloud(); 
   setInterval(updateMiningCounter, 1000);
   updateLiveFeed(); setInterval(updateLiveFeed, 15000);
+
+    async function fetchGlobalSettings() {
+  try {
+    const res = await fetch(BACKEND_URL + '/api/settings');
+    const data = await res.json();
+    
+    if (data.tasks && data.tasks.length > 0) {
+      userTasks = data.tasks;
+      renderUserTasks();
+    }
+    if (data.fakeUsers) fakeUsers = data.fakeUsers;
+    if (data.announcement) {
+      const banner = document.getElementById('announcementBanner');
+      banner.textContent = data.announcement;
+      banner.style.display = 'block';
+    }
+    if (data.prizePool) prizePool = data.prizePool;
+  } catch(e) { console.log("Settings fetch error"); }
+}
   
   if (state.hasPaid === true) {
     document.getElementById('gateScreen').classList.remove('active'); document.getElementById('homeScreen').classList.add('active'); document.getElementById('bottomNav').style.display = 'flex';
