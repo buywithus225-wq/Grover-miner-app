@@ -483,12 +483,24 @@ button:active{transform:scale(.97)}
   }, 2000);
 
   function toast(msg) { 
-    const el = document.getElementById('toast'); 
-    if(!el) return;
-    el.textContent = msg; el.classList.add('show'); 
-    if(tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
-    setTimeout(() => el.classList.remove('show'), 2500); 
-  }
+  const el = document.getElementById('toast'); 
+  if(!el) return;
+  
+  // Clear any existing timer
+  if(window.toastTimer) clearTimeout(window.toastTimer);
+  
+  el.textContent = msg; 
+  el.classList.add('show'); 
+  if(tg && tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+  
+  window.toastTimer = setTimeout(() => {
+    el.classList.remove('show'); 
+    // Force hide just in case Telegram paused the CSS animation
+    setTimeout(() => { el.style.display = 'none'; }, 400); 
+  }, 2500); 
+  
+  el.style.display = 'block';
+}
 
   async function syncUserWithCloud() {
     if (!tg || !tg.initData) return;
