@@ -245,35 +245,30 @@ button:active{transform:scale(.97)}
   </div>
 
   <div class="screen" id="referScreen">
-    <div style="text-align:center;margin-bottom:12px;">
-      <div style="font-size:22px;font-weight:900;color:#f5b800;">👥 REFER FRIENDS</div>
+  <div style="text-align:center;margin-bottom:20px;">
+    <div style="font-size:22px;font-weight:900;color:#f5b800;">👥 REFER FRIENDS</div>
+  </div>
+  
+  <div class="refer-hero" style="padding: 30px 20px; background: radial-gradient(circle at center,rgba(0,212,255,.2),transparent 70%); border-radius: 18px; margin-bottom: 20px;">
+    <div class="refer-count" id="referCount" style="font-size: 64px; font-weight: 900; background:linear-gradient(135deg,#f5b800,#ffdd00); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">0</div>
+    <div class="refer-label" style="font-size: 14px; color: #6ba3ff; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-top: 4px;">Friends Invited</div>
+  </div>
+
+  <button class="collect-btn" onclick="referFriend()">🔗 SHARE YOUR LINK</button>
+  <button style="background:rgba(0,212,255,.15);color:#00d4ff;margin-top:8px;border:1px solid rgba(0,212,255,.3);" onclick="showMyLink()">📋 COPY MY LINK</button>
+
+  <div style="margin-top:20px; text-align:left;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+      <div style="font-size:12px; font-weight:900; color:#f5b800;">🏆 TOP 10 REFERRALS</div>
+      <div style="font-size:12px; font-weight:900; color:#00d4ff;">Pool: <span id="prizePoolDisplay">50</span> TON</div>
     </div>
-    <div class="refer-hero">
-      <div class="refer-count" id="referCount">0</div>
-      <div class="refer-label">Friends Invited</div>
-    </div>
-    <div class="target-bar-refer"><div class="target-fill-refer" id="targetFillRefer"></div></div>
-    <div class="target-text"><span id="targetCountRefer">1,000</span> / 100,000 USERS</div>
-    <div style="display:flex; flex-direction:column; gap:6px; margin-top:10px;">
-      <div style="background:rgba(255,255,255,0.05); padding:8px; border-radius:8px; display:flex; justify-content:space-between; font-size:11px;"><span style="color:#a8c5ff;">Invite 5 Friends</span><span style="color:#f5b800; font-weight:900;">+500 GROV</span></div>
-      <div style="background:rgba(255,255,255,0.05); padding:8px; border-radius:8px; display:flex; justify-content:space-between; font-size:11px;"><span style="color:#a8c5ff;">Invite 10 Friends</span><span style="color:#f5b800; font-weight:900;">+1,500 GROV</span></div>
-      <div style="background:rgba(255,255,255,0.05); padding:8px; border-radius:8px; display:flex; justify-content:space-between; font-size:11px;"><span style="color:#a8c5ff;">Invite 50 Friends</span><span style="color:#f5b800; font-weight:900;">+10,000 GROV</span></div>
-    </div>
-    <div class="notice" style="margin-top:12px;"><strong>Earn 100 GROV</strong> per friend!</div>
-    <button class="collect-btn" onclick="referFriend()">🔗 SHARE YOUR LINK</button>
-    <button style="background:rgba(0,212,255,.15);color:#00d4ff;margin-top:8px;border:1px solid rgba(0,212,255,.3);" onclick="showMyLink()">📋 COPY MY LINK</button>
-    <div style="margin-top:20px; text-align:left;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-        <div style="font-size:12px; font-weight:900; color:#f5b800;">🏆 TOP 10 REFERRALS</div>
-        <div style="font-size:12px; font-weight:900; color:#00d4ff;">Pool: <span id="prizePoolDisplay">50</span> TON</div>
-      </div>
-      <div id="leaderboardList" style="display:flex; flex-direction:column; gap:6px;"></div>
-      <div style="margin-top:12px; padding-top:12px; border-top:1px dashed rgba(0,212,255,.3); display:flex; justify-content:space-between; align-items:center;">
-        <div style="font-size:12px; color:#00d4ff; font-weight:800;">YOUR RANK</div>
-        <div id="userRankDisplay" style="font-size:16px; font-weight:900; color:#fff;">#999</div>
-      </div>
+    <div id="leaderboardList" style="display:flex; flex-direction:column; gap:6px;"></div>
+    <div style="margin-top:12px; padding-top:12px; border-top:1px dashed rgba(0,212,255,.3); display:flex; justify-content:space-between; align-items:center;">
+      <div style="font-size:12px; color:#00d4ff; font-weight:800;">YOUR RANK</div>
+      <div id="userRankDisplay" style="font-size:16px; font-weight:900; color:#fff;">#999</div>
     </div>
   </div>
+</div>
 
   <div class="screen" id="profileScreen">
     <div style="text-align:center;margin-bottom:12px;">
