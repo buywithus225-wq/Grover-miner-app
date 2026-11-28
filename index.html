@@ -166,7 +166,7 @@ button:active{transform:scale(.97)}
 
   <div class="screen" id="homeScreen">
     <div class="home-top-bar">
-      <button class="vip-btn" id="vipBtn">👑 VIP</button>
+      <button class="vip-btn" id="vipBtn" onclick="openVip()">👑 VIP</button>
       <button class="profile-btn" onclick="switchTab('profile')">👤 Profile</button>
     </div>
     <div id="announcementBanner" style="display:none; background:linear-gradient(135deg,#ef4444,#dc2626); color:#fff; font-size:11px; font-weight:900; padding:8px; border-radius:8px; text-align:center; margin-bottom:10px;"></div>
@@ -188,8 +188,7 @@ button:active{transform:scale(.97)}
     <button class="mystery-btn" style="background:linear-gradient(135deg,#00d4ff,#0088ff);" onclick="buyScratchCard()">🎟️ Scratch Card (500 GROV)</button>
     <button class="checkin-btn" onclick="openCheckin()">🎯 Daily Check-in</button>
   </div>
-
-  <div class="screen" id="spinScreen">
+    <div class="screen" id="spinScreen">
     <div style="text-align:center;margin-bottom:8px;">
       <div style="font-size:22px;font-weight:900;color:#f5b800;">🎡 SPIN WHEEL</div>
       <div style="font-size:11px;color:#00d4ff;margin-top:2px;">1 free spin per day</div>
@@ -340,6 +339,7 @@ button:active{transform:scale(.97)}
     <div class="nav-item" onclick="switchTab('wallet')" data-tab="wallet"><span class="nav-icon">💰</span><span class="nav-label">Wallet</span></div>
   </div>
 </div>
+
 <div class="vip-modal" id="vipModal">
   <div class="vip-content">
     <div class="vip-header"><h2>👑 VIP UPGRADES</h2><button class="vip-close" onclick="closeVip()">✕</button></div>
@@ -971,7 +971,19 @@ button:active{transform:scale(.97)}
     });
   } catch (e) { console.log('TON error:', e); }
 
-  async function handleConnect() { if (!tonConnectUI) { toast('TON not loaded.'); return; } try { toast('Opening wallet...'); await tonConnectUI.openModal(); } catch (e) { toast('Cancelled.'); } }
+  async function handleConnect() { 
+    if (!tonConnectUI) { 
+      alert('❌ TON Connect SDK failed to load. Please check your internet connection or turn off your VPN.'); 
+      return; 
+    } 
+    try { 
+      toast('Opening wallet...'); 
+      await tonConnectUI.openModal(); 
+    } catch (e) { 
+      alert('❌ Wallet Error: ' + e.message); 
+    } 
+  }
+
   async function handlePay() {
     const tos = document.getElementById('tosCheckbox');
     if (tos && !tos.checked) return toast('❌ Please agree to Terms of Service first!');
@@ -1020,14 +1032,6 @@ button:active{transform:scale(.97)}
       }
     }
   }
-  
-  // Fix VIP Button Listener
-const vipBtnEl = document.getElementById('vipBtn');
-if (vipBtnEl) {
-  vipBtnEl.addEventListener('click', () => {
-    openVip();
-  });
-}
 
   loadState(); 
   updateSpinTimer(); 
