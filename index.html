@@ -1020,6 +1020,14 @@ button:active{transform:scale(.97)}
       }
     }
   }
+  
+  // Fix VIP Button Listener
+const vipBtnEl = document.getElementById('vipBtn');
+if (vipBtnEl) {
+  vipBtnEl.addEventListener('click', () => {
+    openVip();
+  });
+}
 
   loadState(); 
   updateSpinTimer(); 
