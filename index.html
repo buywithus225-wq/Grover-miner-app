@@ -38,7 +38,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .tos-text{color:#00d4ff;text-decoration:underline;cursor:pointer;}
 .vip-btn{background:linear-gradient(135deg,#f5b800,#ff6b00);border:1.5px solid rgba(255,255,255,.3);color:#0a1428;font-weight:900;font-size:11px;padding:8px 12px;border-radius:18px;cursor:pointer;font-family:inherit}
 .profile-btn{background:linear-gradient(135deg,#00d4ff,#0088ff);border:1.5px solid rgba(255,255,255,.3);color:#fff;font-weight:900;font-size:11px;padding:8px 12px;border-radius:18px;cursor:pointer;font-family:inherit}
-  .logo-hero{text-align:center;padding:8px 0 6px}
+.logo-hero{text-align:center;padding:8px 0 6px}
 .hero-logo{width:170px;height:170px;object-fit:contain;filter:drop-shadow(0 0 40px rgba(0,212,255,.9))}
 .earned-counter{text-align:center;margin-bottom:10px}
 .earned-value{font-size:34px;font-weight:900;line-height:1;background:linear-gradient(135deg,#00d4ff,#00ffcc);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-variant-numeric:tabular-nums}
@@ -62,7 +62,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .mining-value .unit{font-size:11px;margin-left:4px}
 .mining-rate{font-size:10px;color:#4a7aaa;margin-top:4px}
 .mining-lock-text{font-size:10px;color:#f5b800;font-weight:800;margin-top:6px;text-transform:uppercase}
-  .stats2{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;margin-bottom:10px}
+.stats2{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;margin-bottom:10px}
 .stat{background:linear-gradient(135deg,rgba(0,212,255,.12),rgba(0,136,255,.08));border:1px solid rgba(0,212,255,.3);border-radius:12px;padding:10px 6px;text-align:center}
 .stat-label{font-size:9px;color:#6ba3ff;text-transform:uppercase;font-weight:700;margin-bottom:3px}
 .stat-value{font-size:16px;font-weight:900;background:linear-gradient(135deg,#f5b800,#ffdd00);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
@@ -107,6 +107,22 @@ button:active{transform:scale(.97)}
 .welcome-banner{background:linear-gradient(135deg,#22c55e,#16a34a);border-radius:12px;padding:12px;text-align:center;margin-bottom:12px;box-shadow:0 0 20px rgba(34,197,94,.4)}
 .welcome-banner-title{font-size:14px;font-weight:900;color:#fff;margin-bottom:2px}
 .welcome-banner-text{font-size:11px;color:rgba(255,255,255,.9)}
+.task-item{background:linear-gradient(135deg,rgba(0,212,255,.12),rgba(0,136,255,.08));border:1px solid rgba(0,212,255,.25);border-radius:12px;padding:12px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;cursor:pointer}
+.task-left{display:flex;align-items:center;gap:10px;flex:1}
+.task-icon{font-size:24px}
+.task-info{flex:1}
+.task-name{font-size:13px;font-weight:700;color:#fff;margin-bottom:2px}
+.task-reward{font-size:11px;color:#f5b800;font-weight:800}
+.task-btn{background:linear-gradient(135deg,#f5b800,#ff6b00);color:#0a1428;padding:8px 14px;border-radius:8px;font-size:10px;font-weight:900;border:none;cursor:pointer;font-family:inherit;text-transform:uppercase}
+.refer-hero{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 20px;background:radial-gradient(circle at center,rgba(0,212,255,.2),transparent 70%);border-radius:18px;margin-bottom:20px}
+.refer-count{font-size:64px;font-weight:900;line-height:1;background:linear-gradient(135deg,#f5b800,#ffdd00);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.refer-label{font-size:14px;color:#6ba3ff;letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-top:8px}
+.spin-result{position:fixed;inset:0;z-index:9997;background:rgba(0,0,0,.9);display:none;align-items:center;justify-content:center;padding:20px}
+.spin-result.show{display:flex}
+.spin-result-content{background:linear-gradient(160deg,#0a2a5a,#061a3a);border:3px solid #f5b800;border-radius:22px;padding:30px 24px;text-align:center;max-width:320px;width:100%}
+.spin-result-prize{font-size:56px;font-weight:900;background:linear-gradient(135deg,#f5b800,#ffdd00);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin:12px 0}
+.spin-result-label{font-size:12px;color:#6ba3ff;text-transform:uppercase;letter-spacing:2px;font-weight:700}
+.spin-result-btn{width:100%;padding:14px;background:linear-gradient(135deg,#f5b800,#ff6b00);color:#0a1428;border:none;border-radius:12px;font-size:14px;font-weight:900;cursor:pointer;font-family:inherit;margin-top:16px;text-transform:uppercase}
 </style>
 </head>
 <body>
@@ -209,7 +225,8 @@ button:active{transform:scale(.97)}
     <button class="collect-btn" id="spinBtn" onclick="spinWheel(false)">🎡 SPIN NOW</button>
     <div id="spinTimer" style="text-align:center;font-size:11px;color:#00d4ff;margin-top:8px;font-weight:700;"></div>
   </div>
-    <div class="screen" id="mineScreen">
+
+  <div class="screen" id="mineScreen">
     <div class="mine-hero">
       <div class="pickaxe-spin">⛏️</div>
       <div class="mine-rate">Mining at <strong id="mineRateText">5 GROV/day</strong></div>
@@ -245,30 +262,27 @@ button:active{transform:scale(.97)}
   </div>
 
   <div class="screen" id="referScreen">
-  <div style="text-align:center;margin-bottom:20px;">
-    <div style="font-size:22px;font-weight:900;color:#f5b800;">👥 REFER FRIENDS</div>
-  </div>
-  
-  <div class="refer-hero" style="padding: 30px 20px; background: radial-gradient(circle at center,rgba(0,212,255,.2),transparent 70%); border-radius: 18px; margin-bottom: 20px;">
-    <div class="refer-count" id="referCount" style="font-size: 64px; font-weight: 900; background:linear-gradient(135deg,#f5b800,#ffdd00); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">0</div>
-    <div class="refer-label" style="font-size: 14px; color: #6ba3ff; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-top: 4px;">Friends Invited</div>
-  </div>
-
-  <button class="collect-btn" onclick="referFriend()">🔗 SHARE YOUR LINK</button>
-  <button style="background:rgba(0,212,255,.15);color:#00d4ff;margin-top:8px;border:1px solid rgba(0,212,255,.3);" onclick="showMyLink()">📋 COPY MY LINK</button>
-
-  <div style="margin-top:20px; text-align:left;">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-      <div style="font-size:12px; font-weight:900; color:#f5b800;">🏆 TOP 10 REFERRALS</div>
-      <div style="font-size:12px; font-weight:900; color:#00d4ff;">Pool: <span id="prizePoolDisplay">50</span> TON</div>
+    <div style="text-align:center;margin-bottom:20px;">
+      <div style="font-size:22px;font-weight:900;color:#f5b800;">👥 REFER FRIENDS</div>
     </div>
-    <div id="leaderboardList" style="display:flex; flex-direction:column; gap:6px;"></div>
-    <div style="margin-top:12px; padding-top:12px; border-top:1px dashed rgba(0,212,255,.3); display:flex; justify-content:space-between; align-items:center;">
-      <div style="font-size:12px; color:#00d4ff; font-weight:800;">YOUR RANK</div>
-      <div id="userRankDisplay" style="font-size:16px; font-weight:900; color:#fff;">#999</div>
+    <div class="refer-hero" style="padding: 30px 20px; background: radial-gradient(circle at center,rgba(0,212,255,.2),transparent 70%); border-radius: 18px; margin-bottom: 20px;">
+      <div class="refer-count" id="referCount" style="font-size: 64px; font-weight: 900; background:linear-gradient(135deg,#f5b800,#ffdd00); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">0</div>
+      <div class="refer-label" style="font-size: 14px; color: #6ba3ff; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; margin-top: 4px;">Friends Invited</div>
+    </div>
+    <button class="collect-btn" onclick="referFriend()">🔗 SHARE YOUR LINK</button>
+    <button style="background:rgba(0,212,255,.15);color:#00d4ff;margin-top:8px;border:1px solid rgba(0,212,255,.3);" onclick="showMyLink()">📋 COPY MY LINK</button>
+    <div style="margin-top:20px; text-align:left;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <div style="font-size:12px; font-weight:900; color:#f5b800;">🏆 TOP 10 REFERRALS</div>
+        <div style="font-size:12px; font-weight:900; color:#00d4ff;">Pool: <span id="prizePoolDisplay">50</span> TON</div>
+      </div>
+      <div id="leaderboardList" style="display:flex; flex-direction:column; gap:6px;"></div>
+      <div style="margin-top:12px; padding-top:12px; border-top:1px dashed rgba(0,212,255,.3); display:flex; justify-content:space-between; align-items:center;">
+        <div style="font-size:12px; color:#00d4ff; font-weight:800;">YOUR RANK</div>
+        <div id="userRankDisplay" style="font-size:16px; font-weight:900; color:#fff;">#999</div>
+      </div>
     </div>
   </div>
-</div>
 
   <div class="screen" id="profileScreen">
     <div style="text-align:center;margin-bottom:12px;">
@@ -287,6 +301,9 @@ button:active{transform:scale(.97)}
   <div class="screen" id="walletScreen">
     <div style="text-align:center;margin-bottom:12px;">
       <div style="font-size:22px;font-weight:900;color:#f5b800;">💰 GROVER WALLET</div>
+    </div>
+    <div id="walletConnectWrap" style="margin-bottom: 10px;">
+      <button id="walletConnectBtn" onclick="handleConnect()" style="background:linear-gradient(135deg,#00d4ff,#0088ff);color:#fff; margin-bottom:10px;">🔗 Connect TON Wallet</button>
     </div>
     <div style="background:rgba(0,212,255,.1); border:1px dashed #00d4ff; border-radius:12px; padding:10px; text-align:center; margin-bottom:14px;">
       <div style="font-size:10px; color:#6ba3ff; font-weight:700;">YOUR INVITE CODE</div>
@@ -308,7 +325,6 @@ button:active{transform:scale(.97)}
       <button class="collect-btn" onclick="executeP2P()" style="padding:10px; font-size:12px;">SEND GROV</button>
     </div>
     <button style="background:linear-gradient(135deg,#f5b800,#ff6b00); color:#0a1428; margin-bottom:10px;" onclick="requestWithdrawal()">💸 REQUEST WITHDRAWAL</button>
-    
     <div style="margin-top:20px;">
       <div style="font-size:12px; font-weight:900; color:#f5b800; margin-bottom:8px;">📜 TRANSACTION HISTORY</div>
       <div id="txHistoryList" style="display:flex; flex-direction:column; gap:6px;"></div>
@@ -450,7 +466,7 @@ button:active{transform:scale(.97)}
 
   let fakeUsers = [];
   let hasDiamond = localStorage.getItem('grover_diamond_' + CURRENT_USER) === 'true';
-  let prizePool = [];
+  let prizePool = localStorage.getItem('grover_prize_pool') || '50';
 
   let state = {
     balance: 0, lastClaimTime: Date.now(), lastSpin: null, extraSpinsUsed: 0,
@@ -583,7 +599,8 @@ button:active{transform:scale(.97)}
       } else { toast('❌ ' + data.error); }
     } catch (e) { toast('❌ Network Error. Try again.'); }
   }
-    function buyMiningBoost() {
+
+  function buyMiningBoost() {
     if (state.boostUntil && Date.now() < state.boostUntil) return toast('❌ Boost is already active!');
     let adsWatched = 0;
     function showNextAd() {
@@ -649,17 +666,16 @@ button:active{transform:scale(.97)}
   }
 
   function claimCheckin() {
-  function claimCheckin() {
-  const today = new Date().toDateString();
-  if (state.lastCheckin === today) return toast('❌ Already claimed today!');
-  if (state.checkinDay > 7) return toast('🎉 You finished the streak! Resetting...');
-  const rewards = [10, 20, 30, 40, 50, 60, 200];
-  const reward = rewards[state.checkinDay - 1];
-  state.balance += reward; state.lastCheckin = today; state.checkinDay++;
-  if (state.checkinDay > 7) state.checkinDay = 1; 
-  saveState(); updateBalanceDisplay(); renderCheckinGrid();
-  toast('🎁 +' + reward + ' GROV Checked In!');
-}
+    const today = new Date().toDateString();
+    if (state.lastCheckin === today) return toast('❌ Already claimed today!');
+    if (state.checkinDay > 7) return toast('🎉 You finished the streak! Resetting...');
+    const rewards = [10, 20, 30, 40, 50, 60, 200];
+    const reward = rewards[state.checkinDay - 1];
+    state.balance += reward; state.lastCheckin = today; state.checkinDay++;
+    if (state.checkinDay > 7) state.checkinDay = 1; 
+    saveState(); updateBalanceDisplay(); renderCheckinGrid();
+    toast('🎁 +' + reward + ' GROV Checked In!');
+  }
 
   function claimQuestReward() {
     const q1 = document.getElementById('qClaim').checked;
@@ -717,7 +733,7 @@ button:active{transform:scale(.97)}
       content.innerHTML = `<div class="spin-result-label" style="color:#00d4ff; font-size:14px;">Scratch Card</div><div style="font-size:70px; margin: 15px 0; filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.8));">🎟️</div><div style="font-size:11px; color:#a8c5ff; margin-bottom:15px; line-height:1.4;">Buy a scratch card for 500 GROV to win up to 200 GROV or a rare <b>Diamond 💎</b>!</div><button id="scratchPayBtn" class="spin-result-btn" style="background:linear-gradient(135deg,#00d4ff,#0088ff); color:#fff;" onclick="payScratchCard()">BUY FOR 500 GROV</button><button class="spin-result-btn" style="background:rgba(255,255,255,0.1); color:#fff; margin-top:8px; font-size:12px; padding:10px;" onclick="closeScratchCard()">Cancel</button>`;
     }, 300);
   }
-    
+
   async function payScratchCard() {
     if (state.balance < 500) return toast('❌ Need 500 GROV to buy!');
     try {
@@ -758,50 +774,40 @@ button:active{transform:scale(.97)}
   function closeMysteryBox() { document.getElementById('mysteryModal').classList.remove('show'); }
 
   async function payMysteryBox() {
-  if (state.balance < 1000) return toast('❌ Need 1,000 GROV to open!');
-  
-  try {
-    toast('Connecting to server...');
-    const res = await fetch(BACKEND_URL + '/api/deduct-grov', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ initData: tg.initData, amount: 1000, action: 'Mystery Box Opened' })
-    });
-    
-    if (!res.ok) {
-      return toast('❌ Server Error: ' + res.status);
-    }
-    
-    const data = await res.json();
-    if (!data.success) return toast('❌ ' + data.error);
-    
-    state.balance = data.newBalance; saveState(); updateBalanceDisplay();
-    
-    document.getElementById('mysteryPayBtn').style.display = 'none';
-    document.getElementById('chestText').textContent = 'Chest unlocked! Tap it twice fast!';
-    
-    const chest = document.getElementById('chestIcon');
-    let taps = 0;
-    
-    chest.onclick = function() {
-      chest.style.transform = 'scale(1.1)';
-      setTimeout(() => chest.style.transform = 'scale(1)', 100);
-      taps++;
+    if (state.balance < 1000) return toast('❌ Need 1,000 GROV to open!');
+    try {
+      const res = await fetch(BACKEND_URL + '/api/deduct-grov', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ initData: tg.initData, amount: 1000, action: 'Mystery Box Opened' })
+      });
+      const data = await res.json();
+      if (!data.success) return toast('❌ ' + data.error);
+      state.balance = data.newBalance; saveState(); updateBalanceDisplay();
       
-      if (taps >= 2) {
-        chest.onclick = null;
-        chest.textContent = '🎁';
-        setTimeout(() => { 
-          const grov = Math.floor(Math.random() * 301) + 900; 
-          state.balance += grov; saveState(); updateBalanceDisplay();
-          const content = document.querySelector('#mysteryModal .spin-result-content');
-          content.innerHTML = `<div class="spin-result-label" style="color:#00d4ff;">You Won!</div><div class="spin-result-prize">+${grov}</div><div class="spin-result-label">GROV</div><button class="spin-result-btn" onclick="closeMysteryBox()">CLAIM</button>`;
-        }, 500);
-      }
-    };
-  } catch (e) { 
-    toast('❌ Network Error. Server might be asleep.'); 
+      document.getElementById('mysteryPayBtn').style.display = 'none';
+      document.getElementById('chestText').textContent = 'Chest unlocked! Tap it twice fast!';
+      
+      const chest = document.getElementById('chestIcon');
+      let taps = 0;
+      
+      chest.onclick = function() {
+        chest.style.transform = 'scale(1.1)';
+        setTimeout(() => chest.style.transform = 'scale(1)', 100);
+        taps++;
+        
+        if (taps >= 2) {
+          chest.onclick = null;
+          chest.textContent = '🎁';
+          setTimeout(() => { 
+            const grov = Math.floor(Math.random() * 301) + 900; 
+            state.balance += grov; saveState(); updateBalanceDisplay();
+            const content = document.querySelector('#mysteryModal .spin-result-content');
+            content.innerHTML = `<div class="spin-result-label" style="color:#00d4ff;">You Won!</div><div class="spin-result-prize">+${grov}</div><div class="spin-result-label">GROV</div><button class="spin-result-btn" onclick="closeMysteryBox()">CLAIM</button>`;
+          }, 500);
+        }
+      };
+    } catch (e) { toast('❌ Network Error'); }
   }
-}
 
   let userTasks = [];
   function renderUserTasks() {
