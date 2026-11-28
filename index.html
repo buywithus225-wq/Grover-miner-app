@@ -450,7 +450,7 @@ button:active{transform:scale(.97)}
 
   let fakeUsers = [];
   let hasDiamond = localStorage.getItem('grover_diamond_' + CURRENT_USER) === 'true';
-  let prizePool = localStorage.getItem('grover_prize_pool') || '50';
+  let prizePool = [];
 
   let state = {
     balance: 0, lastClaimTime: Date.now(), lastSpin: null, extraSpinsUsed: 0,
@@ -649,16 +649,17 @@ button:active{transform:scale(.97)}
   }
 
   function claimCheckin() {
-    const today = new Date().toDateString();
-    if (state.lastCheckin === today) return toast('❌ Already claimed today!');
-    if (state.checkinDay > 7) return toast('🎉 You finished the streak! Resetting...');
-    const rewards = [10, 20, 30, 40, 50, 60, 200];
-    const reward = rewards[state.checkinDay - 1];
-    state.balance += reward; state.lastCheckin = today; state.checkinDay++;
-    if (state.checkinDay > 7) state.checkinDay = 1; 
-    saveState(); updateBalanceDisplay(); renderCheckinGrid();
-    toast('🎁 +' + reward + ' GROV Checked In!');
-  }
+  function claimCheckin() {
+  const today = new Date().toDateString();
+  if (state.lastCheckin === today) return toast('❌ Already claimed today!');
+  if (state.checkinDay > 7) return toast('🎉 You finished the streak! Resetting...');
+  const rewards = [10, 20, 30, 40, 50, 60, 200];
+  const reward = rewards[state.checkinDay - 1];
+  state.balance += reward; state.lastCheckin = today; state.checkinDay++;
+  if (state.checkinDay > 7) state.checkinDay = 1; 
+  saveState(); updateBalanceDisplay(); renderCheckinGrid();
+  toast('🎁 +' + reward + ' GROV Checked In!');
+}
 
   function claimQuestReward() {
     const q1 = document.getElementById('qClaim').checked;
