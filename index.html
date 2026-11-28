@@ -717,7 +717,7 @@ button:active{transform:scale(.97)}
       content.innerHTML = `<div class="spin-result-label" style="color:#00d4ff; font-size:14px;">Scratch Card</div><div style="font-size:70px; margin: 15px 0; filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.8));">🎟️</div><div style="font-size:11px; color:#a8c5ff; margin-bottom:15px; line-height:1.4;">Buy a scratch card for 500 GROV to win up to 200 GROV or a rare <b>Diamond 💎</b>!</div><button id="scratchPayBtn" class="spin-result-btn" style="background:linear-gradient(135deg,#00d4ff,#0088ff); color:#fff;" onclick="payScratchCard()">BUY FOR 500 GROV</button><button class="spin-result-btn" style="background:rgba(255,255,255,0.1); color:#fff; margin-top:8px; font-size:12px; padding:10px;" onclick="closeScratchCard()">Cancel</button>`;
     }, 300);
   }
-
+    
   async function payScratchCard() {
     if (state.balance < 500) return toast('❌ Need 500 GROV to buy!');
     try {
@@ -758,40 +758,50 @@ button:active{transform:scale(.97)}
   function closeMysteryBox() { document.getElementById('mysteryModal').classList.remove('show'); }
 
   async function payMysteryBox() {
-    if (state.balance < 1000) return toast('❌ Need 1,000 GROV to open!');
-    try {
-      const res = await fetch(BACKEND_URL + '/api/deduct-grov', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ initData: tg.initData, amount: 1000, action: 'Mystery Box Opened' })
-      });
-      const data = await res.json();
-      if (!data.success) return toast('❌ ' + data.error);
-      state.balance = data.newBalance; saveState(); updateBalanceDisplay();
+  if (state.balance < 1000) return toast('❌ Need 1,000 GROV to open!');
+  
+  try {
+    toast('Connecting to server...');
+    const res = await fetch(BACKEND_URL + '/api/deduct-grov', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ initData: tg.initData, amount: 1000, action: 'Mystery Box Opened' })
+    });
+    
+    if (!res.ok) {
+      return toast('❌ Server Error: ' + res.status);
+    }
+    
+    const data = await res.json();
+    if (!data.success) return toast('❌ ' + data.error);
+    
+    state.balance = data.newBalance; saveState(); updateBalanceDisplay();
+    
+    document.getElementById('mysteryPayBtn').style.display = 'none';
+    document.getElementById('chestText').textContent = 'Chest unlocked! Tap it twice fast!';
+    
+    const chest = document.getElementById('chestIcon');
+    let taps = 0;
+    
+    chest.onclick = function() {
+      chest.style.transform = 'scale(1.1)';
+      setTimeout(() => chest.style.transform = 'scale(1)', 100);
+      taps++;
       
-      document.getElementById('mysteryPayBtn').style.display = 'none';
-      document.getElementById('chestText').textContent = 'Chest unlocked! Tap it twice fast!';
-      
-      const chest = document.getElementById('chestIcon');
-      let taps = 0;
-      
-      chest.onclick = function() {
-        chest.style.transform = 'scale(1.1)';
-        setTimeout(() => chest.style.transform = 'scale(1)', 100);
-        taps++;
-        
-        if (taps >= 2) {
-          chest.onclick = null;
-          chest.textContent = '🎁';
-          setTimeout(() => { 
-            const grov = Math.floor(Math.random() * 301) + 900; 
-            state.balance += grov; saveState(); updateBalanceDisplay();
-            const content = document.querySelector('#mysteryModal .spin-result-content');
-            content.innerHTML = `<div class="spin-result-label" style="color:#00d4ff;">You Won!</div><div class="spin-result-prize">+${grov}</div><div class="spin-result-label">GROV</div><button class="spin-result-btn" onclick="closeMysteryBox()">CLAIM</button>`;
-          }, 500);
-        }
-      };
-    } catch (e) { toast('❌ Network Error'); }
+      if (taps >= 2) {
+        chest.onclick = null;
+        chest.textContent = '🎁';
+        setTimeout(() => { 
+          const grov = Math.floor(Math.random() * 301) + 900; 
+          state.balance += grov; saveState(); updateBalanceDisplay();
+          const content = document.querySelector('#mysteryModal .spin-result-content');
+          content.innerHTML = `<div class="spin-result-label" style="color:#00d4ff;">You Won!</div><div class="spin-result-prize">+${grov}</div><div class="spin-result-label">GROV</div><button class="spin-result-btn" onclick="closeMysteryBox()">CLAIM</button>`;
+        }, 500);
+      }
+    };
+  } catch (e) { 
+    toast('❌ Network Error. Server might be asleep.'); 
   }
+}
 
   let userTasks = [];
   function renderUserTasks() {
